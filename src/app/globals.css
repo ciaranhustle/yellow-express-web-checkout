@@ -3,19 +3,82 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --primary: 253 187 48;
+  --background: 255 255 255;
+  --foreground: 0 0 0;
+  --accent: 90 105 159;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-height: 100vh;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-gt-walsheim-pro), Inter, system-ui, Avenir, Helvetica,
+    Arial, sans-serif;
+}
+
+/* .red-strikethrough {
+  position: relative;
+} */
+/* .red-strikethrough:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 57%;
+  right: 0;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url("./assets/redStrikethrough.svg");
+  transform: translateY(-50%);
+}
+.white-underline {
+  position: relative;
+}
+.white-underline:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url("./assets/whiteUnderline.svg");
+  transform: translateY(20px);
+} */
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  border: 8px solid rgba(0, 0, 0, 0.05);
+  border-top: 8px solid black;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+}
+
+.customToast {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  font-family: var(--font-bt-beau-sans) !important;
 }

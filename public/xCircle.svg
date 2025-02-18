@@ -1,0 +1,10 @@
+<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 96">
+<g id="Ellipse 7" opacity="0.4">
+<circle cx="18" cy="18" r="18" fill="white"/>
+<circle cx="18" cy="18" r="17.5" stroke="black" stroke-opacity="0.5"/>
+</g>
+<path id="Vector 17" opacity="0.5" d="M11.5 13L24 25.5" stroke="black" stroke-linejoin="round"/>
+<path id="Vector 18" opacity="0.5" d="M11.5 25.5L24 13" stroke="black" stroke-linejoin="round"/>
+</g>
+</svg>

@@ -1,0 +1,35 @@
+const NODE_ENV = process.env.NEXT_PUBLIC_NODE_ENV;
+
+const APPLICATION_URL = process.env.APPLICATION_URL;
+
+const API_URL =
+  NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_API_URL
+    : process.env.NEXT_PUBLIC_TEST_API_URL;
+
+const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
+const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
+const AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET;
+const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE;
+
+const STRIPE_PUBLIC_KEY =
+  NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY
+    : process.env.NEXT_PUBLIC_TEST_STRIPE_PUBLIC_KEY;
+
+const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN;
+
+const GMAPS_API_KEY = process.env.NEXT_PUBLIC_GMAPS_API_KEY;
+
+export {
+  NODE_ENV,
+  APPLICATION_URL,
+  AUTH0_DOMAIN,
+  AUTH0_CLIENT_ID,
+  AUTH0_CLIENT_SECRET,
+  AUTH0_AUDIENCE,
+  API_URL,
+  STRIPE_PUBLIC_KEY,
+  SENTRY_DSN,
+  GMAPS_API_KEY,
+};

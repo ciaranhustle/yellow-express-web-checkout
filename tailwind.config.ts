@@ -9,8 +9,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: "rgb(var(--primary))",
+        background: "rgb(var(--background))",
+        foreground: "rgb(var(--foreground))",
+        accent: "rgb(var(--accent))",
+      },
+      fontFamily: {
+        "gt-walsheim-pro": ["var(--font-gt-walsheim-pro)"],
       },
     },
   },
