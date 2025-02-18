@@ -3,11 +3,13 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { Loader } from "../Loader/Loader";
 
 interface Props {
   onNext: () => void;
   nextText?: string;
   nextDisabled?: boolean;
+  nextLoading?: boolean;
   onPrevious?: () => void;
   previousText?: string;
   previousWhite?: boolean;
@@ -17,6 +19,7 @@ export const StepNavButtons: React.FC<Props> = ({
   onNext,
   nextText = "NEXT",
   nextDisabled,
+  nextLoading,
   onPrevious,
   previousText = "PREVIOUS",
   previousWhite = false,
@@ -31,10 +34,10 @@ export const StepNavButtons: React.FC<Props> = ({
             "text-center font-bold text-2xl py-3 bg-primary border-2 border-black rounded md:flex-1 capitalize",
             nextDisabled && "opacity-50"
           )}
-          disabled={nextDisabled}
+          disabled={nextDisabled || nextLoading}
           onClick={onNext}
         >
-          {nextText}
+          {nextLoading ? <Loader className="sm-loader" /> : nextText}
         </button>
         <button
           className={cn(

@@ -6,6 +6,7 @@ import {
   GeocodingAddressComponentType,
   PlaceAutocompleteType,
 } from "@googlemaps/google-maps-services-js";
+import { GMAPS_API_KEY } from "@/lib/secrets";
 
 const client = new Client();
 
@@ -16,7 +17,7 @@ export const autocomplete = async (input: string) => {
     const response = await client.placeAutocomplete({
       params: {
         input,
-        key: process.env.GMAPS_API_KEY!,
+        key: GMAPS_API_KEY!,
         types: PlaceAutocompleteType.regions,
         components: ["country:au"],
       },
@@ -35,8 +36,8 @@ export const getFormattedAddress = async (placeId: string) => {
     const response = await client.placeDetails({
       params: {
         place_id: placeId,
-        key: process.env.GMAPS_API_KEY!,
-        fields: ["address_components", "formatted_address"],
+        key: GMAPS_API_KEY!,
+        fields: ["address_components", "formatted_address", "geometry"],
       },
     });
 
@@ -51,14 +52,20 @@ export const getFormattedAddress = async (placeId: string) => {
         ?.short_name || "";
 
     return {
-      country: getComponent(AddressType.country),
-      postcode: getComponent(AddressType.postal_code),
-      suburb:
+      address: details.formatted_address || "",
+      subpremise: getComponent(AddressType.subpremise),
+      street_number: getComponent(AddressType.street_number),
+      company: getComponent(GeocodingAddressComponentType.establishment),
+      street: getComponent(AddressType.route),
+      locality:
         getComponent(AddressType.locality) ||
         getComponent(AddressType.sublocality) ||
         getComponent(AddressType.neighborhood),
+      country: getComponent(AddressType.country),
       state: getComponent(AddressType.administrative_area_level_1),
-      details: details.formatted_address || "",
+      postal_code: getComponent(AddressType.postal_code),
+      lat: details.geometry?.location?.lat || null,
+      lng: details.geometry?.location?.lng || null,
     };
   } catch (error) {
     console.error("Get Place Details error:", error);

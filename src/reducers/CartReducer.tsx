@@ -73,6 +73,10 @@ export const cartReducer = (
       };
       break;
 
+    case "SET_QUOTE_ID":
+      newState = { ...newState, quoteId: action.payload };
+      break;
+
     case "SET_COUPON_CODE":
       newState = { ...newState, couponCode: action.payload };
       break;

@@ -6,12 +6,15 @@ import { toast } from "react-toastify";
 import { Container } from "@/components/Container/Container";
 import { Loader } from "@/components/Loader/Loader";
 import { StepNavButtons } from "@/components/StepNavButtons/StepNavButtons";
-import { useNewQuote } from "@/hooks/queries/useNewQuote";
 import { useClaimQuote } from "@/hooks/mutations/useClaimQuote";
+import { useQuote } from "@/hooks/queries/useQuote";
+import { useCartContext } from "@/context/CartContext";
 
 const QuotePage = () => {
   const router = useRouter();
-  const { data: quote, isLoading } = useNewQuote();
+  const { state } = useCartContext();
+  console.log({ quoteId: state.quoteId });
+  const { data: quote, isLoading } = useQuote({ quoteId: state.quoteId });
   console.log({ quote });
   const { mutate: claimQuote, isPending: isClaiming } = useClaimQuote();
 
@@ -30,7 +33,7 @@ const QuotePage = () => {
     );
 
   return (
-    <Container className="px-0 pb-0 lg:pb-0 lg:px-0">
+    <Container className="px-0 pb-0">
       {isLoading || isClaiming ? (
         <Loader
           label={isLoading ? "Getting your quote..." : "Claiming your quote..."}
@@ -38,7 +41,7 @@ const QuotePage = () => {
       ) : (
         <>
           <div className="px-5 mt-7 w-full flex flex-col items-center">
-            <div className="relative w-full max-w-lg bg-paleyellow rounded-lg pt-14 pb-10 flex flex-row justify-center items-center gap-8 lg:gap-14">
+            <div className="relative w-full max-w-lg bg-primary/30 rounded-lg pt-14 pb-10 flex flex-row justify-center items-center gap-8 lg:gap-14">
               <div className="absolute -top-6 text-center py-2 px-20 rounded-[40px] border border-primary font-black text-xl z-10 bg-white">
                 Your quote
               </div>
@@ -62,7 +65,7 @@ const QuotePage = () => {
               </div>
             </div>
           </div>
-          <div className="mt-14 flex-1 w-full flex flex-col items-center bg-accent relative rounded-t-[50px] py-12 px-5">
+          <div className="mt-14 flex-1 w-full flex flex-col items-center bg-accent relative rounded-t-[50px] py-10 px-5">
             <div className="absolute -top-6 text-center py-2 px-20 rounded-[40px] font-black text-xl z-10 bg-primary">
               Special offer
             </div>
@@ -75,13 +78,11 @@ const QuotePage = () => {
             <p className="text-white text-center text-2xl px-5 mt-7">
               Book now to claim your discounted special offer!
             </p>
-            <div className="w-full mt-5">
-              <StepNavButtons
-                onNext={handleNextPress}
-                nextText="CLAIM OFFER"
-                previousWhite
-              />
-            </div>
+            <StepNavButtons
+              onNext={handleNextPress}
+              nextText="CLAIM OFFER"
+              previousWhite
+            />
           </div>
         </>
       )}

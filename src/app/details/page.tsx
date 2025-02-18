@@ -8,11 +8,15 @@ import Input from "@/components/Input/Input";
 import { useRouter } from "next/navigation";
 import { useCartContext } from "@/context/CartContext";
 import { isMobile, isEmail } from "@/lib/validation";
+import { useCreateQuote } from "@/hooks/mutations/useCreateQuote";
+import { toast } from "react-toastify";
 
 const WhatPage = () => {
   const router = useRouter();
   const { state, dispatch } = useCartContext();
   const customerDetails = state.customerDetails;
+  const { mutate: createQuote, isPending } = useCreateQuote();
+
   const {
     handleSubmit,
     formState: { errors },
@@ -30,7 +34,24 @@ const WhatPage = () => {
 
   const handleNextPress = async (formData: CustomerDetails) => {
     dispatch({ type: "SET_CUSTOMER_DETAILS", payload: formData });
-    router.push("/quote");
+
+    createQuote(undefined, {
+      onSuccess: (quote) => {
+        if (quote?._id) {
+          dispatch({ type: "SET_QUOTE_ID", payload: quote._id });
+          router.push("/quote");
+        } else {
+          toast.error(
+            "Failed to create quote. Please try again or contact us for help."
+          );
+        }
+      },
+      onError: () => {
+        toast.error(
+          "Failed to create quote. Please try again or contact us for help."
+        );
+      },
+    });
   };
 
   return (
@@ -71,6 +92,7 @@ const WhatPage = () => {
       <StepNavButtons
         onNext={handleSubmit(handleNextPress)}
         nextDisabled={nextDisabled}
+        nextLoading={isPending}
       />
     </Container>
   );

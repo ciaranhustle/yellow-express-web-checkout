@@ -21,6 +21,14 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const { bookingDetails, ...body } = await request.json();
+
+  const pickUpAddress = await getFormattedAddress(
+    bookingDetails.pickUpAddress.value.place_id
+  );
+  const dropOffAddress = await getFormattedAddress(
+    bookingDetails.dropOffAddress.value.place_id
+  );
+
   const res = await fetch(`${API_URL}/v1/quote`, {
     method: "POST",
     headers: {
@@ -30,12 +38,8 @@ export async function POST(request: NextRequest) {
       ...body,
       bookingDetails: {
         ...bookingDetails,
-        pickUpAddress: await getFormattedAddress(
-          bookingDetails.pickUpAddress.place_id
-        ),
-        dropOffAddress: await getFormattedAddress(
-          bookingDetails.dropOffAddress.place_id
-        ),
+        pickUpAddress: pickUpAddress,
+        dropOffAddress: dropOffAddress,
       },
     }),
   });

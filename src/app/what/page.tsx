@@ -12,7 +12,7 @@ interface FormValues {
   description: string;
 }
 
-const MIN_CHARACTERS = 50;
+const MIN_CHARACTERS = 30;
 
 const WhatPage = () => {
   const router = useRouter();
@@ -70,7 +70,8 @@ const WhatPage = () => {
             errors.description && "text-red-500 opacity-100"
           )}
         >
-          {errors.description?.message ?? "Minimum 50 characters"}
+          {errors.description?.message ??
+            `Minimum ${MIN_CHARACTERS} characters`}
           {description && `: ${description.length}`}
         </p>
       </div>
