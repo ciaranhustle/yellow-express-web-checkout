@@ -13,24 +13,26 @@ import { useCartContext } from "@/context/CartContext";
 const QuotePage = () => {
   const router = useRouter();
   const { state } = useCartContext();
-  console.log({ quoteId: state.quoteId });
   const { data: quote, isLoading } = useQuote({ quoteId: state.quoteId });
   console.log({ quote });
   const { mutate: claimQuote, isPending: isClaiming } = useClaimQuote();
 
-  const handleNextPress = () =>
-    claimQuote(
-      {
-        quoteId: quote?._id,
-      },
-      {
-        onSuccess: () => router.push("/summary"),
-        onError: () =>
-          toast.error(
-            "Failed to claim quote. Please try again or contact us for help."
-          ),
-      }
-    );
+  const handleNextPress = () => {
+    if (quote?._id) {
+      claimQuote(
+        {
+          quoteId: quote._id,
+        },
+        {
+          onSuccess: () => router.push("/summary"),
+          onError: () =>
+            toast.error(
+              "Failed to claim quote. Please try again or contact us for help."
+            ),
+        }
+      );
+    }
+  };
 
   return (
     <Container className="px-0 pb-0">
@@ -38,6 +40,11 @@ const QuotePage = () => {
         <Loader
           label={isLoading ? "Getting your quote..." : "Claiming your quote..."}
         />
+      ) : !quote ? (
+        <div className="flex flex-col items-center justify-center h-full">
+          <p className="text-xl font-bold">Quote not found</p>
+          <p className="mt-2">Please try again or contact support for help</p>
+        </div>
       ) : (
         <>
           <div className="px-5 mt-7 w-full flex flex-col items-center">
@@ -46,21 +53,29 @@ const QuotePage = () => {
                 Your quote
               </div>
               <div className="flex flex-col items-center gap-1">
-                <h3 className="font-bold text-6xl">$149</h3>
+                <h3 className="font-bold text-6xl">{quote.fullPrice}</h3>
                 <p className="font-bold">Job quote</p>
               </div>
               <div className="flex flex-col items-center gap-2">
                 <div className="flex flex-row items-center gap-2 w-full">
                   <Image src="/tickCircle.svg" alt="" width={24} height={24} />
-                  <span className="flex-1 text-start">60 minutes</span>
+                  <span className="flex-1 text-start">
+                    {quote.inclusions.minutes} minutes
+                  </span>
                 </div>
                 <div className="flex flex-row items-center gap-2 w-full">
                   <Image src="/tickCircle.svg" alt="" width={24} height={24} />
-                  <span className="flex-1 text-start">100-200kgs</span>
+                  <span className="flex-1 text-start">
+                    {quote.inclusions.weight}
+                  </span>
                 </div>
                 <div className="flex flex-row items-center gap-2 w-full">
                   <Image src="/tickCircle.svg" alt="" width={24} height={24} />
-                  <span className="flex-1 text-start">1 load</span>
+                  <span className="flex-1 text-start">
+                    {`${quote.inclusions.loads} load${
+                      quote.inclusions?.loads > 1 ? "s" : ""
+                    }`}
+                  </span>
                 </div>
               </div>
             </div>

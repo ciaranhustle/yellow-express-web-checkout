@@ -11,7 +11,7 @@ export const Acknowledgement: React.FC<{
     <div className="flex flex-row gap-5 items-center">
       <button
         className={cn(
-          "flex-1 flex flex-row items-center gap-3 justify-start py-3 px-4 border rounded-button opacity-50 font-medium text-lg",
+          "flex-1 flex flex-row items-center gap-3 justify-start py-3 px-4 border rounded opacity-50 font-medium text-lg",
           isChecked && "border-accent opacity-100"
         )}
         onClick={onChange}

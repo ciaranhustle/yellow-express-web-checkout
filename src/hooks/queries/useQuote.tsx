@@ -6,7 +6,8 @@ export const useQuote = ({ quoteId }: { quoteId: string | null }) => {
     queryKey: ["quote", quoteId],
     queryFn: async () => {
       const response = await api(`/api/quote/${quoteId}`);
-      return response?.data?.quote ?? null;
+      const quote: Quote = response?.data?.quote ?? null;
+      return quote;
     },
     enabled: !!quoteId,
   });

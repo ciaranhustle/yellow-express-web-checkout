@@ -32,14 +32,7 @@ const CardForm: React.FC<Props> = ({ onSuccess, onError }) => {
 
 export const PaymentForm: React.FC<Props> = ({ onSuccess, onError }) => {
   return (
-    <Elements
-      stripe={stripePromise}
-      options={{
-        // clientSecret: "",
-        mode: "setup",
-        currency: "aud",
-      }}
-    >
+    <Elements stripe={stripePromise}>
       <CardForm onSuccess={onSuccess} onError={onError} />
     </Elements>
   );

@@ -10,7 +10,6 @@ import { useQuote } from "@/hooks/queries/useQuote";
 import { useCartContext } from "@/context/CartContext";
 import { BookingAssistOption } from "@/components/BookingAssistOption/BookingAssistOption";
 import { cn } from "@/lib/utils";
-import { PaymentSummary } from "@/components/PaymentSummary/PaymentSummary";
 import { Acknowledgement } from "@/components/Acknowledgement/Acknowledgement";
 
 type BookingAssistOption = "DIY" | "TLC";
@@ -18,6 +17,7 @@ type BookingAssistOption = "DIY" | "TLC";
 const SummaryPage = () => {
   const { state } = useCartContext();
   const { data: quote, isLoading } = useQuote({ quoteId: state.quoteId });
+  console.log({ quote });
   const [selectedAssistOption, setSelectedAssistOption] =
     useState<BookingAssistOption | null>(null);
   const [isServiceAcknowledge, setIsServiceAcknowledge] = useState(false);
@@ -48,20 +48,20 @@ const SummaryPage = () => {
               <div className="flex flex-row gap-5">
                 <BookingAssistOption
                   option="DIY"
-                  description="We’ll park curbside and help you load & unload our van"
+                  description="We'll park curbside and help you load & unload our van"
                   selectedOption={selectedAssistOption}
                   setSelectedOption={setSelectedAssistOption}
-                  fullPrice={149}
-                  price={99}
+                  fullPrice={quote.fullPrice}
+                  price={quote.price}
                   hint="Best value"
                 />
                 <BookingAssistOption
                   option="TLC"
-                  description="Sit back and relax, we’ll do all the work."
+                  description="Sit back and relax, we'll do all the work."
                   selectedOption={selectedAssistOption}
                   setSelectedOption={setSelectedAssistOption}
-                  fullPrice={499}
-                  price={399}
+                  fullPrice={quote.fullPrice + 300}
+                  price={quote.price + 300}
                 />
               </div>
 
@@ -95,7 +95,21 @@ const SummaryPage = () => {
                   !selectedAssistOption && "blur-sm pointer-events-none"
                 )}
               >
-                <PaymentSummary />
+                <div className="w-full bg-white border-b-8 border-b-primary rounded shadow-lg pl-6 pr-2 pt-4 pb-2 text-black my-7 flex flex-row justify-between items-center">
+                  <p className="text-lg font-bold">Got a discount code?</p>
+                  <button className="py-1 px-5 rounded-md border border-black">
+                    + Add
+                  </button>
+                </div>
+                <p className="text-lg font-bold mb-3 text-start">
+                  Payment summary
+                </p>
+                <div className="flex flex-col bg-white rounded shadow-lg border-b-8 border-b-primary">
+                  <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
+                    <p className="text-lg font-bold">Your Booking</p>
+                    <p className="text-lg font-bold w-20">${quote.price}</p>
+                  </div>
+                </div>
                 <PaymentForm onSuccess={() => {}} onError={() => {}} />
               </div>
             </div>

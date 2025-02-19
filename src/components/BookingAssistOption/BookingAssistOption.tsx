@@ -25,7 +25,7 @@ export const BookingAssistOption: React.FC<BookingAssistOptionProps> = ({
   return (
     <div
       className={cn(
-        "flex-1 bg-white rounded-button shadow-button px-5 pt-8 pb-5 flex flex-col items-center text-black relative",
+        "flex-1 bg-white rounded shadow-lg px-5 pt-8 pb-5 flex flex-col items-center text-black relative",
         isSelected && "bg-accent text-white"
       )}
       onClick={() => setSelectedOption(option)}

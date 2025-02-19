@@ -11,7 +11,7 @@ export const Header = () => {
           width={134}
           height={80}
           priority
-          className="w-[134px] h-[80px]"
+          className="w-[100px] h-[60px]"
         />
       </Link>
       <a

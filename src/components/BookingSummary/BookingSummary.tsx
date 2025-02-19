@@ -38,17 +38,19 @@ interface Props {
 export const BookingSummary: React.FC<Props> = ({ quote }) => {
   const isToday = quote.bookingDetails.isToday;
 
+  if (!quote) return null;
+
   return (
     <div className="w-full bg-white border-b-8 border-b-primary rounded shadow-lg px-6 py-5 text-black">
       <h3 className="text-2xl font-bold text-start mb-3">Booking Summary</h3>
       <div className="w-full flex flex-col gap-2.5">
         <BookingSummaryItem
           title="Pick up"
-          values={[quote.bookingDetails.pickUpAddress.label]}
+          values={[quote.bookingDetails.pickUpAddress.address]}
         />
         <BookingSummaryItem
           title="Drop off"
-          values={[quote.bookingDetails.dropOffAddress.label]}
+          values={[quote.bookingDetails.dropOffAddress.address]}
         />
         <BookingSummaryItem
           title="Date"
@@ -63,7 +65,16 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
           title="Pickup time"
           values={[isToday ? "ASAP" : PICKUP_TIMES[quote.bookingDetails.time]]}
         />
-        <BookingSummaryItem title="Job inclusions" values={quote.inclusions} />
+        <BookingSummaryItem
+          title="Job inclusions"
+          values={[
+            `${quote.inclusions.minutes} minutes`,
+            `${quote.inclusions.weight}kg`,
+            `${quote.inclusions.loads} load${
+              quote.inclusions?.loads > 1 ? "s" : ""
+            }`,
+          ]}
+        />
       </div>
     </div>
   );

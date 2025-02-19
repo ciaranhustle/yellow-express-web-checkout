@@ -93,11 +93,20 @@ interface Quote {
     isToday: boolean;
     date: string;
     time: BookingTime;
-    pickUpAddress: Address;
-    dropOffAddress: Address;
+    pickUpAddress: {
+      address: string;
+    };
+    dropOffAddress: {
+      address: string;
+    };
   };
   price: number;
-  inclusions: string[];
+  inclusions: {
+    minutes: number;
+    weight: number;
+    loads: number;
+  };
+  fullPrice: number;
 }
 
 type QuoteStatus = "Pending" | "Claimed" | "Expired" | "Paid";
