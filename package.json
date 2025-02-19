@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "doppler run -- next dev --turbopack",
+    "local-build": "doppler run -- next build",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
