@@ -11,7 +11,7 @@ const BookingSummaryItem: React.FC<BookingSummaryItemProps> = ({
   title,
   values = [],
 }) => (
-  <div className="text-sm w-full flex flex-col items-start">
+  <div className="text-sm w-full flex flex-col items-start gap-1">
     <p className="opacity-50">{title}</p>
     {values.map((value, index) => (
       <div
@@ -19,7 +19,7 @@ const BookingSummaryItem: React.FC<BookingSummaryItemProps> = ({
         className="w-full flex flex-row justify-between items-center"
       >
         <p className="w-2/3 text-start">{value}</p>
-        <Image src="/tick.svg" width={20} height={20} alt="Tick" />
+        <Image src="/tickCircle.svg" width={20} height={20} alt="Tick" />
       </div>
     ))}
   </div>
