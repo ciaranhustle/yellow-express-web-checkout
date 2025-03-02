@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Container } from "@/components/Container/Container";
 import { Loader } from "@/components/Loader/Loader";
-import { ProgressBar } from "@/components/ProgressBar/ProgressBar";
 import { BookingSummary } from "@/components/BookingSummary/BookingSummary";
 import { useQuote } from "@/hooks/queries/useQuote";
 import { useCartContext } from "@/context/CartContext";
@@ -11,6 +10,7 @@ import { BookingAssistOption } from "@/components/BookingAssistOption/BookingAss
 import { Acknowledgement } from "@/components/Acknowledgement/Acknowledgement";
 // import { PaymentForm } from "@/components/PaymentForm/PaymentForm";
 import { cn } from "@/lib/utils";
+import { CountdownTimer } from "@/components/CountdownTimer/CountdownTimer";
 
 type BookingAssistOption = "DIY" | "TLC";
 
@@ -25,13 +25,7 @@ const SummaryPage = () => {
 
   return (
     <>
-      <div className="bg-accent w-full pt-3 pb-4 px-4 flex flex-row justify-between text-white text-sm relative">
-        <p>We are holding your special offer</p>
-        <p className="font-bold">06:32</p>
-        <div className="absolute bottom-0 left-0 right-0">
-          <ProgressBar percentage={70} />
-        </div>
-      </div>
+      <CountdownTimer expiryTime={quote?.expiresOn} />
       <Container className="border-none px-0 py-0 lg:px-0 lg:py-0 pb-10">
         {isLoading ? (
           <Loader />

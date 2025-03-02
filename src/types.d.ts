@@ -107,6 +107,7 @@ interface Quote {
     loads: number;
   };
   fullPrice: number;
+  expiresOn: string;
 }
 
 type QuoteStatus = "Pending" | "Claimed" | "Expired" | "Paid";
