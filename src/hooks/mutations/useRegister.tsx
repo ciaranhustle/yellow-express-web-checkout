@@ -16,6 +16,7 @@ export const useRegister = () => {
       lastName: string;
       mobile: string;
       password: string;
+      jobId?: string;
     }) => {
       const response = await api("/api/customer/register", {
         method: "POST",
