@@ -5,8 +5,14 @@ import { API_URL } from "@/lib/secrets";
 
 export async function POST(request: NextRequest) {
   try {
-    const { firstName, lastName, email, mobile, password } =
-      await request.json();
+    const { 
+      firstName, 
+      lastName, 
+      email, 
+      mobile, 
+      password, 
+      jobId 
+    } = await request.json();
 
     if (!firstName || !lastName || !email || !mobile || !password) {
       return NextResponse.json(
@@ -15,7 +21,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const customerRes = await fetch(`${API_URL}/v1/customer/create`, {
+    const customerRes = await fetch(`${API_URL}/v1/customer`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -26,6 +32,7 @@ export async function POST(request: NextRequest) {
         email,
         mobile,
         password,
+        jobid: jobId,
       }),
     });
 
