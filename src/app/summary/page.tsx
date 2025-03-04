@@ -8,20 +8,31 @@ import { useQuote } from "@/hooks/queries/useQuote";
 import { useCartContext } from "@/context/CartContext";
 import { BookingAssistOption } from "@/components/BookingAssistOption/BookingAssistOption";
 import { Acknowledgement } from "@/components/Acknowledgement/Acknowledgement";
-// import { PaymentForm } from "@/components/PaymentForm/PaymentForm";
+import { PaymentForm } from "@/components/PaymentForm/PaymentForm";
 import { cn } from "@/lib/utils";
 import { CountdownTimer } from "@/components/CountdownTimer/CountdownTimer";
+import { useCheckout } from "@/hooks/mutations/useCheckout";
+import { toast } from "react-toastify";
 
 type BookingAssistOption = "DIY" | "TLC";
 
 const SummaryPage = () => {
   const { state } = useCartContext();
   const { data: quote, isLoading } = useQuote({ quoteId: state.quoteId });
-  console.log({ quote });
+  const { mutate: checkout } = useCheckout();
   const [selectedAssistOption, setSelectedAssistOption] =
     useState<BookingAssistOption | null>(null);
   const [isServiceAcknowledge, setIsServiceAcknowledge] = useState(false);
   const [isChangeAcknowledge, setIsChangeAcknowledge] = useState(false);
+
+  const handlePaymentSuccess = async (paymentMethodId: string) => {
+    if (!quote) return;
+    checkout({ paymentMethodId, quote });
+  };
+
+  const handlePaymentError = () => {
+    toast.error('Payment failed. Please try again.');
+  };
 
   return (
     <>
@@ -88,7 +99,7 @@ const SummaryPage = () => {
                 <div
                   className={cn(
                     "w-full flex flex-col",
-                    !selectedAssistOption && "blur-sm pointer-events-none"
+                    (!selectedAssistOption || !isServiceAcknowledge || !isChangeAcknowledge) && "blur-sm pointer-events-none"
                   )}
                 >
                   <div className="w-full bg-white border-b-8 border-b-primary rounded shadow-lg pl-6 pr-2 pt-4 pb-2 text-black my-7 flex flex-row justify-between items-center">
@@ -103,10 +114,29 @@ const SummaryPage = () => {
                   <div className="flex flex-col bg-white rounded shadow-lg border-b-8 border-b-primary">
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <p className="text-lg font-bold">Your Booking</p>
-                      <p className="text-lg font-bold w-20">${quote.price}</p>
+                      <p className="text-lg font-bold mr-8">${quote.fullPrice}</p>
+                    </div>
+                    <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
+                      <div className="flex flex-col">
+                        <p className="text-lg font-bold">Coupon code</p>
+                        <p className="text-sm">ABC123</p>
+                      </div>
+                      <div className="flex flex-col items-center mr-4">
+                        <p className="text-lg font-bold">${quote.fullPrice -quote.price}</p>
+                        <p className="text-sm border border-black rounded-md px-2">Remove</p>
+                      </div>
+                    </div>
+                    <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
+                      <p className="text-2xl font-bold">Total</p>
+                      <p className="text-2xl font-bold mr-8">${quote.price}</p>
+                    </div>
+                    <div className="w-fullpt-7 pb-5 px-6 border-b border-opacity-10">
+                      <PaymentForm 
+                        onSuccess={handlePaymentSuccess}
+                        onError={handlePaymentError}
+                      />
                     </div>
                   </div>
-                  {/* <PaymentForm onSuccess={() => {}} onError={() => {}} /> */}
                 </div>
               </div>
             </>
