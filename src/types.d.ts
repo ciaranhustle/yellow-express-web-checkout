@@ -95,10 +95,29 @@ interface Quote {
     time: BookingTime;
     pickUpAddress: {
       address: string;
+      company: string;
+      street_number: string;
+      street: string;
+      locality: string;
+      state: string;
+      country: string;
+      lat: number;
+      lng: number;
+      postal_code: string;
     };
     dropOffAddress: {
       address: string;
+      company: string;
+      street_number: string;
+      street: string;
+      locality: string;
+      state: string;
+      country: string;
+      lat: number;
+      lng: number;
+      postal_code: string;
     };
+    description: string;
   };
   price: number;
   inclusions: {
@@ -108,6 +127,7 @@ interface Quote {
   };
   fullPrice: number;
   expiresOn: string;
+  status: QuoteStatus;
 }
 
 type QuoteStatus = "Pending" | "Claimed" | "Expired" | "Paid";
@@ -118,4 +138,75 @@ interface QuoteUpdates {
 
 interface QuoteDataProps {
   quote: Quote;
+}
+
+interface Job {
+  type: BookingType;
+  pickupDateUTC: string;
+  pickupTime: { 
+    hours: number,
+    minutes: number,
+    ampm: string
+  };
+  pickupNow: boolean;
+  addresses: {
+    pickup: {
+      location: {
+        address: string;
+        company: string;
+        street_number: string;
+        street: string;
+        locality: string;
+        state: string;
+        country: string;
+        lat: number;
+        lng: number;
+        postal_code: string;
+        parking: string;
+      };
+      contactInfo: {
+        name: string;
+        number: string;
+        email: string;
+      };
+    };
+    dropoff: {
+      location: {
+        address: string;
+        company: string;
+        street_number: string;
+        street: string;
+        locality: string;
+        state: string;
+        country: string;
+        lat: number;
+        lng: number;
+        postal_code: string;
+        parking: string;
+      };
+      contactInfo: {
+        name: string;
+        number: string;
+        email: string;
+      };
+    };
+  };
+  items: {
+    name: BookingType;
+    quantity: number;
+    description: string;
+  }[];
+  options: {
+    weight: number;
+    loads: number;
+    minutes: number;
+  };
+  variationConditions: {
+    fullPrice: number;
+  };
+  estimates: {
+    price: number;
+    distance: number;
+    duration: number;
+  };
 }
