@@ -2,6 +2,8 @@ import Image from "next/image";
 import { Container } from "@/components/Container/Container";
 import { StepNavButtons } from "@/components/StepNavButtons/StepNavButtons";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import confetti from "canvas-confetti";
 
 interface SuccessPageProps {
   title: string;
@@ -11,6 +13,14 @@ interface SuccessPageProps {
 
 export const SuccessPage = ({ title, message, showAppStore = false }: SuccessPageProps) => {
   const router = useRouter();
+
+  useEffect(() => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }, []);
 
   return (
     <Container className="px-0 pb-0">
