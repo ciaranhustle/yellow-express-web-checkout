@@ -2,14 +2,14 @@
 
 import { SuccessPage } from "@/components/SuccessPage/SuccessPage";
 
-const SuccessPageWrapper = () => {
+const EnquiryReceivedPage = () => {
   return (
     <SuccessPage
-      title="Booking Confirmed!"
+      title="Enquiry Received!"
       message="A member of our team will be in touch shortly to confirm your booking."
-      showAppStore
+      showAppStore={false}
     />
   );
 };
 
-export default SuccessPageWrapper;
+export default EnquiryReceivedPage;
