@@ -210,3 +210,38 @@ interface Job {
     duration: number;
   };
 }
+
+interface Size {
+  icon: string;
+  title: string;
+  description: string;
+  addition: number;
+}
+
+interface DeliverySpeed {
+  icon: string;
+  title: string;
+  description: string;
+  rate?: number;
+  pricingId: string;
+  multiplier?: number;
+}
+
+interface Variations {
+  sizes?: Size[];
+  speeds: DeliverySpeed[];
+}
+
+interface Product {
+  title?: string;
+  description: string;
+  value: string;
+  image?: string;
+  type: 'Delivery' | 'Addon' | 'Time' | 'Distance';
+  variations?: Variations;
+  active: boolean;
+  imageSource?: string;
+  price?: number;
+  basePickup?: number;
+  baseRate?: number;
+}
