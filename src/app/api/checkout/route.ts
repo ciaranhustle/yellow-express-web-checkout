@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const jobId = jobData.job._id;
     console.log({ jobId, jobData });
 
-    const processPaymentResponse = await fetch(`${API_URL}/v1/job/${jobId}/confirm/guest`, {
+    const processPaymentResponse = await fetch(`${API_URL}/v1/job/${jobId}/guest/checkout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
