@@ -9,13 +9,15 @@ import { useRouter } from "next/navigation";
 import { useCartContext } from "@/context/CartContext";
 import { isMobile, isEmail } from "@/lib/validation";
 import { useCreateQuote } from "@/hooks/mutations/useCreateQuote";
+import { useCreateEnquiry } from "@/hooks/mutations/useCreateEnquiry";
 import { toast } from "react-toastify";
 
 const WhatPage = () => {
   const router = useRouter();
   const { state, dispatch } = useCartContext();
   const customerDetails = state.customerDetails;
-  const { mutate: createQuote, isPending } = useCreateQuote();
+  const { mutate: createQuote, isPending: isCreatingQuote } = useCreateQuote();
+  const { mutate: createEnquiry, isPending: isCreatingEnquiry } = useCreateEnquiry();
 
   const {
     handleSubmit,
@@ -35,23 +37,30 @@ const WhatPage = () => {
   const handleNextPress = async (formData: CustomerDetails) => {
     dispatch({ type: "SET_CUSTOMER_DETAILS", payload: formData });
 
-    createQuote(undefined, {
-      onSuccess: (quote) => {
-        if (quote?._id) {
+    if (state.type === "Fragile & Sensitive" || state.type === "Something Obscure") {
+      createEnquiry(undefined, {
+        onSuccess: () => {
+          router.push("/enquiry-received");
+        },
+        onError: () => {
+          toast.error(
+            "Failed to create enquiry. Please try again or contact us for help."
+          );
+        },
+      });
+    } else {
+      createQuote(undefined, {
+        onSuccess: (quote) => {
           dispatch({ type: "SET_QUOTE_ID", payload: quote._id });
           router.push("/quote");
-        } else {
+        },
+        onError: () => {
           toast.error(
             "Failed to create quote. Please try again or contact us for help."
           );
-        }
-      },
-      onError: () => {
-        toast.error(
-          "Failed to create quote. Please try again or contact us for help."
-        );
-      },
-    });
+        },
+      });
+    }
   };
 
   return (
@@ -92,7 +101,7 @@ const WhatPage = () => {
       <StepNavButtons
         onNext={handleSubmit(handleNextPress)}
         nextDisabled={nextDisabled}
-        nextLoading={isPending}
+        nextLoading={isCreatingQuote || isCreatingEnquiry}
       />
     </Container>
   );
