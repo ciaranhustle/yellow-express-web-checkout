@@ -13,7 +13,11 @@ interface LoginFormValues {
 	password: string;
 }
 
-export const LoginForm: React.FC = () => {
+interface LoginFormProps {
+	onSuccess?: () => void;
+}
+
+export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
 	const { mutateAsync: login, isPending } = useLogin();
 
 	const {
@@ -30,6 +34,7 @@ export const LoginForm: React.FC = () => {
 	const onSubmit = async (data: LoginFormValues) => {
 		try {
 			await login(data);
+			onSuccess?.();
 		} catch (error) {
 			console.error('Login error:', error);
 			toast.error('Login failed. Please check your credentials and try again.');

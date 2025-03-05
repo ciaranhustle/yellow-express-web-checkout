@@ -11,7 +11,6 @@ export async function POST(request: NextRequest) {
       email, 
       mobile, 
       password, 
-      jobId 
     } = await request.json();
 
     if (!firstName || !lastName || !email || !mobile || !password) {
@@ -32,7 +31,6 @@ export async function POST(request: NextRequest) {
         email,
         mobile,
         password,
-        jobid: jobId,
       }),
     });
 

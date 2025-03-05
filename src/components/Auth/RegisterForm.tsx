@@ -14,14 +14,13 @@ interface RegisterFormValues {
 	lastName: string;
 	mobile: string;
 	password: string;
-	jobId: string;
 }
 
 interface RegisterFormProps {
-	jobId: string;
+	onSuccess?: () => void;
 }
 
-export const RegisterForm: React.FC<RegisterFormProps> = ({ jobId }) => {
+export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
 	const { mutateAsync: register, isPending } = useRegister();
 
 	const {
@@ -35,13 +34,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ jobId }) => {
 			lastName: '',
 			mobile: '',
 			password: '',
-			jobId,
 		},
 	});
 
 	const onSubmit = async (data: RegisterFormValues) => {
 		try {
 			await register(data);
+			onSuccess?.();
 		} catch (error) {
 			console.error('Registration error:', error);
 			toast.error('Registration failed. Please try again.');
