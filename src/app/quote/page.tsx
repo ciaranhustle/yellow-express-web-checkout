@@ -85,10 +85,10 @@ const QuotePage = () => {
               Special offer
             </div>
             <p className="text-white text-3xl font-bold relative red-strikethrough">
-              ${state.quoteDetails?.fullPrice}
+              ${quote?.fullPrice}
             </p>
             <p className="text-white font-black text-8xl mt-2 white-underline">
-              ${state.quoteDetails?.price}
+              ${quote?.price}
             </p>
             <p className="text-white text-center text-2xl px-5 mt-7">
               Book now to claim your discounted special offer!
