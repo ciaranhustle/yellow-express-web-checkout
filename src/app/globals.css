@@ -87,7 +87,23 @@ body {
 }
 
 .customToast {
-  background: var(--accent) !important;
+  background: rgb(var(--accent)) !important;
   color: #ffffff !important;
   font-family: var(--font-bt-beau-sans) !important;
+}
+
+.Toastify__close-button {
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  background: none;
+  outline: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  opacity: .7;
+  transition: all .3s;
+  z-index: 1;
+  transform: translateY(-50%);
 }
