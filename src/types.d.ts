@@ -9,6 +9,8 @@ type BookingType =
   | "Fragile & Sensitive"
   | "Something Obscure";
 
+type BookingAssistOption = "DIY" | "TLC";
+
 interface CartState {
   type: BookingType | null;
   when: WhenDetails | null;
@@ -17,6 +19,7 @@ interface CartState {
   customerDetails: CustomerDetails | null;
   quoteId: string | null;
   couponCode: string | null;
+  bookingAssistOption: BookingAssistOption | null;
 }
 type CartAction =
   | { type: "SET_TYPE"; payload: BookingType | null }
@@ -26,6 +29,7 @@ type CartAction =
   | { type: "SET_CUSTOMER_DETAILS"; payload: Partial<CustomerDetails> | null }
   | { type: "SET_COUPON_CODE"; payload: string | null }
   | { type: "SET_QUOTE_ID"; payload: string | null }
+  | { type: "SET_BOOKING_ASSIST_OPTION"; payload: BookingAssistOption | null }
   | { type: "CLEAR_CART" }
   | { type: "SET_CART"; payload: CartState };
 
@@ -126,6 +130,8 @@ interface Quote {
     loads: number;
   };
   fullPrice: number;
+  tlcFullPrice: number;
+  tlcPrice: number;
   expiresOn: string;
   status: QuoteStatus;
 }
@@ -148,6 +154,7 @@ interface Job {
     minutes: number,
     ampm: string
   };
+  bookingAssistOption: BookingAssistOption;
   pickupNow: boolean;
   addresses: {
     pickup: {

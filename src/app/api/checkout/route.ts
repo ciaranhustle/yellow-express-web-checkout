@@ -5,7 +5,7 @@ import { createJobFromQuote } from '@/lib/checkoutUtils';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { quote, paymentMethodId } = body;
+    const { quote, paymentMethodId, bookingAssistOption } = body;
 
     if (!quote || !paymentMethodId) {
       return NextResponse.json(
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     console.log({ quote, paymentMethodId });
 
-    const newJob = createJobFromQuote(quote);
+    const newJob = createJobFromQuote(quote, bookingAssistOption);
 
     const createJobResponse = await fetch(`${API_URL}/v1/job`, {
       method: 'POST',
@@ -53,6 +53,7 @@ export async function POST(request: NextRequest) {
           mobile: quote.customerDetails.mobile,
         },  
         paymentMethodId,
+        bookingAssistOption,
       }),
     });
 

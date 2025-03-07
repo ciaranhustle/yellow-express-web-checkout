@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 interface CheckoutData {
   paymentMethodId: string;
   quote: Quote;
+  bookingAssistOption: BookingAssistOption;
 }
 
 interface CheckoutResponse {

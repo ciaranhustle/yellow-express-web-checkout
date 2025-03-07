@@ -6,9 +6,9 @@ export const useGuestJob = ({ jobId }: { jobId: string | null }) => {
     queryKey: ["job", "guest", jobId],
     queryFn: async () => {
       const response = await api(`/api/job/${jobId}/guest`);
-      const job = response?.data ?? null;
-      return job;
+      return response?.data ?? null;
     },
     enabled: !!jobId,
+    retry: false,
   });
 };

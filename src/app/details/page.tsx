@@ -11,6 +11,7 @@ import { isMobile, isEmail } from "@/lib/validation";
 import { useCreateQuote } from "@/hooks/mutations/useCreateQuote";
 import { useCreateEnquiry } from "@/hooks/mutations/useCreateEnquiry";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const WhatPage = () => {
   const router = useRouter();
@@ -62,6 +63,13 @@ const WhatPage = () => {
       });
     }
   };
+
+  useEffect(() => {
+    // If the user navigates to this page without selecting a type, redirect to the home page
+    if (!state.type) {
+      router.push("/");
+    }
+  }, [state.type, router]);
 
   return (
     <Container>

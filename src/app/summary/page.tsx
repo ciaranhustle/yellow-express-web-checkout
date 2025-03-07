@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "@/components/Container/Container";
 import { Loader } from "@/components/Loader/Loader";
 import { BookingSummary } from "@/components/BookingSummary/BookingSummary";
@@ -13,26 +13,43 @@ import { cn } from "@/lib/utils";
 import { CountdownTimer } from "@/components/CountdownTimer/CountdownTimer";
 import { useCheckout } from "@/hooks/mutations/useCheckout";
 import { toast } from "react-toastify";
-
-type BookingAssistOption = "DIY" | "TLC";
+import { LoadingPage } from "@/components/LoadingPage";
+import { useRouter } from "next/navigation";
 
 const SummaryPage = () => {
-  const { state } = useCartContext();
+  const router = useRouter();
+  const { state, dispatch } = useCartContext();
   const { data: quote, isLoading } = useQuote({ quoteId: state.quoteId });
-  const { mutate: checkout } = useCheckout();
+  const { mutate: checkout, isPending, isSuccess } = useCheckout();
   const [selectedAssistOption, setSelectedAssistOption] =
     useState<BookingAssistOption | null>(null);
   const [isServiceAcknowledge, setIsServiceAcknowledge] = useState(false);
   const [isChangeAcknowledge, setIsChangeAcknowledge] = useState(false);
 
   const handlePaymentSuccess = async (paymentMethodId: string) => {
-    if (!quote) return;
-    checkout({ paymentMethodId, quote });
+    if (!quote || !selectedAssistOption) return;
+    checkout({ paymentMethodId, quote, bookingAssistOption: selectedAssistOption});
   };
 
   const handlePaymentError = () => {
     toast.error('Payment failed. Please try again.');
   };
+
+  const handleSetBookingAssistOption = (option: BookingAssistOption) => {
+    setSelectedAssistOption(option);
+    dispatch({ type: "SET_BOOKING_ASSIST_OPTION", payload: option });
+  };
+
+  useEffect(() => {
+    // Only redirect to home if we're not processing a payment and there's no type selected
+    if (!state.type && !isPending && !isSuccess) {
+      router.push("/");
+    }
+  }, [state.type, router, isPending, isSuccess]);
+
+  if (isPending) {
+    return <LoadingPage message="Processing payment..." />;
+  }
 
   return (
     <>
@@ -55,7 +72,7 @@ const SummaryPage = () => {
                     option="DIY"
                     description="We'll park curbside and help you load & unload our van"
                     selectedOption={selectedAssistOption}
-                    setSelectedOption={setSelectedAssistOption}
+                    setSelectedOption={handleSetBookingAssistOption}
                     fullPrice={quote.fullPrice}
                     price={quote.price}
                     hint="Best value"
@@ -64,9 +81,9 @@ const SummaryPage = () => {
                     option="TLC"
                     description="Sit back and relax, we'll do all the work."
                     selectedOption={selectedAssistOption}
-                    setSelectedOption={setSelectedAssistOption}
-                    fullPrice={quote.fullPrice + 300}
-                    price={quote.price + 300}
+                    setSelectedOption={handleSetBookingAssistOption}
+                    fullPrice={quote.tlcFullPrice}
+                    price={quote.tlcPrice}
                   />
                 </div>
 
@@ -114,28 +131,30 @@ const SummaryPage = () => {
                   <div className="flex flex-col bg-white rounded shadow-lg border-b-8 border-b-primary">
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <p className="text-lg font-bold">Your Booking</p>
-                      <p className="text-lg font-bold mr-8">${quote.fullPrice}</p>
+                      <p className="text-lg font-bold mr-8">${ state.bookingAssistOption === "TLC" ? quote.tlcFullPrice : quote.fullPrice}</p>
                     </div>
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <div className="flex flex-col">
                         <p className="text-lg font-bold">Coupon code</p>
-                        <p className="text-sm">ABC123</p>
+                        <p className="text-sm">{state.couponCode}</p>
                       </div>
                       <div className="flex flex-col items-center mr-4">
-                        <p className="text-lg font-bold">${quote.fullPrice -quote.price}</p>
+                        <p className="text-lg font-bold">${quote.fullPrice - quote.price}</p>
                         <p className="text-sm border border-black rounded-md px-2">Remove</p>
                       </div>
                     </div>
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <p className="text-2xl font-bold">Total</p>
-                      <p className="text-2xl font-bold mr-8">${quote.price}</p>
-                    </div>
-                    <div className="w-fullpt-7 pb-5 px-6 border-b border-opacity-10">
-                      <PaymentForm 
-                        onSuccess={handlePaymentSuccess}
-                        onError={handlePaymentError}
-                      />
-                    </div>
+                      <p className="text-2xl font-bold mr-8">${state.bookingAssistOption === "TLC" ? quote.tlcPrice : quote.price}</p>
+                    </div>  
+                    {selectedAssistOption && (
+                      <div className="w-full pt-7 pb-5 px-6 border-b border-opacity-10">
+                        <PaymentForm 
+                          onSuccess={handlePaymentSuccess}
+                          onError={handlePaymentError}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

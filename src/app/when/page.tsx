@@ -22,6 +22,13 @@ const WhenPage = () => {
     return now.getHours() >= 17 && now.getMinutes() >= 30;
   };
 
+  useEffect(() => {
+    // If the user navigates to this page without selecting a type, redirect to the home page
+    if (!state.type) {
+      router.push("/");
+    }
+  }, [state.type, router]);
+
   // Set schedule as default if after cutoff time
   useEffect(() => {
     if (isAfterCutoff() && (!state.when || state.when.isToday)) {

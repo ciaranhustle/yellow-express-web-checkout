@@ -16,7 +16,7 @@ export const PICKUP_TIME_SCHEDULE: Record<BookingTime, { hours: number, minutes:
   }
 }
 
-export const createJobFromQuote = (quote: Quote): Job => {
+export const createJobFromQuote = (quote: Quote, bookingAssistOption: BookingAssistOption): Job => {
   if (quote.bookingDetails.isToday) {
     const now = new Date();
     quote.bookingDetails.date = now.toISOString();
@@ -39,6 +39,7 @@ export const createJobFromQuote = (quote: Quote): Job => {
     pickupDateUTC: quote.bookingDetails.date,
     pickupTime: PICKUP_TIME_SCHEDULE[quote.bookingDetails.time],
     pickupNow: quote.bookingDetails.isToday,
+    bookingAssistOption,
     addresses: {
       pickup: {
         location: {
@@ -97,7 +98,7 @@ export const createJobFromQuote = (quote: Quote): Job => {
       fullPrice: quote.fullPrice
     },
     estimates: {
-      price: quote.price,
+      price: bookingAssistOption === "TLC" ? quote.tlcPrice : quote.price,
       distance: 0,
       duration: 0,
     }

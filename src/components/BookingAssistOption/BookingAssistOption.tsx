@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 
-type BookingAssistOption = "DIY" | "TLC";
 interface BookingAssistOptionProps {
   option: BookingAssistOption;
   fullPrice: number;

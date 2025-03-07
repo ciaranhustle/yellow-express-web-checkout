@@ -26,6 +26,7 @@ export const initialState: CartState = {
   customerDetails: initialCustomerDetailsState,
   quoteId: null,
   couponCode: null,
+  bookingAssistOption: null,
 };
 
 export const cartReducer = (
@@ -55,6 +56,10 @@ export const cartReducer = (
           ? { ...(newState.where ?? initialWhereState), ...action.payload }
           : null,
       };
+      break;
+
+    case "SET_BOOKING_ASSIST_OPTION":
+      newState = { ...newState, bookingAssistOption: action.payload };
       break;
 
     case "SET_WHAT":
