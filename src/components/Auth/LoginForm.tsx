@@ -5,9 +5,8 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Input from '@/components/Input/Input';
 import { cn } from '@/lib/utils';
-import { useLogin } from '@/hooks/mutations/useLogin';
 import { isEmail } from '@/lib/validation';
-
+import { useAuthContext } from '@/context/AuthContext';
 interface LoginFormValues {
 	email: string;
 	password: string;
@@ -18,7 +17,7 @@ interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
-	const { mutateAsync: login, isPending } = useLogin();
+	const { login, isAuthLoading } = useAuthContext();
 
 	const {
 		handleSubmit,
@@ -66,13 +65,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
 				<div className="mt-6">
 					<button
 						type="submit"
-						disabled={isPending}
+						disabled={isAuthLoading}
 						className={cn(
 							'w-full text-center font-bold text-xl py-3 bg-primary border-2 border-black rounded capitalize',
-							(isPending || Object.keys(errors).length > 0) && 'opacity-50'
+							(isAuthLoading || Object.keys(errors).length > 0) && 'opacity-50'
 						)}
 					>
-						{isPending ? 'Logging in...' : 'Login'}
+						{isAuthLoading ? 'Logging in...' : 'Login'}
 					</button>
 				</div>
 			</form>

@@ -12,6 +12,6 @@ export const useCustomer = () => {
       return response?.data?.customer ?? null;
     },
     refetchInterval: 10 * 60 * 1000,
-    enabled: false,
+    // enabled: false,
   });
 };

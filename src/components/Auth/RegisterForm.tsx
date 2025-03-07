@@ -5,9 +5,8 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Input from '@/components/Input/Input';
 import { cn } from '@/lib/utils';
-import { useRegister } from '@/hooks/mutations/useRegister';
 import { isEmail, isMobile } from '@/lib/validation';
-
+import { useAuthContext } from '@/context/AuthContext';
 interface RegisterFormValues {
 	email: string;
 	firstName: string;
@@ -21,7 +20,7 @@ interface RegisterFormProps {
 }
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
-	const { mutateAsync: register, isPending } = useRegister();
+	const { register, isAuthLoading } = useAuthContext();
 
 	const {
 		handleSubmit,
@@ -97,13 +96,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
 				<div className="mt-6">
 					<button
 						type="submit"
-						disabled={isPending}
+						disabled={isAuthLoading}
 						className={cn(
 							'w-full text-center font-bold text-xl py-3 bg-primary border-2 border-black rounded capitalize',
-							(isPending || Object.keys(errors).length > 0) && 'opacity-50'
+							(isAuthLoading || Object.keys(errors).length > 0) && 'opacity-50'
 						)}
 					>
-						{isPending ? 'Creating Account...' : 'Register'}
+						{isAuthLoading ? 'Creating Account...' : 'Register'}
 					</button>
 				</div>
 			</form>
