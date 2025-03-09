@@ -27,6 +27,13 @@ const WherePage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    // Redirect if no what is selected
+    if (!state.what) {
+      router.push("/");
+    }
+  }, [state, router]);
+
   const nextDisabled =
     !state.where?.pickUpAddress || !state.where?.dropOffAddress;
 

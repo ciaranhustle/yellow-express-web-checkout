@@ -22,7 +22,7 @@ export const initialState: CartState = {
   type: null,
   when: initialWhenState,
   where: initialWhereState,
-  what: "",
+  what: null,
   customerDetails: initialCustomerDetailsState,
   quoteId: null,
   couponCode: null,
