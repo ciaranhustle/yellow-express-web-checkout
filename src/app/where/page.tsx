@@ -29,7 +29,7 @@ const WherePage = () => {
 
   useEffect(() => {
     // Redirect if no what is selected
-    if (!state.what) {
+    if (!state.type) {
       router.push("/");
     }
   }, [state, router]);
