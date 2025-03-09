@@ -25,7 +25,7 @@ export const SuccessPage = ({ title, message, showAppStore = false }: SuccessPag
   return (
     <Container className="px-0 pb-0">
       <div className="flex flex-col justify-between min-h-[calc(100vh-116px)] gap-24">
-        <div className="px-5 pt-24 w-full flex flex-col items-center gap-4 text-center">
+        <div className="px-24 pt-24 w-full flex flex-col items-center gap-4 text-center">
           <Image src="/greenTick.svg" width={60} height={60} alt="Success" />
           <p className="text-4xl font-bold">{title}</p>
           <p className="text-lg">{message}</p>
