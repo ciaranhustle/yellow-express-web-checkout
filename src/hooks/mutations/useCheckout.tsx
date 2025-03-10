@@ -39,9 +39,11 @@ export const useCheckout = () => {
         toast.error("Checkout failed. Please try again.");
       }
     },
-    onError: (error) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
       console.error("Checkout error:", error);
-      toast.error("Checkout failed. Please try again.");
+      const errorMessage = error?.response?.data?.error || "Checkout failed. Please try again.";
+      toast.error(errorMessage);
     },
   });
 };

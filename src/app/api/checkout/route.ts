@@ -58,10 +58,14 @@ export async function POST(request: NextRequest) {
     });
 
     if (!processPaymentResponse.ok) {
-      const errorData = await processPaymentResponse.json().catch(() => null);
+      const errorData = await processPaymentResponse.json();
       console.log("Error processing payment:", errorData);
       return NextResponse.json(
-        { error: "Failed to process payment" },
+        { 
+          error: errorData.message || "Failed to process payment",
+          requiresAction: errorData.requiresAction,
+          clientSecret: errorData.clientSecret
+        },
         { status: processPaymentResponse.status }
       );
     }
