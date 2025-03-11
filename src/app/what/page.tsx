@@ -7,6 +7,7 @@ import { StepHeader } from "@/components/StepHeader/StepHeader";
 import { StepNavButtons } from "@/components/StepNavButtons/StepNavButtons";
 import { cn } from "@/lib/utils";
 import { useCartContext } from "@/context/CartContext";
+import { useEffect } from "react";
 
 interface FormValues {
   description: string;
@@ -35,6 +36,13 @@ const WhatPage = () => {
     dispatch({ type: "SET_WHAT", payload: formData.description });
     router.push("/details");
   };
+
+  useEffect(() => {
+    // If the user navigates to this page without selecting a type, redirect to the home page
+    if (!state.type) {
+      router.push("/");
+    }
+  }, [state.type, router]);
 
   const description = watch("description");
 

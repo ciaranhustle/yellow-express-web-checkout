@@ -10,11 +10,13 @@ export const useCreateQuote = () => {
   const whenDetails = state.when;
   const whereDetails = state.where;
   const whatDetails = state.what;
+  const bookingAssistOption = state.bookingAssistOption;
   const bookingDetails = {
     bookingType,
     ...whenDetails,
     ...whereDetails,
     description: whatDetails,
+    bookingAssistOption,
   };
   const customerDetails = state.customerDetails;
 

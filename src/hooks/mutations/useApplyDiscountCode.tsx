@@ -6,6 +6,15 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useCartContext } from "@/context/CartContext";
 
+interface DiscountResponse {
+  coupon: Coupon
+  message?: string;
+}
+
+interface ErrorResponse {
+  error: string;
+}
+
 export const useApplyDiscountCode = () => {
   const { dispatch } = useCartContext();
 
@@ -15,21 +24,21 @@ export const useApplyDiscountCode = () => {
         method: "POST",
         data: data,
       });
-      return response?.data ?? null;
+      return response?.data as DiscountResponse;
     },
     onSuccess: (data) => {
-      if (!data?.discount) {
+      if (!data?.coupon) {
         toast.error(
           data?.message ?? "Error applying coupon. Please try again."
         );
       } else {
-        dispatch({ type: "SET_COUPON_CODE", payload: data.discount.code });
-        toast.success("Discount applied");
+        dispatch({ type: "SET_COUPON", payload: data.coupon });
+        toast.success("Discount applied successfully");
       }
     },
-    onError: (error: AxiosError) => {
+    onError: (error: AxiosError<ErrorResponse>) => {
       console.error("Error applying coupon:", error);
-      toast.error("Error applying coupon. Please try again.");
+      toast.error(error.response?.data?.error || "Error applying coupon. Please try again.");
     },
   });
 };

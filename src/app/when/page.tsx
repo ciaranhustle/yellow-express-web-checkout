@@ -10,10 +10,34 @@ import { addDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useCartContext } from "@/context/CartContext";
 import { bookingTimeOptions } from "@/lib/constants";
+import { useEffect } from "react";
 
 const WhenPage = () => {
   const router = useRouter();
   const { state, dispatch } = useCartContext();
+
+  // Check if current time is after 5:30 PM
+  const isAfterCutoff = () => {
+    const now = new Date();
+    return now.getHours() > 17 || (now.getHours() === 17 && now.getMinutes() >= 30);
+  };
+
+  useEffect(() => {
+    // If the user navigates to this page without selecting a type, redirect to the home page
+    if (!state.type) {
+      router.push("/");
+    }
+  }, [state.type, router]);
+
+  // Set schedule as default if after cutoff time
+  useEffect(() => {
+    if (isAfterCutoff() && (!state.when || state.when.isToday)) {
+      dispatch({
+        type: "SET_WHEN",
+        payload: { isToday: false },
+      });
+    }
+  }, [dispatch, state.when]);
 
   const handleNextPress = () => {
     router.push("/where");
@@ -43,6 +67,8 @@ const WhenPage = () => {
                 payload: { isToday: true, date: null, time: null },
               })
             }
+            disabled={isAfterCutoff()}
+            disabledMessage="Unavailable after 5:30pm"
           />
           <BookingDateOption
             title="Schedule"
@@ -115,6 +141,8 @@ interface BookingDateOptionProps {
   imageSrc: string;
   onClick: () => void;
   isSelected: boolean;
+  disabled?: boolean;
+  disabledMessage?: string;
 }
 
 const BookingDateOption: React.FC<BookingDateOptionProps> = ({
@@ -123,13 +151,15 @@ const BookingDateOption: React.FC<BookingDateOptionProps> = ({
   imageSrc,
   onClick,
   isSelected,
+  disabled,
+  disabledMessage,
 }) => (
   <div
     className={cn(
       "px-5 py-3 bg-white border-b-8 border-primary rounded shadow-lg flex flex-row items-center w-full overflow-hidden relative cursor-pointer",
       isSelected && "bg-accent text-white"
     )}
-    onClick={onClick}
+    onClick={disabled ? undefined : onClick}
   >
     <div className="text-left flex flex-col max-w-52">
       <h3 className="font-bold text-[26px] leading-snug">{title}</h3>
@@ -138,5 +168,15 @@ const BookingDateOption: React.FC<BookingDateOptionProps> = ({
     <div className="flex-1 flex flex-row justify-end items-center">
       <Image src={imageSrc} alt="" className="h-12" width={48} height={48} />
     </div>
+    {disabled && (
+      <>
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[3px]" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="bg-white px-4 py-2 rounded-[4px]">
+            <p className="text-black font-bold">{disabledMessage}</p>
+          </div>
+        </div>
+      </>
+    )}
   </div>
 );

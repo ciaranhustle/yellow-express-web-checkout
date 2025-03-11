@@ -2,6 +2,7 @@ export const formatPrice = (price: number | string) => {
   return new Intl.NumberFormat("en-AU", {
     style: "currency",
     currency: "AUD",
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
   }).format(Number(price));
 };

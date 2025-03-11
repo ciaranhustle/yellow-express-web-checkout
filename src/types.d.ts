@@ -9,6 +9,8 @@ type BookingType =
   | "Fragile & Sensitive"
   | "Something Obscure";
 
+type BookingAssistOption = "DIY" | "TLC";
+
 interface CartState {
   type: BookingType | null;
   when: WhenDetails | null;
@@ -16,7 +18,8 @@ interface CartState {
   what: string | null;
   customerDetails: CustomerDetails | null;
   quoteId: string | null;
-  couponCode: string | null;
+  coupon: Coupon | null;
+  bookingAssistOption: BookingAssistOption | null;
 }
 type CartAction =
   | { type: "SET_TYPE"; payload: BookingType | null }
@@ -24,8 +27,10 @@ type CartAction =
   | { type: "SET_WHERE"; payload: Partial<WhereDetails> | null }
   | { type: "SET_WHAT"; payload: string | null }
   | { type: "SET_CUSTOMER_DETAILS"; payload: Partial<CustomerDetails> | null }
-  | { type: "SET_COUPON_CODE"; payload: string | null }
+  | { type: "SET_COUPON"; payload: Coupon | null }
+  | { type: "CLEAR_COUPON" }
   | { type: "SET_QUOTE_ID"; payload: string | null }
+  | { type: "SET_BOOKING_ASSIST_OPTION"; payload: BookingAssistOption | null }
   | { type: "CLEAR_CART" }
   | { type: "SET_CART"; payload: CartState };
 
@@ -95,10 +100,29 @@ interface Quote {
     time: BookingTime;
     pickUpAddress: {
       address: string;
+      company: string;
+      street_number: string;
+      street: string;
+      locality: string;
+      state: string;
+      country: string;
+      lat: number;
+      lng: number;
+      postal_code: string;
     };
     dropOffAddress: {
       address: string;
+      company: string;
+      street_number: string;
+      street: string;
+      locality: string;
+      state: string;
+      country: string;
+      lat: number;
+      lng: number;
+      postal_code: string;
     };
+    description: string;
   };
   price: number;
   inclusions: {
@@ -107,6 +131,10 @@ interface Quote {
     loads: number;
   };
   fullPrice: number;
+  tlcFullPrice: number;
+  tlcPrice: number;
+  expiresOn: string;
+  status: QuoteStatus;
 }
 
 type QuoteStatus = "Pending" | "Claimed" | "Expired" | "Paid";
@@ -117,4 +145,117 @@ interface QuoteUpdates {
 
 interface QuoteDataProps {
   quote: Quote;
+}
+
+interface Job {
+  type: BookingType;
+  pickupDateUTC: string;
+  pickupTime: { 
+    hours: number,
+    minutes: number,
+    ampm: string
+  };
+  bookingAssistOption: BookingAssistOption;
+  pickupNow: boolean;
+  addresses: {
+    pickup: {
+      location: {
+        address: string;
+        company: string;
+        street_number: string;
+        street: string;
+        locality: string;
+        state: string;
+        country: string;
+        lat: number;
+        lng: number;
+        postal_code: string;
+        parking: string;
+      };
+      contactInfo: {
+        name: string;
+        number: string;
+        email: string;
+      };
+    };
+    dropoff: {
+      location: {
+        address: string;
+        company: string;
+        street_number: string;
+        street: string;
+        locality: string;
+        state: string;
+        country: string;
+        lat: number;
+        lng: number;
+        postal_code: string;
+        parking: string;
+      };
+      contactInfo: {
+        name: string;
+        number: string;
+        email: string;
+      };
+    };
+  };
+  items: {
+    name: BookingType;
+    quantity: number;
+    description: string;
+  }[];
+  options: {
+    weight: number;
+    loads: number;
+    minutes: number;
+  };
+  variationConditions: {
+    fullPrice: number;
+  };
+  estimates: {
+    price: number;
+    distance: number;
+    duration: number;
+  };
+}
+
+interface Size {
+  icon: string;
+  title: string;
+  description: string;
+  addition: number;
+}
+
+interface DeliverySpeed {
+  icon: string;
+  title: string;
+  description: string;
+  rate?: number;
+  pricingId: string;
+  multiplier?: number;
+}
+
+interface Variations {
+  sizes?: Size[];
+  speeds: DeliverySpeed[];
+}
+
+interface Product {
+  title?: string;
+  description: string;
+  value: string;
+  image?: string;
+  type: 'Delivery' | 'Addon' | 'Time' | 'Distance';
+  variations?: Variations;
+  active: boolean;
+  imageSource?: string;
+  price?: number;
+  basePickup?: number;
+  baseRate?: number;
+}
+
+interface Coupon {
+  name: string;
+  code: string;
+  value: number;
 }

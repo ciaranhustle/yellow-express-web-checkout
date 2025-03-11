@@ -15,9 +15,10 @@ export const api = async (
   } catch (err) {
     if (axios.isAxiosError(err)) {
       console.error("AxiosError:", err.message);
-      return err.response;
+      throw err;
     } else {
       console.error("Unexpected Error:", err);
+      throw err;
     }
   }
 };

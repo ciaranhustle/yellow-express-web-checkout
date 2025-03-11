@@ -22,10 +22,11 @@ export const initialState: CartState = {
   type: null,
   when: initialWhenState,
   where: initialWhereState,
-  what: "",
+  what: null,
   customerDetails: initialCustomerDetailsState,
   quoteId: null,
-  couponCode: null,
+  coupon: null,
+  bookingAssistOption: null,
 };
 
 export const cartReducer = (
@@ -57,6 +58,10 @@ export const cartReducer = (
       };
       break;
 
+    case "SET_BOOKING_ASSIST_OPTION":
+      newState = { ...newState, bookingAssistOption: action.payload };
+      break;
+
     case "SET_WHAT":
       newState = { ...newState, what: action.payload };
       break;
@@ -77,8 +82,12 @@ export const cartReducer = (
       newState = { ...newState, quoteId: action.payload };
       break;
 
-    case "SET_COUPON_CODE":
-      newState = { ...newState, couponCode: action.payload };
+    case "SET_COUPON":
+      newState = { ...newState, coupon: action.payload };
+      break;
+
+    case "CLEAR_COUPON":
+      newState = { ...newState, coupon: null };
       break;
 
     case "SET_CART":

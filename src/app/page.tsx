@@ -11,9 +11,12 @@ const HomePage = () => {
   const { dispatch } = useCartContext();
 
   const handleOptionPress = (type: BookingType) => {
-    console.log("type", type);
     dispatch({ type: "SET_TYPE", payload: type });
-    router.push("/when");
+    if (type === "Fragile & Sensitive" || type === "Something Obscure") {
+      router.push("/where");
+    } else {
+      router.push("/when");
+    }
   };
 
   return (

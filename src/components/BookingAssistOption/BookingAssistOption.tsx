@@ -1,7 +1,7 @@
+import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import React from "react";
 
-type BookingAssistOption = "DIY" | "TLC";
 interface BookingAssistOptionProps {
   option: BookingAssistOption;
   fullPrice: number;
@@ -41,8 +41,8 @@ export const BookingAssistOption: React.FC<BookingAssistOptionProps> = ({
         </div>
       )}
       <p className="font-bold text-3xl mb-2">{option}</p>
-      <p className="font-bold red-strikethrough opacity-50">${fullPrice}</p>
-      <p className="font-black text-3xl">${price}</p>
+      <p className="font-bold red-strikethrough opacity-50">{formatPrice(fullPrice)}</p>
+      <p className="font-black text-3xl">{formatPrice(price)}</p>
       <p className="text-sm mt-3 mb-9">{description}</p>
       <div className="flex-1 flex flex-col justify-end w-full">
         <button
