@@ -2,7 +2,11 @@
 
 import React, { useState } from "react";
 import { Elements, useStripe, useElements } from "@stripe/react-stripe-js";
-import { loadStripe, StripeError, StripeElementsOptions } from "@stripe/stripe-js";
+import {
+  loadStripe,
+  StripeError,
+  StripeElementsOptions,
+} from "@stripe/stripe-js";
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { STRIPE_PUBLIC_KEY } from "@/lib/secrets";
 import { useCartContext } from "@/context/CartContext";
@@ -14,11 +18,11 @@ interface Props {
 
 // Define the options outside of the component to avoid re-renders
 const stripeOptions: StripeElementsOptions = {
-  mode: 'setup' as const,
-  paymentMethodCreation: 'manual' as const,
-  currency: 'aud',
+  mode: "setup" as const,
+  paymentMethodCreation: "manual" as const,
+  currency: "aud",
   appearance: {
-    theme: 'stripe',
+    theme: "stripe",
   },
 };
 
@@ -46,7 +50,7 @@ const CardForm: React.FC<Props> = ({ onSuccess, onError }) => {
     try {
       // Submit the form first as required by Stripe's latest API
       const { error: submitError } = await elements.submit();
-      
+
       if (submitError) {
         setErrorMessage(submitError.message);
         onError(submitError);
@@ -57,13 +61,15 @@ const CardForm: React.FC<Props> = ({ onSuccess, onError }) => {
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         elements,
         params: {
-          type: 'card',
+          type: "card",
           billing_details: {
-            email: state.customerDetails?.email || '',
-            name: state.customerDetails ? 
-              `${state.customerDetails.firstName || ''} ${state.customerDetails.lastName || ''}`.trim() : 
-              '',
-            phone: state.customerDetails?.mobile || '',
+            email: state.customerDetails?.email || "",
+            name: state.customerDetails
+              ? `${state.customerDetails.firstName || ""} ${
+                  state.customerDetails.lastName || ""
+                }`.trim()
+              : "",
+            phone: state.customerDetails?.mobile || "",
           },
         },
       });
@@ -91,9 +97,7 @@ const CardForm: React.FC<Props> = ({ onSuccess, onError }) => {
   return (
     <form onSubmit={handleSubmit} className="py-7 px-5">
       <PaymentElement />
-      {errorMessage && (
-        <div className="text-red-500 mt-2">{errorMessage}</div>
-      )}
+      {errorMessage && <div className="text-red-500 mt-2">{errorMessage}</div>}
       <button
         type="submit"
         disabled={!stripe || isLoading}
@@ -106,9 +110,17 @@ const CardForm: React.FC<Props> = ({ onSuccess, onError }) => {
 };
 
 export const PaymentForm: React.FC<Props> = ({ onSuccess, onError }) => {
+  const handleSuccess = (paymentMethodId: string) => {
+    onSuccess(paymentMethodId);
+  };
+
+  const handleError = (error: Error | StripeError) => {
+    onError(error);
+  };
+
   return (
     <Elements stripe={stripePromise} options={stripeOptions}>
-      <CardForm onSuccess={onSuccess} onError={onError} />
+      <CardForm onSuccess={handleSuccess} onError={handleError} />
     </Elements>
   );
 };
