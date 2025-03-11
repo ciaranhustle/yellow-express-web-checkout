@@ -10,6 +10,7 @@ interface CheckoutData {
   paymentMethodId: string;
   quote: Quote;
   bookingAssistOption: BookingAssistOption;
+  couponCode?: string;
 }
 
 interface CheckoutResponse {
@@ -32,8 +33,7 @@ export const useCheckout = () => {
     onSuccess: (data: CheckoutResponse) => {
       if (data.success) {
         dispatch({ type: "CLEAR_CART" });
-        console.log({ data });
-        console.log(`/success?bookingId=${data.jobId}`)
+        dispatch({ type: "CLEAR_COUPON" });
         router.push(`/success?bookingId=${data.jobId}`);
       } else {
         toast.error("Checkout failed. Please try again.");

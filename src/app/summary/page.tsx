@@ -15,6 +15,7 @@ import { useCheckout } from "@/hooks/mutations/useCheckout";
 import { toast } from "react-toastify";
 import { LoadingPage } from "@/components/LoadingPage";
 import { useRouter } from "next/navigation";
+import { DiscountCodeModal } from "@/components/DiscountCodeModal/DiscountCodeModal";
 
 const SummaryPage = () => {
   const router = useRouter();
@@ -25,6 +26,7 @@ const SummaryPage = () => {
     useState<BookingAssistOption | null>(null);
   const [isServiceAcknowledge, setIsServiceAcknowledge] = useState(false);
   const [isChangeAcknowledge, setIsChangeAcknowledge] = useState(false);
+  const [isDiscountModalOpen, setIsDiscountModalOpen] = useState(false);
 
   const handleSetBookingAssistOption = useCallback((option: BookingAssistOption) => {
     setSelectedAssistOption(option);
@@ -40,7 +42,7 @@ const SummaryPage = () => {
 
   const handlePaymentSuccess = async (paymentMethodId: string) => {
     if (!quote || !selectedAssistOption) return;
-    checkout({ paymentMethodId, quote, bookingAssistOption: selectedAssistOption});
+    checkout({ paymentMethodId, quote, bookingAssistOption: selectedAssistOption, couponCode: state.coupon?.code});
   };
 
   const handlePaymentError = () => {
@@ -61,6 +63,10 @@ const SummaryPage = () => {
   return (
     <>
       <CountdownTimer expiryTime={quote?.expiresOn} />
+      <DiscountCodeModal 
+        isOpen={isDiscountModalOpen}
+        onClose={() => setIsDiscountModalOpen(false)}
+      />
       <Container className="border-none px-0 py-0 lg:px-0 lg:py-0 pb-10">
         {isLoading ? (
           <Loader />
@@ -138,7 +144,10 @@ const SummaryPage = () => {
                 >
                   <div className="w-full bg-white border-b-8 border-b-primary rounded shadow-lg pl-6 pr-2 pt-4 pb-2 text-black my-7 flex flex-row justify-between items-center">
                     <p className="text-lg font-bold">Got a discount code?</p>
-                    <button className="py-1 px-5 rounded-md border border-black">
+                    <button 
+                      className="py-1 px-5 rounded-md border border-black hover:bg-gray-50"
+                      onClick={() => setIsDiscountModalOpen(true)}
+                    >
                       + Add
                     </button>
                   </div>
@@ -148,21 +157,28 @@ const SummaryPage = () => {
                   <div className="flex flex-col bg-white rounded shadow-lg border-b-8 border-b-primary">
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <p className="text-lg font-bold">Your Booking</p>
-                      <p className="text-lg font-bold mr-8">${ state.bookingAssistOption === "TLC" ? quote.tlcFullPrice : quote.fullPrice}</p>
+                      <p className="text-lg font-bold mr-8">${state.bookingAssistOption === "TLC" ? quote.tlcFullPrice : quote.fullPrice}</p>
                     </div>
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <div className="flex flex-col">
-                        <p className="text-lg font-bold">Coupon code</p>
-                        <p className="text-sm">{state.couponCode}</p>
+                        <p className="text-lg font-bold">Quote Discount</p>
+                        <p className="text-sm">{state.coupon?.code}</p>
                       </div>
-                      <div className="flex flex-col items-center mr-4">
-                        <p className="text-lg font-bold">${quote.fullPrice - quote.price}</p>
-                        <p className="text-sm border border-black rounded-md px-2">Remove</p>
+                      <div className={`flex flex-col items-center ${state.coupon ? 'mr-6' : 'mr-8'}`}>
+                        <p className="text-lg font-bold">-${(state.bookingAssistOption === "TLC" ? quote.tlcFullPrice - quote.tlcPrice : quote.fullPrice - quote.price) + (state.coupon?.value || 0)}</p>
+                        {state.coupon && (
+                          <button 
+                            onClick={() => dispatch({ type: "CLEAR_COUPON" })}
+                            className="text-sm border border-black rounded-md px-2 hover:bg-gray-100"
+                          >
+                            Remove
+                          </button>
+                        )}
                       </div>
                     </div>
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <p className="text-2xl font-bold">Total</p>
-                      <p className="text-2xl font-bold mr-8">${state.bookingAssistOption === "TLC" ? quote.tlcPrice : quote.price}</p>
+                      <p className="text-2xl font-bold mr-8">${state.bookingAssistOption === "TLC" ? quote.tlcPrice : quote.price - (state.coupon?.value || 0)}</p>
                     </div>  
                     {selectedAssistOption && (
                       <div className="w-full pt-7 pb-5 px-6 border-b border-opacity-10">

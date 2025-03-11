@@ -5,7 +5,7 @@ import { createJobFromQuote } from '@/lib/checkoutUtils';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { quote, paymentMethodId, bookingAssistOption } = body;
+    const { quote, paymentMethodId, bookingAssistOption, couponCode } = body;
 
     if (!quote || !paymentMethodId) {
       return NextResponse.json(
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!createJobResponse.ok) {
-      const errorData = await createJobResponse.json().catch(() => null);
+      const errorData = await createJobResponse.json();
       console.log("Error creating job:", errorData);
       return NextResponse.json(
         { error: "Failed to checkout" },
@@ -54,6 +54,7 @@ export async function POST(request: NextRequest) {
         },  
         paymentMethodId,
         bookingAssistOption,
+        couponCode,
       }),
     });
 

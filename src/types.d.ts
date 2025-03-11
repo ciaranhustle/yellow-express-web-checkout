@@ -18,7 +18,7 @@ interface CartState {
   what: string | null;
   customerDetails: CustomerDetails | null;
   quoteId: string | null;
-  couponCode: string | null;
+  coupon: Coupon | null;
   bookingAssistOption: BookingAssistOption | null;
 }
 type CartAction =
@@ -27,7 +27,8 @@ type CartAction =
   | { type: "SET_WHERE"; payload: Partial<WhereDetails> | null }
   | { type: "SET_WHAT"; payload: string | null }
   | { type: "SET_CUSTOMER_DETAILS"; payload: Partial<CustomerDetails> | null }
-  | { type: "SET_COUPON_CODE"; payload: string | null }
+  | { type: "SET_COUPON"; payload: Coupon | null }
+  | { type: "CLEAR_COUPON" }
   | { type: "SET_QUOTE_ID"; payload: string | null }
   | { type: "SET_BOOKING_ASSIST_OPTION"; payload: BookingAssistOption | null }
   | { type: "CLEAR_CART" }
@@ -251,4 +252,10 @@ interface Product {
   price?: number;
   basePickup?: number;
   baseRate?: number;
+}
+
+interface Coupon {
+  name: string;
+  code: string;
+  value: number;
 }
