@@ -18,7 +18,7 @@ const WhatPage = () => {
   const { state, dispatch } = useCartContext();
   const customerDetails = state.customerDetails;
   const { mutate: createQuote, isPending: isCreatingQuote } = useCreateQuote();
-  const { mutate: createEnquiry, isPending: isCreatingEnquiry } = useCreateEnquiry();
+  const { mutate: createEnquiry, isPending: isCreatingEnquiry, isSuccess: isEnquirySuccess } = useCreateEnquiry();
 
   const {
     handleSubmit,
@@ -39,16 +39,7 @@ const WhatPage = () => {
     dispatch({ type: "SET_CUSTOMER_DETAILS", payload: formData });
 
     if (state.type === "Fragile & Sensitive" || state.type === "Something Obscure") {
-      createEnquiry(undefined, {
-        onSuccess: () => {
-          router.push("/enquiry-received");
-        },
-        onError: () => {
-          toast.error(
-            "Failed to create enquiry. Please try again or contact us for help."
-          );
-        },
-      });
+      createEnquiry();
     } else {
       createQuote(undefined, {
         onSuccess: (quote) => {
@@ -66,10 +57,10 @@ const WhatPage = () => {
 
   useEffect(() => {
     // If the user navigates to this page without selecting a type, redirect to the home page
-    if (!state.type) {
+    if (!state.type && !isCreatingEnquiry && !isCreatingQuote && !isEnquirySuccess) {
       router.push("/");
     }
-  }, [state.type, router]);
+  }, [state.type, router, isCreatingEnquiry, isCreatingQuote, isEnquirySuccess]);
 
   return (
     <Container>
