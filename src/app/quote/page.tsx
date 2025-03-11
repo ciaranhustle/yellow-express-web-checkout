@@ -9,6 +9,7 @@ import { StepNavButtons } from "@/components/StepNavButtons/StepNavButtons";
 import { useClaimQuote } from "@/hooks/mutations/useClaimQuote";
 import { useQuote } from "@/hooks/queries/useQuote";
 import { useCartContext } from "@/context/CartContext";
+import { formatPrice } from "@/lib/format";
 
 const QuotePage = () => {
   const router = useRouter();
@@ -53,7 +54,7 @@ const QuotePage = () => {
                 Your quote
               </div>
               <div className="flex flex-col items-center gap-1">
-                <h3 className="font-bold text-6xl">{quote.fullPrice}</h3>
+                <h3 className="font-bold text-6xl">{formatPrice(quote.fullPrice)}</h3>
                 <p className="font-bold">Job quote</p>
               </div>
               <div className="flex flex-col items-center gap-2">
@@ -85,10 +86,10 @@ const QuotePage = () => {
               Special offer
             </div>
             <p className="text-white text-3xl font-bold relative red-strikethrough">
-              ${quote?.fullPrice}
+              {formatPrice(quote.fullPrice)}
             </p>
             <p className="text-white font-black text-8xl mt-2 white-underline">
-              ${quote?.price}
+              {formatPrice(quote.price)}
             </p>
             <p className="text-white text-center text-2xl px-5 mt-7">
               Book now to claim your discounted special offer!

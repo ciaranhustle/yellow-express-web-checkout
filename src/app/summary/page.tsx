@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { LoadingPage } from "@/components/LoadingPage";
 import { useRouter } from "next/navigation";
 import { DiscountCodeModal } from "@/components/DiscountCodeModal/DiscountCodeModal";
+import { formatPrice } from "@/lib/format";
 
 const SummaryPage = () => {
   const router = useRouter();
@@ -157,7 +158,7 @@ const SummaryPage = () => {
                   <div className="flex flex-col bg-white rounded shadow-lg border-b-8 border-b-primary">
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <p className="text-lg font-bold">Your Booking</p>
-                      <p className="text-lg font-bold mr-8">${state.bookingAssistOption === "TLC" ? quote.tlcFullPrice : quote.fullPrice}</p>
+                      <p className="text-lg font-bold mr-8">{formatPrice(state.bookingAssistOption === "TLC" ? quote.tlcFullPrice : quote.fullPrice)}</p>
                     </div>
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <div className="flex flex-col">
@@ -165,7 +166,7 @@ const SummaryPage = () => {
                         <p className="text-sm">{state.coupon?.code}</p>
                       </div>
                       <div className={`flex flex-col items-center ${state.coupon ? 'mr-6' : 'mr-8'}`}>
-                        <p className="text-lg font-bold">-${(state.bookingAssistOption === "TLC" ? quote.tlcFullPrice - quote.tlcPrice : quote.fullPrice - quote.price) + (state.coupon?.value || 0)}</p>
+                        <p className="text-lg font-bold">-{formatPrice((state.bookingAssistOption === "TLC" ? quote.tlcFullPrice - quote.tlcPrice : quote.fullPrice - quote.price) + (state.coupon?.value || 0))}</p>
                         {state.coupon && (
                           <button 
                             onClick={() => dispatch({ type: "CLEAR_COUPON" })}
@@ -178,7 +179,7 @@ const SummaryPage = () => {
                     </div>
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <p className="text-2xl font-bold">Total</p>
-                      <p className="text-2xl font-bold mr-8">${state.bookingAssistOption === "TLC" ? quote.tlcPrice : quote.price - (state.coupon?.value || 0)}</p>
+                      <p className="text-2xl font-bold mr-8">{formatPrice(state.bookingAssistOption === "TLC" ? quote.tlcPrice : quote.price - (state.coupon?.value || 0))}</p>
                     </div>  
                     {selectedAssistOption && (
                       <div className="w-full pt-7 pb-5 px-6 border-b border-opacity-10">
