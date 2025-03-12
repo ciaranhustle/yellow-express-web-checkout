@@ -8,7 +8,7 @@ interface CountdownTimerProps {
 }
 
 export const CountdownTimer = ({ expiryTime }: CountdownTimerProps) => {
-  const [countdown, setCountdown] = useState("00:00");
+  const [countdown, setCountdown] = useState("10:00");
   const [progressPercentage, setProgressPercentage] = useState(0);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export const CountdownTimer = ({ expiryTime }: CountdownTimerProps) => {
     }
     
     // Store the initial total seconds for percentage calculation
-    const initialTotalSeconds = Math.floor(initialDifference / 1000);
+    const initialTotalSeconds = 10 * 60; // 10 minutes in seconds
     
     const calculateTimeLeft = () => {
       const expiryTimeMs = new Date(expiryTime).getTime();
@@ -46,7 +46,6 @@ export const CountdownTimer = ({ expiryTime }: CountdownTimerProps) => {
       // Calculate total seconds remaining
       const totalSecondsRemaining = Math.floor(difference / 1000);
       
-      // Calculate percentage based on how much time has elapsed compared to initial time
       const percentageElapsed = 100 - ((totalSecondsRemaining / initialTotalSeconds) * 100);
       setProgressPercentage(Math.min(100, Math.max(0, percentageElapsed)));
       
@@ -73,7 +72,7 @@ export const CountdownTimer = ({ expiryTime }: CountdownTimerProps) => {
 
   return (
     <div className="bg-accent w-full pt-3 pb-4 px-4 flex flex-row justify-between text-white text-sm relative">
-      <p>We are holding your special offer</p>
+      <p>{countdown === "00:00" ? "Your special offer has expired" : "We are holding your special offer"}</p>
       <p className="font-bold">{countdown}</p>
       <div className="absolute bottom-0 left-0 right-0">
         <ProgressBar percentage={progressPercentage} />
