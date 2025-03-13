@@ -15,10 +15,10 @@ import { useEffect } from "react";
 
 const WhatPage = () => {
   const router = useRouter();
-  const { state, dispatch } = useCartContext();
+  const { state, dispatch, isLoading: isCartLoading } = useCartContext();
   const customerDetails = state.customerDetails;
   const { mutate: createQuote, isPending: isCreatingQuote } = useCreateQuote();
-  const { mutate: createEnquiry, isPending: isCreatingEnquiry, isSuccess: isEnquirySuccess } = useCreateEnquiry();
+  const { mutate: createEnquiry, isPending: isCreatingEnquiry } = useCreateEnquiry();
 
   const {
     handleSubmit,
@@ -56,11 +56,11 @@ const WhatPage = () => {
   };
 
   useEffect(() => {
-    // If the user navigates to this page without selecting a type, redirect to the home page
-    if (!state.type && !isCreatingEnquiry && !isCreatingQuote && !isEnquirySuccess) {
+    // If the user navigates to this page without the previous steps, redirect to the home page
+    if (!isCartLoading && (!state.type || !state.when?.date || !state.where || !state.what)) {
       router.push("/");
     }
-  }, [state.type, router, isCreatingEnquiry, isCreatingQuote, isEnquirySuccess]);
+  }, [state, router, isCartLoading]);
 
   return (
     <Container>

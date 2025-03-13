@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Container } from "@/components/Container/Container";
-import { Loader } from "@/components/Loader/Loader";
 import { BookingSummary } from "@/components/BookingSummary/BookingSummary";
 import { useQuote } from "@/hooks/queries/useQuote";
 import { useCartContext } from "@/context/CartContext";
@@ -20,9 +19,9 @@ import { formatPrice } from "@/lib/format";
 
 const SummaryPage = () => {
   const router = useRouter();
-  const { state, dispatch } = useCartContext();
-  const { data: quote, isLoading } = useQuote({ quoteId: state.quoteId });
-  const { mutate: checkout, isPending, isSuccess } = useCheckout();
+  const { state, dispatch, isLoading: isCartLoading } = useCartContext();
+  const { data: quote, isPending: isQuotePending } = useQuote({ quoteId: state.quoteId });
+  const { mutate: checkout, isPending: isCheckoutPending, isSuccess: isCheckoutSuccess } = useCheckout();
   const [selectedAssistOption, setSelectedAssistOption] =
     useState<BookingAssistOption | null>(null);
   const [isServiceAcknowledge, setIsServiceAcknowledge] = useState(false);
@@ -51,13 +50,20 @@ const SummaryPage = () => {
   };
 
   useEffect(() => {
-    // Only redirect to home if we're not processing a payment and there's no type selected
-    if (!state.type && !isPending && !isSuccess) {
+    // Only redirect to home if we're not processing a payment,
+    // there's no quote, and loading is complete
+    if (!isCartLoading && !quote && !isQuotePending && !isCheckoutPending && !isCheckoutSuccess && 
+      !state.type || 
+      !state.when?.date ||
+      !state.customerDetails ||
+      !state.where ||
+      !state.what
+    ) {
       router.push("/");
     }
-  }, [state.type, router, isPending, isSuccess]);
+  }, [state, router, isCartLoading, quote, isQuotePending, isCheckoutPending, isCheckoutSuccess]);
 
-  if (isPending) {
+  if (isCheckoutPending) {
     return <LoadingPage message="Processing payment..." />;
   }
 
@@ -69,10 +75,7 @@ const SummaryPage = () => {
         onClose={() => setIsDiscountModalOpen(false)}
       />
       <Container className="border-none px-0 py-0 lg:px-0 lg:py-0 pb-10">
-        {isLoading ? (
-          <Loader />
-        ) : (
-          quote && (
+          {quote && (
             <>
               <div className="px-5 pt-8">
                 <p className="text-base font-bold mb-3">
@@ -193,8 +196,7 @@ const SummaryPage = () => {
                 </div>
               </div>
             </>
-          )
-        )}
+          )}
       </Container>
     </>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { use, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LoginForm from '@/components/Auth/LoginForm';
 import RegisterForm from '@/components/Auth/RegisterForm';
@@ -27,13 +27,7 @@ const ConfirmationPage = ({ searchParams }: ConfirmationPageProps) => {
 	const { mutate: claimJob, isPending } = useClaimJob();
 	const { customer, isAuthenticated } = useAuthContext();
 
-	useEffect(() => {
-		if (isAuthenticated && customer) {
-			handleClaimJob();
-		}
-	}, [isAuthenticated, customer]);
-
-	const handleClaimJob = async () => {
+	const handleClaimJob = useCallback(async () => {
 		claimJob({ jobId: jobid }, {
 			onSuccess: () => {
 				router.push('/claim-success');
@@ -42,13 +36,17 @@ const ConfirmationPage = ({ searchParams }: ConfirmationPageProps) => {
 				toast.error('Failed to claim booking');
 			}
 		});
-	};
+	}, [jobid, router, claimJob]);
+
+	useEffect(() => {
+		if (isAuthenticated && customer) {
+			handleClaimJob();
+		}
+	}, [isAuthenticated, customer, handleClaimJob]);
 
 	if (!jobid || !job?.job && !isLoading) {
 		router.push('/');
 	}
-
-	console.log(isLoading)
 
 	if (isLoading || !jobid) {
 		return <></>;

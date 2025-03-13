@@ -14,7 +14,7 @@ import { useEffect } from "react";
 
 const WhenPage = () => {
   const router = useRouter();
-  const { state, dispatch } = useCartContext();
+  const { state, dispatch, isLoading: isCartLoading } = useCartContext();
 
   // Check if current time is after 5:30 PM
   const isAfterCutoff = () => {
@@ -23,11 +23,11 @@ const WhenPage = () => {
   };
 
   useEffect(() => {
-    // If the user navigates to this page without selecting a type, redirect to the home page
-    if (!state.type) {
+    // Redirect if we skipped the 1st step
+    if (!isCartLoading && !state.type) {
       router.push("/");
     }
-  }, [state.type, router]);
+  }, [state.type, router, isCartLoading]);
 
   // Set schedule as default if after cutoff time
   useEffect(() => {
