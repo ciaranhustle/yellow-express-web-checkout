@@ -15,7 +15,6 @@ const QuotePage = () => {
   const router = useRouter();
   const { state } = useCartContext();
   const { data: quote, isLoading } = useQuote({ quoteId: state.quoteId });
-  console.log({ quote });
   const { mutate: claimQuote, isPending: isClaiming } = useClaimQuote();
 
   const handleNextPress = () => {
