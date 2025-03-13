@@ -20,7 +20,7 @@ import { formatPrice } from "@/lib/format";
 const SummaryPage = () => {
   const router = useRouter();
   const { state, dispatch, isLoading: isCartLoading } = useCartContext();
-  const { data: quote, isPending: isQuotePending } = useQuote({ quoteId: state.quoteId });
+  const { data: quote, isLoading: isQuoteLoading } = useQuote({ quoteId: state.quoteId });
   const { mutate: checkout, isPending: isCheckoutPending, isSuccess: isCheckoutSuccess } = useCheckout();
   const [selectedAssistOption, setSelectedAssistOption] =
     useState<BookingAssistOption | null>(null);
@@ -52,16 +52,16 @@ const SummaryPage = () => {
   useEffect(() => {
     // Only redirect to home if we're not processing a payment,
     // there's no quote, and loading is complete
-    if (!isCartLoading && !quote && !isQuotePending && !isCheckoutPending && !isCheckoutSuccess && 
-      !state.type || 
+    if (!isCartLoading && !quote && !isQuoteLoading && !isCheckoutPending && !isCheckoutSuccess && 
+      (!state.type || 
       !state.when?.date ||
       !state.customerDetails ||
       !state.where ||
-      !state.what
+      !state.what)
     ) {
       router.push("/");
     }
-  }, [state, router, isCartLoading, quote, isQuotePending, isCheckoutPending, isCheckoutSuccess]);
+  }, [state, router, isCartLoading, quote, isQuoteLoading, isCheckoutPending, isCheckoutSuccess]);
 
   if (isCheckoutPending) {
     return <LoadingPage message="Processing payment..." />;
