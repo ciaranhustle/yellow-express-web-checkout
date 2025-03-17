@@ -37,8 +37,12 @@ export const SuccessPage = ({ title, message, showAppStore = false }: SuccessPag
                 Track your booking live with our app!
               </p>
               <div className="flex flex-col gap-2">
-                <Image src="/appStore.jpg" alt="App Store" className="rounded-lg" width={220} height={65} />
-                <Image src="/googlePlay.jpg" alt="Google Play" className="rounded-lg" width={220} height={65} />
+                <a href="https://apps.apple.com/au/app/yellow-express/id1519252013" target="_blank" rel="noopener noreferrer">
+                  <Image src="/appStore2.jpg" alt="App Store" className="rounded-lg cursor-pointer" width={220} height={65} />
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=com.yellowexpress.app&pli=1" target="_blank" rel="noopener noreferrer">
+                  <Image src="/playStore.jpg" alt="Google Play" className="rounded-lg cursor-pointer" width={220} height={65} />
+                </a>
               </div>
             </div>
           )}
