@@ -29,11 +29,7 @@ const WherePage = () => {
 
   useEffect(() => {
     // Redirect if required fields are missing
-    if (!isCartLoading && (
-      !state.type || 
-      ((state.type === "Big & Bulky" || state.type === "Small Items") && !(state.when?.date || state.when?.isToday))
-    )) {
-      console.log("Redirecting to /");
+    if (!isCartLoading && !state.type) {
       router.push("/");
     }
   }, [state, router, isCartLoading]);

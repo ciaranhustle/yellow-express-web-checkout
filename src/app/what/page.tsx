@@ -39,7 +39,7 @@ const WhatPage = () => {
 
   useEffect(() => {
     // If the user navigates to this page without the previous steps, redirect to the home page
-    if (!isCartLoading && (!state.type || !state.when?.date || !state.where)) {
+    if (!isCartLoading && !state.type) {
       router.push("/");
     }
   }, [state, router, isCartLoading]);
