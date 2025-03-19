@@ -45,8 +45,8 @@ export const StepNavButtons: React.FC<Props> = ({
         )}
         <button
           className={cn(
-            "text-center font-bold text-lg py-3 border-2 border-black rounded md:flex-1 capitalize bg-white/10",
-            previousWhite && "border-white text-white"
+            "text-center font-bold text-lg py-3 border-2 border-black rounded md:flex-1 capitalize bg-white",
+            previousWhite && "border-white text-white bg-transparent"
           )}
           onClick={() => (onPrevious ? onPrevious() : router.back())}
         >
