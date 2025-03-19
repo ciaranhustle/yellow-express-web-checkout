@@ -16,6 +16,7 @@ import { LoadingPage } from "@/components/LoadingPage";
 import { useRouter } from "next/navigation";
 import { DiscountCodeModal } from "@/components/DiscountCodeModal/DiscountCodeModal";
 import { formatPrice } from "@/lib/format";
+import { StepNavButtons } from "@/components/StepNavButtons/StepNavButtons";
 
 const SummaryPage = () => {
   const router = useRouter();
@@ -193,6 +194,11 @@ const SummaryPage = () => {
                       </div>
                     )}
                   </div>
+                </div>
+                <div className="mt-24">
+                  <StepNavButtons
+                    hideNext
+                  />
                 </div>
               </div>
             </>
