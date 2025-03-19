@@ -14,6 +14,7 @@ interface Props {
   onPrevious?: () => void;
   previousText?: string;
   previousWhite?: boolean;
+  headerText?: string;
 }
 
 export const StepNavButtons: React.FC<Props> = ({
@@ -25,11 +26,15 @@ export const StepNavButtons: React.FC<Props> = ({
   onPrevious,
   previousText = "PREVIOUS",
   previousWhite = false,
+  headerText,
 }) => {
   const router = useRouter();
 
   return (
     <div className="flex-1 w-full flex flex-col justify-end mt-10">
+      {headerText && (
+        <p className="text-center text-sm mb-2.5">{headerText}</p>
+      )}
       <div className="mt-2.5 mb-10 w-full flex flex-col md:flex-row-reverse gap-2.5 md:gap-10">
         {!hideNext && (
           <button

@@ -13,7 +13,7 @@ interface FormValues {
   description: string;
 }
 
-const MIN_CHARACTERS = 30;
+const MIN_CHARACTERS = 5;
 
 const WhatPage = () => {
   const router = useRouter();
@@ -84,6 +84,7 @@ const WhatPage = () => {
         </p>
       </div>
       <StepNavButtons
+        headerText="Your quote powered by ChatGPT"
         onNext={handleSubmit(handleNextPress)}
         nextDisabled={nextDisabled}
       />
