@@ -31,8 +31,9 @@ const WherePage = () => {
     // Redirect if required fields are missing
     if (!isCartLoading && (
       !state.type || 
-      ((state.type === "Big & Bulky" || state.type === "Small Items") && !state.when?.date)
+      ((state.type === "Big & Bulky" || state.type === "Small Items") && !(state.when?.date || state.when?.isToday))
     )) {
+      console.log("Redirecting to /");
       router.push("/");
     }
   }, [state, router, isCartLoading]);
