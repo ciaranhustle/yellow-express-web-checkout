@@ -13,7 +13,7 @@ import { Loader } from "@/components/Loader/Loader";
 
 const WherePage = () => {
   const router = useRouter();
-  const { state, dispatch } = useCartContext();
+  const { state, dispatch, isLoading: isCartLoading } = useCartContext();
   const [isGoogleReady, setIsGoogleReady] = useState(false);
 
   useEffect(() => {
@@ -28,11 +28,14 @@ const WherePage = () => {
   }, []);
 
   useEffect(() => {
-    // Redirect if no what is selected
-    if (!state.type) {
+    // Redirect if required fields are missing
+    if (!isCartLoading && (
+      !state.type || 
+      ((state.type === "Big & Bulky" || state.type === "Small Items") && !state.when?.date)
+    )) {
       router.push("/");
     }
-  }, [state, router]);
+  }, [state, router, isCartLoading]);
 
   const nextDisabled =
     !state.where?.pickUpAddress || !state.where?.dropOffAddress;

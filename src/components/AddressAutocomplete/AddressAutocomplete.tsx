@@ -24,14 +24,12 @@ export const AddressAutocomplete: React.FC<Props> = ({
     }
 
     if (!address.value?.place_id) {
-      console.log("Invalid address");
       return;
     }
 
     const results = await geocodeByPlaceId(address.value.place_id);
 
     if (!results || results.length === 0) {
-      console.log("Invalid address");
       return;
     }
 

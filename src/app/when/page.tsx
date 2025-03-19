@@ -14,7 +14,30 @@ import { useEffect } from "react";
 
 const WhenPage = () => {
   const router = useRouter();
-  const { state, dispatch } = useCartContext();
+  const { state, dispatch, isLoading: isCartLoading } = useCartContext();
+
+  // Check if current time is after 5:30 PM
+  const isAfterCutoff = () => {
+    const now = new Date();
+    return now.getHours() > 17 || (now.getHours() === 17 && now.getMinutes() >= 30);
+  };
+
+  useEffect(() => {
+    // Redirect if we skipped the 1st step
+    if (!isCartLoading && !state.type) {
+      router.push("/");
+    }
+  }, [state.type, router, isCartLoading]);
+
+  // Set schedule as default if after cutoff time
+  useEffect(() => {
+    if (isAfterCutoff() && (!state.when || state.when.isToday)) {
+      dispatch({
+        type: "SET_WHEN",
+        payload: { isToday: false },
+      });
+    }
+  }, [dispatch, state.when]);
 
   // Check if current time is after 5:30 PM
   const isAfterCutoff = () => {

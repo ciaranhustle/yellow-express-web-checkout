@@ -81,8 +81,6 @@ const CardForm: React.FC<Props> = ({ onSuccess, onError }) => {
       }
 
       if (paymentMethod) {
-        // Pass the paymentMethodId to the parent component
-        console.log({ paymentMethod });
         onSuccess(paymentMethod.id);
       }
     } catch (err) {

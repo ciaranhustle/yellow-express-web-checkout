@@ -17,7 +17,7 @@ const MIN_CHARACTERS = 30;
 
 const WhatPage = () => {
   const router = useRouter();
-  const { state, dispatch } = useCartContext();
+  const { state, dispatch, isLoading: isCartLoading } = useCartContext();
 
   const {
     handleSubmit,
@@ -38,11 +38,11 @@ const WhatPage = () => {
   };
 
   useEffect(() => {
-    // If the user navigates to this page without selecting a type, redirect to the home page
-    if (!state.type) {
+    // If the user navigates to this page without the previous steps, redirect to the home page
+    if (!isCartLoading && (!state.type || !state.when?.date || !state.where)) {
       router.push("/");
     }
-  }, [state.type, router]);
+  }, [state, router, isCartLoading]);
 
   const description = watch("description");
 

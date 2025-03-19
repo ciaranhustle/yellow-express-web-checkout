@@ -11,7 +11,8 @@ export const useCustomer = () => {
       const response = await api("/api/customer");
       return response?.data?.customer ?? null;
     },
-    refetchInterval: 10 * 60 * 1000,
+    // refetchInterval: 10 * 60 * 1000,
+    retry: false,
     // enabled: false,
   });
 };
