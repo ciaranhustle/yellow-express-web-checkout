@@ -92,7 +92,7 @@ const Directions: React.FC<Props> = ({ startLocation, endLocation }) => {
         map,
         suppressMarkers: true,
         polylineOptions: {
-          strokeColor: "#fdbb30",
+          strokeColor: "#5A699F",
           strokeWeight: 6,
           strokeOpacity: 1,
         },
