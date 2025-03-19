@@ -11,11 +11,10 @@ import { isMobile, isEmail } from "@/lib/validation";
 import { useCreateQuote } from "@/hooks/mutations/useCreateQuote";
 import { useCreateEnquiry } from "@/hooks/mutations/useCreateEnquiry";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
 
 const WhatPage = () => {
   const router = useRouter();
-  const { state, dispatch, isLoading: isCartLoading } = useCartContext();
+  const { state, dispatch } = useCartContext();
   const customerDetails = state.customerDetails;
   const { mutate: createQuote, isPending: isCreatingQuote } = useCreateQuote();
   const { mutate: createEnquiry, isPending: isCreatingEnquiry } = useCreateEnquiry();
@@ -54,13 +53,6 @@ const WhatPage = () => {
       });
     }
   };
-
-  useEffect(() => {
-    // If the user navigates to this page without the previous steps, redirect to the home page
-    if (!isCartLoading && !state.type) {
-      router.push("/");
-    }
-  }, [state, router, isCartLoading]);
 
   return (
     <Container>
