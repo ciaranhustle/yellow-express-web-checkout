@@ -27,6 +27,7 @@ const SummaryPage = () => {
     useState<BookingAssistOption | null>(null);
   const [isServiceAcknowledge, setIsServiceAcknowledge] = useState(false);
   const [isChangeAcknowledge, setIsChangeAcknowledge] = useState(false);
+  const [isSmallItemsAcknowledge, setIsSmallItemsAcknowledge] = useState(false);
   const [isDiscountModalOpen, setIsDiscountModalOpen] = useState(false);
 
   const handleSetBookingAssistOption = useCallback((option: BookingAssistOption) => {
@@ -135,6 +136,13 @@ const SummaryPage = () => {
                       isChecked={isChangeAcknowledge}
                       onChange={() => setIsChangeAcknowledge((prev) => !prev)}
                     />
+                    {quote.bookingDetails.bookingType === 'Small Items' && (
+                      <Acknowledgement
+                        text="The items that I am moving are small enough to be placed on the front seat of a standard car."
+                        isChecked={isSmallItemsAcknowledge}
+                        onChange={() => setIsSmallItemsAcknowledge((prev) => !prev)}
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -143,7 +151,8 @@ const SummaryPage = () => {
                     "w-full flex flex-col",
                     ((quote.bookingDetails.bookingType === 'Big & Bulky' && 
                       (!selectedAssistOption || !isServiceAcknowledge)) || 
-                     !isChangeAcknowledge) && 
+                     !isChangeAcknowledge || 
+                     (quote.bookingDetails.bookingType === 'Small Items' && !isSmallItemsAcknowledge)) && 
                     "blur-sm pointer-events-none"
                   )}
                 >
