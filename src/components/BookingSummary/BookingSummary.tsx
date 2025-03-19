@@ -69,7 +69,6 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
           title="Job inclusions"
           values={[
             `${quote.inclusions.minutes} minutes`,
-            `${quote.inclusions.weight}`,
             `${quote.inclusions.loads} load${
               quote.inclusions?.loads > 1 ? "s" : ""
             }`,

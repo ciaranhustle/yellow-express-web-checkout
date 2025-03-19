@@ -66,12 +66,6 @@ const QuotePage = () => {
                 <div className="flex flex-row items-center gap-2 w-full">
                   <Image src="/tickCircle.svg" alt="" width={24} height={24} />
                   <span className="flex-1 text-start">
-                    {quote.inclusions.weight}
-                  </span>
-                </div>
-                <div className="flex flex-row items-center gap-2 w-full">
-                  <Image src="/tickCircle.svg" alt="" width={24} height={24} />
-                  <span className="flex-1 text-start">
                     {`${quote.inclusions.loads} load${
                       quote.inclusions?.loads > 1 ? "s" : ""
                     }`}
