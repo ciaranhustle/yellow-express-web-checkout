@@ -108,43 +108,47 @@ const SummaryPage = () => {
                       />
                     </div>
 
-                    <div className="px-2">
-                      <p className="text-xl font-bold mt-7 mb-2 text-start">
-                        Acknowledge before proceeding
-                      </p>
-                      <div className="w-full flex flex-col gap-5">
-                        <Acknowledgement
-                          text={
-                            selectedAssistOption === "DIY"
-                              ? "I understand that Yellow Express DIY provides a one-man and van service. I agree to assist the driver with loading and unloading any large or bulky items at both pickup and drop-off locations."
-                              : "I understand that Yellow Express TLC provides a two-man and van service. I agree to ensure that the drivers have access in order to load and unload any large or bulky items at both pickup and drop-off locations."
-                          }
-                          isChecked={isServiceAcknowledge}
-                          onChange={() =>
-                            setIsServiceAcknowledge((prev) => !prev)
-                          }
-                        />
+                    {selectedAssistOption && (
+                      <div className="px-2">
+                        <p className="text-xl font-bold mt-7 mb-2 text-start">
+                          Acknowledge before proceeding
+                        </p>
+                        <div className="w-full flex flex-col gap-5">
+                          <Acknowledgement
+                            text={
+                              selectedAssistOption === "DIY"
+                                ? "I understand that Yellow Express DIY provides a one-man and van service. I agree to assist the driver with loading and unloading any large or bulky items at both pickup and drop-off locations."
+                                : "I understand that Yellow Express TLC provides a two-man and van service. I agree to ensure that the drivers have access in order to load and unload any large or bulky items at both pickup and drop-off locations."
+                            }
+                            isChecked={isServiceAcknowledge}
+                            onChange={() =>
+                              setIsServiceAcknowledge((prev) => !prev)
+                            }
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </>
                 )}
 
-                <div className="px-2 my-6">
-                  <div className="w-full flex flex-col gap-5">
-                    <Acknowledgement
-                      text="I understand that any changes to the job details (such as item quantity, size, location, or time) may result in a change to the final price."
-                      isChecked={isChangeAcknowledge}
-                      onChange={() => setIsChangeAcknowledge((prev) => !prev)}
-                    />
-                    {quote.bookingDetails.bookingType === 'Small Items' && (
+                {selectedAssistOption && (
+                  <div className="px-2 my-6">
+                    <div className="w-full flex flex-col gap-5">
                       <Acknowledgement
-                        text="The items that I am moving are small enough to be placed on the front seat of a standard car."
-                        isChecked={isSmallItemsAcknowledge}
-                        onChange={() => setIsSmallItemsAcknowledge((prev) => !prev)}
+                        text="I understand that any changes to the job details (such as item quantity, size, location, or time) may result in a change to the final price."
+                        isChecked={isChangeAcknowledge}
+                        onChange={() => setIsChangeAcknowledge((prev) => !prev)}
                       />
-                    )}
+                      {quote.bookingDetails.bookingType === 'Small Items' && (
+                        <Acknowledgement
+                          text="The items that I am moving are small enough to be placed on the front seat of a standard car."
+                          isChecked={isSmallItemsAcknowledge}
+                          onChange={() => setIsSmallItemsAcknowledge((prev) => !prev)}
+                        />
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div
                   className={cn(
