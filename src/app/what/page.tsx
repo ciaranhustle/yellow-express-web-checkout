@@ -55,11 +55,11 @@ const WhatPage = () => {
             name="description"
             control={control}
             rules={{
-              required: state.type === "Big & Bulky" ? `Minimum ${MIN_CHARACTERS} characters are required` : "Description is required",
-              minLength: state.type === "Big & Bulky" ? {
+              required: `Minimum ${MIN_CHARACTERS} characters are required`,
+              minLength: {
                 value: MIN_CHARACTERS,
                 message: `Minimum ${MIN_CHARACTERS} characters are required`,
-              } : undefined,
+              },
             }}
             render={({ field }) => (
               <textarea
@@ -79,8 +79,8 @@ const WhatPage = () => {
           )}
         >
           {errors.description?.message ??
-            (state.type === "Big & Bulky" ? `Minimum ${MIN_CHARACTERS} characters` : "")}
-          {state.type === "Big & Bulky" && description && `: ${description.length}`}
+            `Minimum ${MIN_CHARACTERS} characters`}
+          {description && `: ${description.length}`}
         </p>
       </div>
       <StepNavButtons

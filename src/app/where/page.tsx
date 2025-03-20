@@ -34,6 +34,16 @@ const WherePage = () => {
     }
   }, [state, router, isCartLoading]);
 
+  const handleNextPress = () => {
+    // For Small Items & Fragile, we want to skip this page
+    if (state.type === "Small Items" || state.type === "Fragile & Sensitive") {
+      dispatch({ type: "SET_WHAT", payload: "Small box of items that can be placed on the front seat of a standard car in one load." });
+      router.push('details');
+    } else {
+      router.push("/what");
+    }
+  };
+
   const nextDisabled =
     !state.where?.pickUpAddress || !state.where?.dropOffAddress;
 
@@ -78,7 +88,7 @@ const WherePage = () => {
         />
         <div className="absolute bottom-5 w-full px-5">
           <StepNavButtons
-            onNext={() => router.push("/what")}
+            onNext={handleNextPress}
             nextText="CONFIRM LOCATIONS"
             nextDisabled={nextDisabled}
           />

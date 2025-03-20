@@ -12,7 +12,7 @@ const HomePage = () => {
 
   const handleOptionPress = (type: BookingType) => {
     dispatch({ type: "SET_TYPE", payload: type });
-    if (type === "Fragile & Sensitive" || type === "Something Obscure") {
+    if (type === "Something Obscure") {
       router.push("/where");
     } else {
       router.push("/when");

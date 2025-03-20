@@ -35,9 +35,14 @@ const SummaryPage = () => {
     dispatch({ type: "SET_BOOKING_ASSIST_OPTION", payload: option });
   }, [dispatch]);
 
-  // Set DIY by default for small items
+  // Set DIY by default for small items & fragile & sensitive
   useEffect(() => {
-    if (quote && quote.bookingDetails.bookingType === 'Small Items' && !selectedAssistOption) {
+    if (
+      quote && 
+      (quote.bookingDetails.bookingType === 'Small Items' || 
+       quote.bookingDetails.bookingType === 'Fragile & Sensitive') && 
+      !selectedAssistOption
+    ) {
       handleSetBookingAssistOption('DIY');
     }
   }, [quote, handleSetBookingAssistOption, selectedAssistOption]);
@@ -139,7 +144,7 @@ const SummaryPage = () => {
                         isChecked={isChangeAcknowledge}
                         onChange={() => setIsChangeAcknowledge((prev) => !prev)}
                       />
-                      {quote.bookingDetails.bookingType === 'Small Items' && (
+                      {(quote.bookingDetails.bookingType === 'Small Items' || quote.bookingDetails.bookingType === 'Fragile & Sensitive') && (
                         <Acknowledgement
                           text="The items that I am moving are small enough to be placed on the front seat of a standard car."
                           isChecked={isSmallItemsAcknowledge}

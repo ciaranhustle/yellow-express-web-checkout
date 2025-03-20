@@ -37,7 +37,7 @@ const WhatPage = () => {
   const handleNextPress = async (formData: CustomerDetails) => {
     dispatch({ type: "SET_CUSTOMER_DETAILS", payload: formData });
 
-    if (state.type === "Fragile & Sensitive" || state.type === "Something Obscure") {
+    if (state.type === "Something Obscure") {
       createEnquiry();
     } else {
       createQuote(undefined, {
