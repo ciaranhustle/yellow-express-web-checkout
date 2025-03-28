@@ -23,7 +23,8 @@ export const Footer = () => {
         <footer className="text-black pt-3 pb-6 text-center bg-primary border-t-4 border-black">
           <a
             className="underline text-2xl font-bold leading-normal"
-            href="tel:1300935569"
+            href="https://yellowexpress.com.au/get-a-quote/"
+            target="_blank"
           >
             Want a quote first?
           </a>
