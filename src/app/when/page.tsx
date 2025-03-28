@@ -54,11 +54,11 @@ const WhenPage = () => {
         <div className="w-full flex flex-col md:flex-row gap-2.5 md:gap-10 mb-4">
           <BookingDateOption
             title="Today"
-            description="Need us ASAP? Choose this option to skip the queue."
+            // description="Need us ASAP? Choose this option to skip the queue."
             imageSrc={
               state.when?.isToday
-                ? "/moneyTruckWhite.svg"
-                : "/moneyTruckBlack.svg"
+                ? "/lightning-white.svg"
+                : "/lightning.svg"
             }
             isSelected={!!state.when?.isToday}
             onClick={() =>
@@ -72,7 +72,7 @@ const WhenPage = () => {
           />
           <BookingDateOption
             title="Schedule"
-            description="Not in a huge rush? Choose this option to book in and save $$"
+            // description="Not in a huge rush? Choose this option to book in and save $$"
             imageSrc={
               state.when?.isToday ? "/scheduleBlack.svg" : "/scheduleWhite.svg"
             }
@@ -102,7 +102,7 @@ const WhenPage = () => {
               />
             </div>
             <div className="w-full flex flex-col items-start">
-              <h3 className="text-2xl font-bold mb-1">What time works best?</h3>
+              <h3 className="text-2xl font-bold mb-1">What pick up time works best for you?</h3>
               <div className="w-full flex flex-col gap-2.5">
                 {bookingTimeOptions.map((option) => (
                   <button
@@ -137,7 +137,7 @@ export default WhenPage;
 
 interface BookingDateOptionProps {
   title: string;
-  description: string;
+  // description: string;
   imageSrc: string;
   onClick: () => void;
   isSelected: boolean;
@@ -147,7 +147,7 @@ interface BookingDateOptionProps {
 
 const BookingDateOption: React.FC<BookingDateOptionProps> = ({
   title,
-  description,
+  // description,
   imageSrc,
   onClick,
   isSelected,
@@ -163,7 +163,7 @@ const BookingDateOption: React.FC<BookingDateOptionProps> = ({
   >
     <div className="text-left flex flex-col max-w-52">
       <h3 className="font-bold text-[26px] leading-snug">{title}</h3>
-      <p className="text-sm leading-snug">{description}</p>
+      {/* <p className="text-sm leading-snug">{description}</p> */}
     </div>
     <div className="flex-1 flex flex-row justify-end items-center">
       <Image src={imageSrc} alt="" className="h-12" width={48} height={48} />
