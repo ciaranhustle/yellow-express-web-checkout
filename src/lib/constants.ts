@@ -31,9 +31,9 @@ export const bookingTypeOptions: BookingTypeOption[] = [
     imageSrc: "/fragileItems.png",
   },
   {
-    type: "Something Obscure",
+    type: "Corporate Enquiries",
     description:
-      "Choose this option if you'd like to book a van for the day or you have a unique / XXXL request.",
+      "Yellow Express provides a bespoke courier service for companies of all sizes.",
     imageSrc: "/obscureItems.png",
   },
 ];

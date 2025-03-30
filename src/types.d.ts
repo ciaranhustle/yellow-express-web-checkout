@@ -7,7 +7,7 @@ type BookingType =
   | "Big & Bulky"
   | "Small Items"
   | "Fragile & Sensitive"
-  | "Something Obscure";
+  | "Corporate Enquiries";
 
 type BookingAssistOption = "DIY" | "TLC";
 
