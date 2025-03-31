@@ -15,7 +15,7 @@ interface CartState {
   type: BookingType | null;
   when: WhenDetails | null;
   where: WhereDetails | null;
-  what: string | null;
+  what: string[] | null;
   customerDetails: CustomerDetails | null;
   quoteId: string | null;
   coupon: Coupon | null;
@@ -25,7 +25,7 @@ type CartAction =
   | { type: "SET_TYPE"; payload: BookingType | null }
   | { type: "SET_WHEN"; payload: Partial<WhenDetails> | null }
   | { type: "SET_WHERE"; payload: Partial<WhereDetails> | null }
-  | { type: "SET_WHAT"; payload: string | null }
+  | { type: "SET_WHAT"; payload: string[] | null }
   | { type: "SET_CUSTOMER_DETAILS"; payload: Partial<CustomerDetails> | null }
   | { type: "SET_COUPON"; payload: Coupon | null }
   | { type: "CLEAR_COUPON" }
@@ -135,6 +135,7 @@ interface Quote {
   tlcPrice: number;
   expiresOn: string;
   status: QuoteStatus;
+  summary: string;
 }
 
 type QuoteStatus = "Pending" | "Claimed" | "Expired" | "Paid";
@@ -150,7 +151,7 @@ interface QuoteDataProps {
 interface Job {
   type: BookingType;
   pickupDateUTC: string;
-  pickupTime: { 
+  pickupTime: {
     hours: number,
     minutes: number,
     ampm: string

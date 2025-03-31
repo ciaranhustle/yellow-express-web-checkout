@@ -37,7 +37,6 @@ const WherePage = () => {
   const handleNextPress = () => {
     // For Small Items & Fragile, we want to skip this page
     if (state.type === "Small Items" || state.type === "Fragile & Sensitive") {
-      dispatch({ type: "SET_WHAT", payload: "Small box of items that can be placed on the front seat of a standard car in one load." });
       router.push('details');
     } else {
       router.push("/what");

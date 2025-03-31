@@ -1,95 +1,115 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
-import { Container } from "@/components/Container/Container";
-import { StepHeader } from "@/components/StepHeader/StepHeader";
-import { StepNavButtons } from "@/components/StepNavButtons/StepNavButtons";
-import { cn } from "@/lib/utils";
-import { useCartContext } from "@/context/CartContext";
-import { useEffect } from "react";
-
+import { useRouter } from 'next/navigation';
+import { useForm, Controller, useFieldArray } from 'react-hook-form';
+import { Container } from '@/components/Container/Container';
+import { StepHeader } from '@/components/StepHeader/StepHeader';
+import { StepNavButtons } from '@/components/StepNavButtons/StepNavButtons';
+import { useCartContext } from '@/context/CartContext';
+import { useEffect } from 'react';
+import Input from '@/components/Input/Input';
+import Image from 'next/image';
 interface FormValues {
-  description: string;
+	items: { description: string }[];
 }
 
 const MIN_CHARACTERS = 5;
 
 const WhatPage = () => {
-  const router = useRouter();
-  const { state, dispatch, isLoading: isCartLoading } = useCartContext();
+	const router = useRouter();
+	const { state, dispatch, isLoading: isCartLoading } = useCartContext();
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-    watch,
-  } = useForm<FormValues>({
-    defaultValues: {
-      description: state.what ?? "",
-    },
-  });
+	const {
+		handleSubmit,
+		control,
+		formState: { errors },
+		watch,
+	} = useForm<FormValues>({
+		defaultValues: {
+			items:
+				state.what && Array.isArray(state.what)
+					? state.what.map((description) => ({ description }))
+					: [{ description: '' }],
+		},
+	});
 
-  const nextDisabled = !!errors.description;
+	const { fields, append, remove } = useFieldArray({
+		control,
+		name: 'items',
+	});
 
-  const handleNextPress = (formData: FormValues) => {
-    dispatch({ type: "SET_WHAT", payload: formData.description });
-    router.push("/details");
-  };
+	const items = watch('items');
 
-  useEffect(() => {
-    // If the user navigates to this page without the previous steps, redirect to the home page
-    if (!isCartLoading && !state.type) {
-      router.push("/");
-    }
-  }, [state, router, isCartLoading]);
+	const nextDisabled = !items?.some((item) => item.description.length >= MIN_CHARACTERS);
 
-  const description = watch("description");
+	const handleNextPress = (formData: FormValues) => {
+		const validItems = formData.items
+			.filter((item) => item.description.length >= MIN_CHARACTERS)
+			.map((item) => item.description);
+		dispatch({ type: 'SET_WHAT', payload: validItems });
+		router.push('/details');
+	};
 
-  return (
-    <Container>
-      <StepHeader title="What are we moving?" />
-      <div className="w-full flex flex-col items-end gap-2.5">
-        <div className="w-full">
-          <Controller
-            name="description"
-            control={control}
-            rules={{
-              required: `Minimum ${MIN_CHARACTERS} characters are required`,
-              minLength: {
-                value: MIN_CHARACTERS,
-                message: `Minimum ${MIN_CHARACTERS} characters are required`,
-              },
-            }}
-            render={({ field }) => (
-              <textarea
-                id="description"
-                placeholder="List out all the items you need help moving and as many details about the job as possible"
-                {...field}
-                className="border border-lightgrey rounded px-5 py-4 w-full bg-transparent text-lg"
-                rows={8}
-              />
-            )}
-          />
-        </div>
-        <p
-          className={cn(
-            "opacity-60 text-xs",
-            errors.description && "text-red-500 opacity-100"
-          )}
-        >
-          {errors.description?.message ??
-            `Minimum ${MIN_CHARACTERS} characters`}
-          {description && `: ${description.length}`}
-        </p>
-      </div>
-      <StepNavButtons
-        headerText="Your quote powered by ChatGPT"
-        onNext={handleSubmit(handleNextPress)}
-        nextDisabled={nextDisabled}
-      />
-    </Container>
-  );
+	useEffect(() => {
+		// If the user navigates to this page without the previous steps, redirect to the home page
+		if (!isCartLoading && !state.type) {
+			router.push('/');
+		}
+	}, [state, router, isCartLoading]);
+
+
+	return (
+		<Container>
+			<StepHeader title="What are we moving?" />
+			<div className="w-full flex flex-col items-end gap-4">
+				<div className="w-full space-y-4">
+					{fields.map((field, index) => (
+						<div key={field.id} className="flex gap-2">
+							<Controller
+								name={`items.${index}.description`}
+								control={control}
+								rules={{
+									minLength: {
+										value: MIN_CHARACTERS,
+										message: `Minimum ${MIN_CHARACTERS} characters are required`,
+									},
+								}}
+								render={({ field }) => (
+									<Input
+										{...field}
+										placeholder="Describe an item"
+										errors={errors}
+										className="placeholder:text-gray-600 border-gray-300"
+									/>
+								)}
+							/>
+							{fields.length > 1 && (
+								<button
+									type="button"
+									onClick={() => remove(index)}
+									className="text-red-500 hover:text-red-700"
+								>
+									<Image src="/xCircle.svg" alt="x" width={36} height={36} />
+								</button>
+							)}
+						</div>
+					))}
+				</div>
+				<button
+					type="button"
+					onClick={() => append({ description: '' })}
+					className="text-blue-500 hover:text-blue-700"
+				>
+					+ Add Another Item
+				</button>
+			</div>
+			<StepNavButtons
+				// headerText="Your quote powered by ChatGPT"
+				onNext={handleSubmit(handleNextPress)}
+				nextDisabled={nextDisabled}
+			/>
+		</Container>
+	);
 };
 
 export default WhatPage;

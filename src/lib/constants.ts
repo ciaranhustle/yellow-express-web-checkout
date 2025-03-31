@@ -34,7 +34,7 @@ export const bookingTypeOptions: BookingTypeOption[] = [
     type: "Corporate Enquiries",
     description:
       "Yellow Express provides a bespoke courier service for companies of all sizes.",
-    imageSrc: "/obscureItems.png",
+    imageSrc: "/corporateEnquiries.png",
   },
 ];
 
