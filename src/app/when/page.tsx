@@ -104,24 +104,29 @@ const WhenPage = () => {
             <div className="w-full flex flex-col items-start">
               <h3 className="text-2xl font-bold mb-1">What pick up time works best for you?</h3>
               <div className="w-full flex flex-col gap-2.5">
-                {bookingTimeOptions.map((option) => (
-                  <button
-                    key={option.time}
-                    className={cn(
-                      "w-full p-4 flex flex-row justify-between items-center rounded border border-black text-base font-bold",
-                      state.when?.time === option.time && "bg-accent text-white"
-                    )}
-                    onClick={() =>
-                      dispatch({
-                        type: "SET_WHEN",
-                        payload: { time: option.time },
-                      })
-                    }
-                  >
-                    <span>{option.time}</span>
-                    <span className="font-normal">{option.range}</span>
-                  </button>
-                ))}
+                {bookingTimeOptions.map((option) => {
+                  const isWeekend = state.when?.date ? new Date(state.when.date).getDay() === 0 || new Date(state.when.date).getDay() === 6 : false;
+                  const displayRange = isWeekend && option.weekendRange ? option.weekendRange : option.range;
+                  
+                  return (
+                    <button
+                      key={option.time}
+                      className={cn(
+                        "w-full p-4 flex flex-row justify-between items-center rounded border border-black text-base font-bold",
+                        state.when?.time === option.time && "bg-accent text-white"
+                      )}
+                      onClick={() =>
+                        dispatch({
+                          type: "SET_WHEN",
+                          payload: { time: option.time },
+                        })
+                      }
+                    >
+                      <span>{option.time}</span>
+                      <span className="font-normal">{displayRange}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>

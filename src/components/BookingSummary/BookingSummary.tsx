@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import Image from "next/image";
 import React from "react";
+import { bookingTimeOptions } from "@/lib/constants";
 
 interface BookingSummaryItemProps {
   title: string;
@@ -25,20 +26,25 @@ const BookingSummaryItem: React.FC<BookingSummaryItemProps> = ({
   </div>
 );
 
-const PICKUP_TIMES: Record<BookingTime, string> = {
-  Morning: "Morning (7:30AM-10AM)",
-  Midday: "Midday (10AM-2PM)",
-  Afternoon: "Afternoon (2PM-6PM)",
-};
-
 interface Props {
   quote: Quote;
 }
 
 export const BookingSummary: React.FC<Props> = ({ quote }) => {
   const isToday = quote.bookingDetails.isToday;
+  const isWeekend = quote.bookingDetails.date ? 
+    new Date(quote.bookingDetails.date).getDay() === 0 || 
+    new Date(quote.bookingDetails.date).getDay() === 6 : false;
 
   if (!quote) return null;
+
+  const getTimeDisplay = (time: BookingTime) => {
+    const timeOption = bookingTimeOptions.find(opt => opt.time === time);
+    if (!timeOption) return time;
+    
+    const range = isWeekend && timeOption.weekendRange ? timeOption.weekendRange : timeOption.range;
+    return `${time} (${range})`;
+  };
 
   return (
     <div className="w-full bg-white border-b-8 border-b-primary rounded shadow-lg px-6 py-5 text-black">
@@ -63,7 +69,7 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
         />
         <BookingSummaryItem
           title="Pickup time"
-          values={[isToday ? "ASAP" : PICKUP_TIMES[quote.bookingDetails.time]]}
+          values={[isToday ? "ASAP" : getTimeDisplay(quote.bookingDetails.time)]}
         />
         <BookingSummaryItem
           title="Job inclusions"
