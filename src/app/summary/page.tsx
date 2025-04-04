@@ -27,7 +27,6 @@ const SummaryPage = () => {
     useState<BookingAssistOption | null>(null);
   const [isServiceAcknowledge, setIsServiceAcknowledge] = useState(false);
   const [isChangeAcknowledge, setIsChangeAcknowledge] = useState(false);
-  const [isSmallItemsAcknowledge, setIsSmallItemsAcknowledge] = useState(false);
   const [isTermsAcknowledge, setIsTermsAcknowledge] = useState(false);
   const [isDiscountModalOpen, setIsDiscountModalOpen] = useState(false);
 
@@ -141,17 +140,10 @@ const SummaryPage = () => {
                   <div className="px-2 my-6">
                     <div className="w-full flex flex-col gap-5">
                       <Acknowledgement
-                        text="I understand that any changes to the job details (such as item quantity, size, location, or time) may result in a change to the final price."
+                        text="I understand that any changes to the job details (such as item quantity, size, location, delays, or time) may result in a change to the final price."
                         isChecked={isChangeAcknowledge}
                         onChange={() => setIsChangeAcknowledge((prev) => !prev)}
                       />
-                      {(quote.bookingDetails.bookingType === 'Small Items' || quote.bookingDetails.bookingType === 'Fragile & Sensitive') && (
-                        <Acknowledgement
-                          text="The items that I am moving are small enough to be placed on the front seat of a standard car."
-                          isChecked={isSmallItemsAcknowledge}
-                          onChange={() => setIsSmallItemsAcknowledge((prev) => !prev)}
-                        />
-                      )}
                       <Acknowledgement
                         text={
                           <>
@@ -180,8 +172,7 @@ const SummaryPage = () => {
                     ((quote.bookingDetails.bookingType === 'Big & Bulky' && 
                       (!selectedAssistOption || !isServiceAcknowledge)) || 
                      !isChangeAcknowledge || 
-                     !isTermsAcknowledge ||
-                     (quote.bookingDetails.bookingType === 'Small Items' && !isSmallItemsAcknowledge)) && 
+                     !isTermsAcknowledge) && 
                     "blur-sm pointer-events-none"
                   )}
                 >

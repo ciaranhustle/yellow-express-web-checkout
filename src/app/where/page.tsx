@@ -35,8 +35,7 @@ const WherePage = () => {
   }, [state, router, isCartLoading]);
 
   const handleNextPress = () => {
-    // For Small Items & Fragile, we want to skip this page
-    if (state.type === "Small Items" || state.type === "Corporate Enquiries" || state.type === "Fragile & Sensitive") {
+    if (state.type === "Corporate Enquiries") {
       router.push('details');
     } else {
       router.push("/what");
