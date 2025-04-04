@@ -1,8 +1,9 @@
-import { cn } from "@/lib/utils";
-import Image from "next/image";
+import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { ReactNode } from 'react';
 
 export const Acknowledgement: React.FC<{
-  text: string;
+	text: ReactNode;
   isChecked: boolean;
   onChange: () => void;
 }> = ({ text, isChecked, onChange }) => (

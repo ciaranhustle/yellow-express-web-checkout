@@ -28,6 +28,7 @@ const SummaryPage = () => {
   const [isServiceAcknowledge, setIsServiceAcknowledge] = useState(false);
   const [isChangeAcknowledge, setIsChangeAcknowledge] = useState(false);
   const [isSmallItemsAcknowledge, setIsSmallItemsAcknowledge] = useState(false);
+  const [isTermsAcknowledge, setIsTermsAcknowledge] = useState(false);
   const [isDiscountModalOpen, setIsDiscountModalOpen] = useState(false);
 
   const handleSetBookingAssistOption = useCallback((option: BookingAssistOption) => {
@@ -151,6 +152,24 @@ const SummaryPage = () => {
                           onChange={() => setIsSmallItemsAcknowledge((prev) => !prev)}
                         />
                       )}
+                      <Acknowledgement
+                        text={
+                          <>
+                            I agree to the{" "}
+                            <a
+                              href="https://yellowexpress.com.au/terms-conditions/"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline"
+                            >
+                              terms and conditions
+                            </a>
+                            .
+                          </>
+                        }
+                        isChecked={isTermsAcknowledge}
+                        onChange={() => setIsTermsAcknowledge((prev) => !prev)}
+                      />
                     </div>
                   </div>
                 )}
@@ -161,6 +180,7 @@ const SummaryPage = () => {
                     ((quote.bookingDetails.bookingType === 'Big & Bulky' && 
                       (!selectedAssistOption || !isServiceAcknowledge)) || 
                      !isChangeAcknowledge || 
+                     !isTermsAcknowledge ||
                      (quote.bookingDetails.bookingType === 'Small Items' && !isSmallItemsAcknowledge)) && 
                     "blur-sm pointer-events-none"
                   )}
