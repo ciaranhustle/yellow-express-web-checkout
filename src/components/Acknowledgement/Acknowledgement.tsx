@@ -20,7 +20,6 @@ export const Acknowledgement: React.FC<{
         <Image src="/tick.svg" alt="tick" width={24} height={24} />
         <span>I agree</span>
       </button>
-      <Image src="/xCircle.svg" alt="x" width={36} height={36} />
     </div>
   </div>
 );
