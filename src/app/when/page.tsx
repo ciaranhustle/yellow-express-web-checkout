@@ -16,10 +16,10 @@ const WhenPage = () => {
   const router = useRouter();
   const { state, dispatch, isLoading: isCartLoading } = useCartContext();
 
-  // Check if current time is after 5:30 PM
+  // Check if current time is after 6:00 PM
   const isAfterCutoff = () => {
     const now = new Date();
-    return now.getHours() > 17 || (now.getHours() === 17 && now.getMinutes() >= 30);
+    return now.getHours() >= 18;
   };
 
   useEffect(() => {
