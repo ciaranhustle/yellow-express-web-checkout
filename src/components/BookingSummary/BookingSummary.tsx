@@ -1,7 +1,8 @@
 import { format } from "date-fns";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { bookingTimeOptions } from "@/lib/constants";
+import { QuoteSummaryModal } from "@/components/QuoteDescriptionModal/QuoteDescriptionModal";
 
 interface BookingSummaryItemProps {
   title: string;
@@ -31,6 +32,7 @@ interface Props {
 }
 
 export const BookingSummary: React.FC<Props> = ({ quote }) => {
+  const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
   const isToday = quote.bookingDetails.isToday;
   const isWeekend = quote.bookingDetails.date ? 
     new Date(quote.bookingDetails.date).getDay() === 0 || 
@@ -71,16 +73,21 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
           title="Pickup time"
           values={[isToday ? "ASAP" : getTimeDisplay(quote.bookingDetails.time)]}
         />
-        <BookingSummaryItem
-          title="Job inclusions"
-          values={[
-            `${quote.inclusions.minutes} minutes`,
-            `${quote.inclusions.loads} load${
-              quote.inclusions?.loads > 1 ? "s" : ""
-            }`,
-          ]}
-        />
+        <div className="text-sm w-full flex flex-row justify-between items-center my-4">
+          <p className="opacity-50">Job summary</p>
+          <button
+            onClick={() => setIsDescriptionModalOpen(true)}
+            className="bg-primary text-black px-4 py-1 rounded-full font-bold hover:bg-primary/90 transition-colors"
+          >
+            See Description
+          </button>
+        </div>
       </div>
+      <QuoteSummaryModal
+        isOpen={isDescriptionModalOpen}
+        onClose={() => setIsDescriptionModalOpen(false)}
+        summary={quote.summary}
+      />
     </div>
   );
 };
