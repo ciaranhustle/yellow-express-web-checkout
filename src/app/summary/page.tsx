@@ -156,6 +156,15 @@ const SummaryPage = () => {
                             >
                               terms and conditions
                             </a>
+                            {" "} and the {" "}
+                            <a
+                              href="https://yellowexpress.com.au/cancellation-policy/"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline"
+                            >
+                              cancellation policy
+                            </a>
                             .
                           </>
                         }
