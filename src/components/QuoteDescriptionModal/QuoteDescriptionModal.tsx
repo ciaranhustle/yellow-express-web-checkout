@@ -1,4 +1,5 @@
 import React from 'react';
+import { X } from 'lucide-react';
 
 interface QuoteSummaryModalProps {
 	isOpen: boolean;
@@ -19,10 +20,10 @@ export const QuoteSummaryModal: React.FC<QuoteSummaryModalProps> = ({
 				<div className="flex justify-between items-center mb-6">
 					<h2 className="text-2xl font-bold">Quote Summary</h2>
 					<button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-						✕
+						<X size={24} />
 					</button>
 				</div>
-				<p className="text-gray-700 text-lg leading-relaxed whitespace-pre-wrap text-center">
+				<p className="text-gray-700 text-lg leading-relaxed whitespace-pre-wrap text-left">
 					{summary}
 				</p>
 			</div>
