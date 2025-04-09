@@ -11,6 +11,7 @@ interface CheckoutData {
   quote: Quote;
   bookingAssistOption: BookingAssistOption;
   couponCode?: string;
+  upsellApplied?: string;
 }
 
 interface CheckoutResponse {

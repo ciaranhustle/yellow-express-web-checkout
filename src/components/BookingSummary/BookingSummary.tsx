@@ -3,6 +3,8 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { bookingTimeOptions } from "@/lib/constants";
 import { QuoteSummaryModal } from "@/components/QuoteDescriptionModal/QuoteDescriptionModal";
+import { formatPrice } from "@/lib/format";
+import { useCartContext } from "@/context/CartContext";
 
 interface BookingSummaryItemProps {
   title: string;
@@ -33,6 +35,8 @@ interface Props {
 
 export const BookingSummary: React.FC<Props> = ({ quote }) => {
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
+  const { state: cartState, dispatch } = useCartContext();
+  const selectedUpsell = cartState.selectedUpsellOption;
   const isToday = quote.bookingDetails.isToday;
   const isWeekend = quote.bookingDetails.date ? 
     new Date(quote.bookingDetails.date).getDay() === 0 || 
@@ -73,15 +77,47 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
           title="Pickup time"
           values={[isToday ? "ASAP" : getTimeDisplay(quote.bookingDetails.time)]}
         />
-        <div className="text-sm w-full flex flex-row justify-between items-center my-4">
+        <div className="text-sm w-full flex flex-row justify-between items-center my-2 pt-4 border-t border-gray-200">
           <p className="opacity-50">Job summary</p>
           <button
             onClick={() => setIsDescriptionModalOpen(true)}
-            className="bg-primary text-black px-4 py-1 rounded-full font-bold hover:bg-primary/90 transition-colors"
+            className="bg-primary text-black px-4 py-2 rounded-full font-bold hover:bg-primary/90 transition-colors"
           >
             See Description
           </button>
         </div>
+        {quote.upsellOptions && quote.upsellOptions.length > 0 && (
+          <div className="pt-4 border-t border-gray-200">
+            <p className="text-sm opacity-50 mb-2">Upgrade Delivery Speed:</p>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => dispatch({ type: 'SET_UPSELL_OPTION', payload: null })}
+                className={`p-3 rounded border text-left transition-colors ${!selectedUpsell ? 'border-primary bg-primary/10' : 'border-gray-300 hover:bg-gray-50'}`}
+              >
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold">Standard Delivery</span>
+                  <span className="font-bold">
+                    {formatPrice(cartState.bookingAssistOption === 'TLC' ? quote.tlcPrice : quote.price)}
+                  </span>
+                </div>
+              </button>
+              {quote.upsellOptions.map((option) => (
+                <button
+                  key={option.speed}
+                  onClick={() => dispatch({ type: 'SET_UPSELL_OPTION', payload: option })}
+                  className={`p-3 rounded border text-left transition-colors ${selectedUpsell?.speed === option.speed ? 'border-primary bg-primary/10' : 'border-gray-300 hover:bg-gray-50'}`}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold">{option.speed} ({option.label})</span>
+                    <span className="font-bold">
+                      {formatPrice(cartState.bookingAssistOption === 'TLC' ? option.tlcPrice : option.price)}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       <QuoteSummaryModal
         isOpen={isDescriptionModalOpen}

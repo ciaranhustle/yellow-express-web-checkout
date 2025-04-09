@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Container } from "@/components/Container/Container";
 import { BookingSummary } from "@/components/BookingSummary/BookingSummary";
 import { useQuote } from "@/hooks/queries/useQuote";
@@ -30,6 +30,21 @@ const SummaryPage = () => {
   const [isTermsAcknowledge, setIsTermsAcknowledge] = useState(false);
   const [isDiscountModalOpen, setIsDiscountModalOpen] = useState(false);
 
+  // Memoize the currently active prices based on selected upsell option
+  const currentPrices = useMemo(() => {
+    if (!quote) {
+      // Return default/zero values if quote is not loaded
+      return { price: 0, fullPrice: 0, tlcPrice: 0, tlcFullPrice: 0 };
+    }
+    const upsell = state.selectedUpsellOption;
+    return {
+      price: upsell?.price ?? quote.price,
+      fullPrice: upsell?.fullPrice ?? quote.fullPrice,
+      tlcPrice: upsell?.tlcPrice ?? quote.tlcPrice,
+      tlcFullPrice: upsell?.tlcFullPrice ?? quote.tlcFullPrice,
+    };
+  }, [quote, state.selectedUpsellOption]);
+
   const handleSetBookingAssistOption = useCallback((option: BookingAssistOption) => {
     setSelectedAssistOption(option);
     dispatch({ type: "SET_BOOKING_ASSIST_OPTION", payload: option });
@@ -49,7 +64,21 @@ const SummaryPage = () => {
 
   const handlePaymentSuccess = async (paymentMethodId: string) => {
     if (!quote || !selectedAssistOption) return;
-    checkout({ paymentMethodId, quote, bookingAssistOption: selectedAssistOption, couponCode: state.coupon?.code});
+    // Use memoized prices for checkout
+    const checkoutQuote = {
+      ...quote,
+      price: currentPrices.price,
+      fullPrice: currentPrices.fullPrice,
+      tlcPrice: currentPrices.tlcPrice,
+      tlcFullPrice: currentPrices.tlcFullPrice,
+    };
+    checkout({ 
+      paymentMethodId, 
+      quote: checkoutQuote, 
+      bookingAssistOption: selectedAssistOption, 
+      couponCode: state.coupon?.code, 
+      upsellApplied: state.selectedUpsellOption?.speed 
+    });
   };
 
   const handlePaymentError = () => {
@@ -99,8 +128,8 @@ const SummaryPage = () => {
                         description="We'll park curbside and help you load & unload our van"
                         selectedOption={selectedAssistOption}
                         setSelectedOption={handleSetBookingAssistOption}
-                        fullPrice={quote.fullPrice}
-                        price={quote.price}
+                        fullPrice={currentPrices.fullPrice}
+                        price={currentPrices.price}
                         hint="Best value"
                       />
                       <BookingAssistOption
@@ -108,8 +137,8 @@ const SummaryPage = () => {
                         description="Sit back and relax, we'll do all the work."
                         selectedOption={selectedAssistOption}
                         setSelectedOption={handleSetBookingAssistOption}
-                        fullPrice={quote.tlcFullPrice}
-                        price={quote.tlcPrice}
+                        fullPrice={currentPrices.tlcFullPrice}
+                        price={currentPrices.tlcPrice}
                       />
                     </div>
 
@@ -200,15 +229,28 @@ const SummaryPage = () => {
                   <div className="flex flex-col bg-white rounded shadow-lg border-b-8 border-b-primary">
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <p className="text-lg font-bold">Your Booking</p>
-                      <p className="text-lg font-bold mr-8">{formatPrice(state.bookingAssistOption === "TLC" ? quote.tlcFullPrice : quote.fullPrice)}</p>
+                      <p className="text-lg font-bold mr-8">
+                        {formatPrice(
+                          state.bookingAssistOption === "TLC"
+                            ? currentPrices.tlcFullPrice
+                            : currentPrices.fullPrice
+                        )}
+                      </p>
                     </div>
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <div className="flex flex-col">
                         <p className="text-lg font-bold">Quote Discount</p>
                         <p className="text-sm">{state.coupon?.code}</p>
                       </div>
-                      <div className={`flex flex-col items-center ${state.coupon ? 'mr-6' : 'mr-8'}`}>
-                        <p className="text-lg font-bold">-{formatPrice((state.bookingAssistOption === "TLC" ? quote.tlcFullPrice - quote.tlcPrice : quote.fullPrice - quote.price) + (state.coupon?.value || 0))}</p>
+                      <div className={`flex flex-col items-center ${state.coupon ? 'mr-6' : 'mr-8'}`}> 
+                        <p className="text-lg font-bold"> 
+                          - {formatPrice(
+                                (state.bookingAssistOption === "TLC"
+                                  ? currentPrices.tlcFullPrice - currentPrices.tlcPrice
+                                  : currentPrices.fullPrice - currentPrices.price) +
+                                (state.coupon?.value || 0)
+                            )}
+                        </p>
                         {state.coupon && (
                           <button 
                             onClick={() => dispatch({ type: "CLEAR_COUPON" })}
@@ -221,7 +263,13 @@ const SummaryPage = () => {
                     </div>
                     <div className="w-full flex flex-row justify-between pt-7 pb-5 px-6 border-b border-opacity-10">
                       <p className="text-2xl font-bold">Total</p>
-                      <p className="text-2xl font-bold mr-8">{formatPrice(state.bookingAssistOption === "TLC" ? quote.tlcPrice : quote.price - (state.coupon?.value || 0))}</p>
+                      <p className="text-2xl font-bold mr-8">
+                        {formatPrice(
+                          (state.bookingAssistOption === "TLC"
+                            ? currentPrices.tlcPrice
+                            : currentPrices.price) - (state.coupon?.value || 0)
+                        )}
+                      </p>
                     </div>  
                     {selectedAssistOption && (
                       <div className="w-full pt-7 pb-5 px-6 border-b border-opacity-10">

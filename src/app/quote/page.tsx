@@ -1,7 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
 import { Container } from '@/components/Container/Container';
 import { Loader } from '@/components/Loader/Loader';
 import { StepNavButtons } from '@/components/StepNavButtons/StepNavButtons';
@@ -13,7 +11,6 @@ import { QuoteSummaryModal } from '@/components/QuoteDescriptionModal/QuoteDescr
 import { useState } from 'react';
 
 const QuotePage = () => {
-	const router = useRouter();
 	const { state } = useCartContext();
 	const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
 	const { data: quote, isLoading } = useQuote({ quoteId: state.quoteId });
@@ -21,18 +18,7 @@ const QuotePage = () => {
 
 	const handleNextPress = () => {
 		if (quote?._id) {
-			claimQuote(
-				{
-					quoteId: quote._id,
-				},
-				{
-					onSuccess: () => router.push('/summary'),
-					onError: () =>
-						toast.error(
-							'Failed to claim quote. Please try again or contact us for help.'
-						),
-				}
-			);
+			claimQuote({ quoteId: quote._id });
 		}
 	};
 

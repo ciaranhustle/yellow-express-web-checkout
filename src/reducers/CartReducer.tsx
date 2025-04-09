@@ -27,6 +27,7 @@ export const initialState: CartState = {
   quoteId: null,
   coupon: null,
   bookingAssistOption: null,
+  selectedUpsellOption: null,
 };
 
 export const cartReducer = (
@@ -88,6 +89,10 @@ export const cartReducer = (
 
     case "CLEAR_COUPON":
       newState = { ...newState, coupon: null };
+      break;
+
+    case "SET_UPSELL_OPTION":
+      newState = { ...newState, selectedUpsellOption: action.payload };
       break;
 
     case "SET_CART":

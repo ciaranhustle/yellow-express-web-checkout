@@ -18,7 +18,7 @@ export const useClaimQuote = () => {
       return response?.data ?? null;
     },
     onSuccess: () => {
-      router.push("/enquiry-received");
+      router.push('/summary')
     },
     onError: () => {
       toast.error("Failed to claim quote. Please try again or contact us for help.");

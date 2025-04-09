@@ -20,6 +20,7 @@ interface CartState {
   quoteId: string | null;
   coupon: Coupon | null;
   bookingAssistOption: BookingAssistOption | null;
+  selectedUpsellOption: UpsellOption | null;
 }
 type CartAction =
   | { type: "SET_TYPE"; payload: BookingType | null }
@@ -32,7 +33,8 @@ type CartAction =
   | { type: "SET_QUOTE_ID"; payload: string | null }
   | { type: "SET_BOOKING_ASSIST_OPTION"; payload: BookingAssistOption | null }
   | { type: "CLEAR_CART" }
-  | { type: "SET_CART"; payload: CartState };
+  | { type: "SET_CART"; payload: CartState }
+  | { type: "SET_UPSELL_OPTION"; payload: UpsellOption | null };
 
 interface AppState {
   settings: object;
@@ -136,6 +138,14 @@ interface Quote {
   expiresOn: string;
   status: QuoteStatus;
   summary: string;
+  upsellOptions: {
+    label: string;
+    speed: 'VIP' | 'RED HOT';
+    price: number;
+    tlcPrice: number;
+    tlcFullPrice: number;
+    fullPrice: number;
+  }[] | [];
 }
 
 type QuoteStatus = "Pending" | "Claimed" | "Expired" | "Paid";
@@ -218,6 +228,7 @@ interface Job {
     distance: number;
     duration: number;
   };
+  upsellApplied?: string;
 }
 
 interface Size {
