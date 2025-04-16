@@ -12,7 +12,7 @@ export async function GET(
     const errorData = await res.json();
     console.log("Error fetching quote data:", errorData);
     return NextResponse.json(
-      { error: "Failed to fetch quote data" },
+      { error: errorData.message || "Failed to fetch quote data" },
       { status: 500 }
     );
   }

@@ -16,9 +16,11 @@ interface FormValues {
 }
 
 const MIN_CHARACTERS = 1;
+const MAX_SMALL_ITEMS = 6;
+const MAX_BIG_ITEMS_BEFORE_NOTE = 10;
 
 // List of suggested items for Big & Bulky
-const SUGGESTED_ITEMS = [
+const SUGGESTED_BIG_ITEMS = [
   "Sofa",
   "Armchair",
   "Coffee Table",
@@ -29,7 +31,7 @@ const SUGGESTED_ITEMS = [
   "Wardrobe",
   "Dresser",
   "TV",
-  "Refrigerator",
+  "Small Refrigerator",
   "Washing Machine",
   "Dryer",
   "Dishwasher",
@@ -38,6 +40,45 @@ const SUGGESTED_ITEMS = [
   "Patio Set",
   "Office Chair",
   "Filing Cabinet",
+];
+
+const SUGGESTED_SMALL_ITEMS = [
+  "Document Envelope",
+  "Small Parcel",
+  "Moving Box",
+  "Electronics Box",
+  "Books",
+  "Clothing",
+  "Office Supplies",
+  "Personal Care",
+  "Kitchen Utensils",
+  "Kids Toys",
+  "Cosmetics",
+  "Supplements",
+  "Art Supplies",
+  "Tool Bag",
+  "Media Disc",
+  "Accessories",
+  "Gifts",
+  "Misc Items",
+];
+
+const SUGGESTED_FRAGILE_ITEMS = [
+  "Precious Jewelry",
+  "Glassware",
+  "Fine China",
+  "Ceramic Dishes",
+  "Porcelain Vase",
+  "Crystal Bowl",
+  "Picture Frame",
+  "Antiques",
+  "Laptop",
+  "Smartphone",
+  "Tablet",
+  "Camera Gear",
+  "Stereo Speaker",
+  "Delicate Ornament",
+  "Fragile Sculpture",
 ];
 
 // Function to get icon for common items
@@ -59,10 +100,46 @@ const getItemIcon = (item: string): string => {
   if (itemLower.includes("mattress")) return "🛏️";
   if (itemLower.includes("wardrobe")) return "🗄️";
   if (itemLower.includes("dresser")) return "🪞";
-  if (itemLower.includes("dryer")) return "👕";
+  if (itemLower.includes("dryer") || itemLower.includes("clothing"))
+    return "👕";
   if (itemLower.includes("dishwasher")) return "🍽️";
   if (itemLower.includes("patio")) return "⛱️";
   if (itemLower.includes("filing")) return "🗃️";
+  if (itemLower.includes("jewelry")) return "💍";
+  if (itemLower.includes("glassware")) return "🥃";
+  if (itemLower.includes("china")) return "🍽️";
+  if (itemLower.includes("vase")) return "🌸";
+  if (itemLower.includes("bowl")) return "🥣";
+  if (itemLower.includes("picture")) return "🖼️";
+  if (
+    itemLower.includes("antiques") ||
+    itemLower.includes("art") ||
+    itemLower.includes("sculpture") ||
+    itemLower.includes("ornament")
+  )
+    return "🏺";
+  if (itemLower.includes("laptop") || itemLower.includes("electronics"))
+    return "💻";
+  if (itemLower.includes("smartphone") || itemLower.includes("phone"))
+    return "📱";
+  if (itemLower.includes("tablet")) return "📱";
+  if (itemLower.includes("camera")) return "📸";
+  if (itemLower.includes("stereo") || itemLower.includes("speaker"))
+    return "🎧";
+  if (itemLower.includes("delicate")) return "💍";
+  if (itemLower.includes("envelope")) return "📨";
+  if (itemLower.includes("media")) return "📼";
+  if (itemLower.includes("accessory")) return "👜";
+  if (itemLower.includes("gift")) return "🎁";
+  if (itemLower.includes("misc")) return "📦";
+  if (itemLower.includes("tool")) return "🛠️";
+  if (itemLower.includes("toy")) return "🧸";
+  if (itemLower.includes("cosmetic")) return "💄";
+  if (itemLower.includes("supplement")) return "💊";
+  if (itemLower.includes("art")) return "🎨";
+  if (itemLower.includes("office")) return "🖥️";
+  if (itemLower.includes("kitchen")) return "🍽️";
+
   return "📦"; // Default icon
 };
 
@@ -71,6 +148,7 @@ const WhatPage = () => {
   const { state, dispatch, isLoading: isCartLoading } = useCartContext();
   const [isSmallItemsAcknowledge, setIsSmallItemsAcknowledge] = useState(false);
   const [newItemText, setNewItemText] = useState("");
+  const [showSmallItemsLimitNote, setShowSmallItemsLimitNote] = useState(false);
 
   const { handleSubmit, control, watch } = useForm<FormValues>({
     defaultValues: {
@@ -94,14 +172,24 @@ const WhatPage = () => {
       !isSmallItemsAcknowledge);
 
   const handleAddItem = () => {
+    if (state.type === "Small Items" && items.length >= MAX_SMALL_ITEMS) {
+      setShowSmallItemsLimitNote(true);
+      return;
+    }
     if (newItemText.trim().length >= MIN_CHARACTERS) {
       append({ description: newItemText.trim() });
       setNewItemText("");
+      setShowSmallItemsLimitNote(false);
     }
   };
 
   const handleSuggestionSelect = (suggestion: string) => {
+    if (state.type === "Small Items" && items.length >= MAX_SMALL_ITEMS) {
+      setShowSmallItemsLimitNote(true);
+      return;
+    }
     append({ description: suggestion });
+    setShowSmallItemsLimitNote(false);
   };
 
   const handleNextPress = (formData: FormValues) => {
@@ -121,10 +209,36 @@ const WhatPage = () => {
 
   return (
     <Container>
-      <StepHeader title="What are we moving?" />
+      <StepHeader
+        title={
+          state.type === "Corporate Enquiries"
+            ? "What, When, Where?"
+            : "What are we moving?"
+        }
+      />
       {state.type ? (
         <>
-          {state.type === "Big & Bulky" ? (
+          {state.type === "Corporate Enquiries" ? (
+            <div className="w-full flex flex-col items-end gap-4">
+              <Controller
+                name="items.0.description"
+                control={control}
+                rules={{
+                  minLength: {
+                    value: MIN_CHARACTERS,
+                    message: `Minimum ${MIN_CHARACTERS} characters are required`,
+                  },
+                }}
+                render={({ field }) => (
+                  <textarea
+                    {...field}
+                    placeholder="Describe your requirements"
+                    className="w-full p-3 border border-gray-300 rounded-md placeholder:text-gray-600 min-h-[100px] resize-y"
+                  />
+                )}
+              />
+            </div>
+          ) : (
             <div className="w-full flex flex-col gap-4">
               <div className="relative w-full">
                 <input
@@ -139,12 +253,20 @@ const WhatPage = () => {
                       handleAddItem();
                     }
                   }}
+                  disabled={
+                    state.type === "Small Items" &&
+                    items.length >= MAX_SMALL_ITEMS
+                  }
                 />
                 <button
                   type="button"
                   onClick={handleAddItem}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                   aria-label="Add item"
+                  disabled={
+                    state.type === "Small Items" &&
+                    items.length >= MAX_SMALL_ITEMS
+                  }
                 >
                   <Plus size={24} />
                 </button>
@@ -161,7 +283,10 @@ const WhatPage = () => {
                       <span>{items[index].description}</span>
                       <button
                         type="button"
-                        onClick={() => remove(index)}
+                        onClick={() => {
+                          remove(index);
+                          setShowSmallItemsLimitNote(false);
+                        }}
                         className="text-gray-500 ml-1"
                         aria-label={`Remove ${items[index].description}`}
                       >
@@ -172,35 +297,38 @@ const WhatPage = () => {
                 </div>
               )}
 
+              {state.type === "Small Items" && showSmallItemsLimitNote && (
+                <div className="text-red-500 text-sm">
+                  You can only add up to 6 small items.
+                </div>
+              )}
+
+              {state.type === "Big & Bulky" &&
+                items.length > MAX_BIG_ITEMS_BEFORE_NOTE && (
+                  <div className="text-yellow-600 text-sm">
+                    An additional load will be required when transporting more
+                    than 10 big & bulky items.
+                  </div>
+                )}
+
               <SuggestionBubble
-                suggestions={SUGGESTED_ITEMS}
+                suggestions={
+                  state.type === "Big & Bulky"
+                    ? SUGGESTED_BIG_ITEMS
+                    : state.type === "Small Items"
+                    ? SUGGESTED_SMALL_ITEMS
+                    : SUGGESTED_FRAGILE_ITEMS
+                }
+                selected={items.map((item) => item.description)}
                 onSelect={handleSuggestionSelect}
               />
-            </div>
-          ) : (
-            <div className="w-full flex flex-col items-end gap-4">
-              <Controller
-                name="items.0.description"
-                control={control}
-                rules={{
-                  minLength: {
-                    value: MIN_CHARACTERS,
-                    message: `Minimum ${MIN_CHARACTERS} characters are required`,
-                  },
-                }}
-                render={({ field }) => (
-                  <textarea
-                    {...field}
-                    placeholder="Describe your items"
-                    className="w-full p-3 border border-gray-300 rounded-md placeholder:text-gray-600 min-h-[100px] resize-y"
-                  />
-                )}
-              />
-              <Acknowledgement
-                text="The items that I am moving are small enough to be placed on the front seat of a standard car."
-                isChecked={isSmallItemsAcknowledge}
-                onChange={() => setIsSmallItemsAcknowledge((prev) => !prev)}
-              />
+              {state.type === "Small Items" && (
+                <Acknowledgement
+                  text="The items that I am moving are small enough to be placed on the front seat of a standard car."
+                  isChecked={isSmallItemsAcknowledge}
+                  onChange={() => setIsSmallItemsAcknowledge((prev) => !prev)}
+                />
+              )}
             </div>
           )}
         </>

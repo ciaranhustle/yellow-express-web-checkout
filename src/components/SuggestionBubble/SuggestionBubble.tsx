@@ -1,25 +1,27 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState } from "react"
+import type React from "react";
 
 interface SuggestionBubbleProps {
-  suggestions: string[]
-  onSelect: (suggestion: string) => void
+  suggestions: string[];
+  selected: string[];
+  onSelect: (suggestion: string) => void;
 }
 
-export const SuggestionBubble: React.FC<SuggestionBubbleProps> = ({ suggestions, onSelect }) => {
-  const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([])
-
+export const SuggestionBubble: React.FC<SuggestionBubbleProps> = ({
+  suggestions,
+  selected,
+  onSelect,
+}) => {
   const handleSelect = (suggestion: string) => {
-    setSelectedSuggestions([...selectedSuggestions, suggestion])
-    onSelect(suggestion)
-  }
+    onSelect(suggestion);
+  };
 
-  const availableSuggestions = suggestions.filter((suggestion) => !selectedSuggestions.includes(suggestion))
+  const availableSuggestions = suggestions.filter(
+    (suggestion) => !selected.includes(suggestion)
+  );
 
-  if (availableSuggestions.length === 0) return null
+  if (availableSuggestions.length === 0) return null;
 
   return (
     <div className="flex flex-wrap gap-2 mt-4">
@@ -33,6 +35,5 @@ export const SuggestionBubble: React.FC<SuggestionBubbleProps> = ({ suggestions,
         </button>
       ))}
     </div>
-  )
-}
-
+  );
+};

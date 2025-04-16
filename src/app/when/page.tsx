@@ -16,10 +16,10 @@ const WhenPage = () => {
   const router = useRouter();
   const { state, dispatch, isLoading: isCartLoading } = useCartContext();
 
-  // Check if current time is after 6:00 PM
+  // Check if current time is after 5:00 PM
   const isAfterCutoff = () => {
     const now = new Date();
-    return now.getHours() >= 18;
+    return now.getHours() >= 17;
   };
 
   useEffect(() => {
@@ -56,9 +56,7 @@ const WhenPage = () => {
             title="Today"
             // description="Need us ASAP? Choose this option to skip the queue."
             imageSrc={
-              state.when?.isToday
-                ? "/lightning-white.svg"
-                : "/lightning.svg"
+              state.when?.isToday ? "/lightning-white.svg" : "/lightning.svg"
             }
             isSelected={!!state.when?.isToday}
             onClick={() =>
@@ -102,18 +100,27 @@ const WhenPage = () => {
               />
             </div>
             <div className="w-full flex flex-col items-start">
-              <h3 className="text-2xl font-bold mb-1">What pick up time works best for you?</h3>
+              <h3 className="text-2xl font-bold mb-1">
+                What pick up time works best for you?
+              </h3>
               <div className="w-full flex flex-col gap-2.5">
                 {bookingTimeOptions.map((option) => {
-                  const isWeekend = state.when?.date ? new Date(state.when.date).getDay() === 0 || new Date(state.when.date).getDay() === 6 : false;
-                  const displayRange = isWeekend && option.weekendRange ? option.weekendRange : option.range;
-                  
+                  const isWeekend = state.when?.date
+                    ? new Date(state.when.date).getDay() === 0 ||
+                      new Date(state.when.date).getDay() === 6
+                    : false;
+                  const displayRange =
+                    isWeekend && option.weekendRange
+                      ? option.weekendRange
+                      : option.range;
+
                   return (
                     <button
                       key={option.time}
                       className={cn(
                         "w-full p-4 flex flex-row justify-between items-center rounded border border-black text-base font-bold",
-                        state.when?.time === option.time && "bg-accent text-white"
+                        state.when?.time === option.time &&
+                          "bg-accent text-white"
                       )}
                       onClick={() =>
                         dispatch({

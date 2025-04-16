@@ -5,6 +5,9 @@ import { bookingTimeOptions } from "@/lib/constants";
 import { QuoteSummaryModal } from "@/components/QuoteDescriptionModal/QuoteDescriptionModal";
 import { formatPrice } from "@/lib/format";
 import { useCartContext } from "@/context/CartContext";
+import { cn } from "@/lib/utils";
+import { SpeedInfoModal } from "../SpeedInfoModal/SpeedInfoModal";
+import { Info } from "lucide-react";
 
 interface BookingSummaryItemProps {
   title: string;
@@ -35,20 +38,25 @@ interface Props {
 
 export const BookingSummary: React.FC<Props> = ({ quote }) => {
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
+  const [isSpeedInfoModalOpen, setIsSpeedInfoModalOpen] = useState(false);
   const { state: cartState, dispatch } = useCartContext();
   const selectedUpsell = cartState.selectedUpsellOption;
   const isToday = quote.bookingDetails.isToday;
-  const isWeekend = quote.bookingDetails.date ? 
-    new Date(quote.bookingDetails.date).getDay() === 0 || 
-    new Date(quote.bookingDetails.date).getDay() === 6 : false;
+  const isWeekend = quote.bookingDetails.date
+    ? new Date(quote.bookingDetails.date).getDay() === 0 ||
+      new Date(quote.bookingDetails.date).getDay() === 6
+    : false;
 
   if (!quote) return null;
 
   const getTimeDisplay = (time: BookingTime) => {
-    const timeOption = bookingTimeOptions.find(opt => opt.time === time);
+    const timeOption = bookingTimeOptions.find((opt) => opt.time === time);
     if (!timeOption) return time;
-    
-    const range = isWeekend && timeOption.weekendRange ? timeOption.weekendRange : timeOption.range;
+
+    const range =
+      isWeekend && timeOption.weekendRange
+        ? timeOption.weekendRange
+        : timeOption.range;
     return `${time} (${range})`;
   };
 
@@ -75,7 +83,9 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
         />
         <BookingSummaryItem
           title="Pickup time"
-          values={[isToday ? "ASAP" : getTimeDisplay(quote.bookingDetails.time)]}
+          values={[
+            isToday ? "ASAP" : getTimeDisplay(quote.bookingDetails.time),
+          ]}
         />
         <div className="text-sm w-full flex flex-row justify-between items-center my-2 pt-4 border-t border-gray-200">
           <p className="opacity-50">Job summary</p>
@@ -88,29 +98,44 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
         </div>
         {quote.upsellOptions && quote.upsellOptions.length > 0 && (
           <div className="pt-4 border-t border-gray-200">
-            <p className="text-sm opacity-50 mb-2">Upgrade Delivery Speed:</p>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-row justify-between items-center mb-2">
+              <p className="text-sm opacity-50">Upgrade Delivery Speed:</p>
               <button
-                onClick={() => dispatch({ type: 'SET_UPSELL_OPTION', payload: null })}
-                className={`p-3 rounded border text-left transition-colors ${!selectedUpsell ? 'border-primary bg-primary/10' : 'border-gray-300 hover:bg-gray-50'}`}
+                onClick={() => setIsSpeedInfoModalOpen(true)}
+                className="text-sm opacity-50"
               >
-                <div className="flex justify-between items-center">
-                  <span className="font-semibold">Standard Delivery</span>
-                  <span className="font-bold">
-                    {formatPrice(cartState.bookingAssistOption === 'TLC' ? quote.tlcPrice : quote.price)}
-                  </span>
-                </div>
+                <Info size={16} />
               </button>
+            </div>
+            <div className="flex flex-col gap-2">
               {quote.upsellOptions.map((option) => (
                 <button
                   key={option.speed}
-                  onClick={() => dispatch({ type: 'SET_UPSELL_OPTION', payload: option })}
-                  className={`p-3 rounded border text-left transition-colors ${selectedUpsell?.speed === option.speed ? 'border-primary bg-primary/10' : 'border-gray-300 hover:bg-gray-50'}`}
+                  onClick={() =>
+                    dispatch({ type: "SET_UPSELL_OPTION", payload: option })
+                  }
+                  className={cn(
+                    "p-3 rounded border text-left transition-colors",
+                    selectedUpsell?.speed === option.speed
+                      ? "border-primary bg-primary/10"
+                      : "border-gray-300 hover:bg-gray-50",
+                    !option.available && "opacity-50"
+                  )}
+                  disabled={!option.available}
                 >
                   <div className="flex justify-between items-center">
-                    <span className="font-semibold">{option.speed} ({option.label})</span>
+                    <span className="font-semibold">
+                      {option.speed} {!!option.label && `(${option.label})`}
+                      <span className="text-sm opacity-50">
+                        {!option.available && " - Unavailable"}
+                      </span>
+                    </span>
                     <span className="font-bold">
-                      {formatPrice(cartState.bookingAssistOption === 'TLC' ? option.tlcPrice : option.price)}
+                      {formatPrice(
+                        cartState.bookingAssistOption === "TLC"
+                          ? option.tlcPrice
+                          : option.price
+                      )}
                     </span>
                   </div>
                 </button>
@@ -122,7 +147,11 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
       <QuoteSummaryModal
         isOpen={isDescriptionModalOpen}
         onClose={() => setIsDescriptionModalOpen(false)}
-        summary={quote.summary}
+        quote={quote}
+      />
+      <SpeedInfoModal
+        isOpen={isSpeedInfoModalOpen}
+        onClose={() => setIsSpeedInfoModalOpen(false)}
       />
     </div>
   );

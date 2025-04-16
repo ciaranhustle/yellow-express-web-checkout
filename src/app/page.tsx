@@ -13,7 +13,7 @@ const HomePage = () => {
   const handleOptionPress = (type: BookingType) => {
     dispatch({ type: "SET_TYPE", payload: type });
     if (type === "Corporate Enquiries") {
-      router.push("/where");
+      router.push("/what");
     } else {
       router.push("/when");
     }

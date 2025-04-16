@@ -27,7 +27,7 @@ export const bookingTypeOptions: BookingTypeOption[] = [
   {
     type: "Fragile & Sensitive",
     description:
-      "Need something sensitive taken with safe hands from point A to B?",
+      "Need something sensitive taken with safe hands from point A to B direct?",
     imageSrc: "/fragileItems.png",
   },
   {
@@ -38,7 +38,11 @@ export const bookingTypeOptions: BookingTypeOption[] = [
   },
 ];
 
-export const bookingTimeOptions: { time: BookingTime; range: string; weekendRange?: string }[] = [
+export const bookingTimeOptions: {
+  time: BookingTime;
+  range: string;
+  weekendRange?: string;
+}[] = [
   { time: "Morning", range: "7:30AM-10AM", weekendRange: "8AM-10AM" },
   { time: "Midday", range: "10AM-2PM" },
   { time: "Afternoon", range: "2PM-6PM" },

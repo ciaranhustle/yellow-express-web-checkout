@@ -124,7 +124,7 @@ interface Quote {
       lng: number;
       postal_code: string;
     };
-    description: string;
+    description: string[];
   };
   price: number;
   inclusions: {
@@ -132,20 +132,24 @@ interface Quote {
     weight: number;
     loads: number;
   };
+  speedLabel: string;
   fullPrice: number;
   tlcFullPrice: number;
   tlcPrice: number;
   expiresOn: string;
   status: QuoteStatus;
   summary: string;
-  upsellOptions: {
-    label: string;
-    speed: 'VIP' | 'RED HOT';
-    price: number;
-    tlcPrice: number;
-    tlcFullPrice: number;
-    fullPrice: number;
-  }[] | [];
+  upsellOptions:
+    | {
+        label: string;
+        speed: "VIP" | "RED HOT";
+        price: number;
+        tlcPrice: number;
+        tlcFullPrice: number;
+        fullPrice: number;
+        available: boolean;
+      }[]
+    | [];
 }
 
 type QuoteStatus = "Pending" | "Claimed" | "Expired" | "Paid";
@@ -162,9 +166,9 @@ interface Job {
   type: BookingType;
   pickupDateUTC: string;
   pickupTime: {
-    hours: number,
-    minutes: number,
-    ampm: string
+    hours: number;
+    minutes: number;
+    ampm: string;
   };
   bookingAssistOption: BookingAssistOption;
   pickupNow: boolean;
@@ -257,7 +261,7 @@ interface Product {
   description: string;
   value: string;
   image?: string;
-  type: 'Delivery' | 'Addon' | 'Time' | 'Distance';
+  type: "Delivery" | "Addon" | "Time" | "Distance";
   variations?: Variations;
   active: boolean;
   imageSource?: string;

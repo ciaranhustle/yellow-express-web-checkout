@@ -35,11 +35,7 @@ const WherePage = () => {
   }, [state, router, isCartLoading]);
 
   const handleNextPress = () => {
-    if (state.type === "Corporate Enquiries") {
-      router.push('details');
-    } else {
-      router.push("/what");
-    }
+    router.push("/what");
   };
 
   const nextDisabled =
