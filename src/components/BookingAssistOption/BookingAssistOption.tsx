@@ -41,9 +41,11 @@ export const BookingAssistOption: React.FC<BookingAssistOptionProps> = ({
         </div>
       )}
       <p className="font-bold text-3xl mb-2">{option}</p>
-      <p className="font-bold red-strikethrough opacity-50">{formatPrice(fullPrice)}</p>
+      <p className="font-bold red-strikethrough opacity-50">
+        {formatPrice(fullPrice)}
+      </p>
       <p className="font-black text-3xl">{formatPrice(price)}</p>
-      <p className="text-sm mt-3 mb-9">{description}</p>
+      <p className="text-sm mt-3 mb-9 text-center">{description}</p>
       <div className="flex-1 flex flex-col justify-end w-full">
         <button
           className={cn(
