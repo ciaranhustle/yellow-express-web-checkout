@@ -111,8 +111,8 @@ export const createJobFromQuote = (
     },
     estimates: {
       price: bookingAssistOption === "TLC" ? quote.tlcPrice : quote.price,
-      distance: 0,
-      duration: 0,
+      distance: quote.inclusions.distance ?? 0,
+      duration: quote.inclusions.minutes ?? 0,
     },
     quote: quote._id,
   };

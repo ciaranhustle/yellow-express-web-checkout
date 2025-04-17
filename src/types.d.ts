@@ -131,6 +131,7 @@ interface Quote {
     minutes: number;
     weight: number;
     loads: number;
+    distance: number;
   };
   speedLabel: string;
   fullPrice: number;
