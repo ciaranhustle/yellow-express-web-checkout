@@ -26,8 +26,8 @@ export const SpeedInfoModal: React.FC<SpeedInfoModalProps> = ({
         </div>
         <div className="text-sm">
           <p>
-            Fragile & Sensitive, Weekend & Weekday Afternoon jobs are all priced
-            at RED HOT rate.
+            Fragile & Sensitive, Weekend, & Weekday Afternoon jobs are all
+            priced at RED HOT rate.
             <br />
             <br />
             Weekday Midday jobs can be scheduled at VIP or RED HOT.

@@ -39,8 +39,7 @@ export const cartReducer = (
   switch (action.type) {
     case "SET_TYPE":
       newState = {
-        ...newState,
-        what: action.payload === newState.type ? newState.what : null,
+        ...initialState,
         type: action.payload,
       };
       break;

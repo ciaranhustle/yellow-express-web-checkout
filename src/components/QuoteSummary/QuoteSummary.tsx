@@ -24,9 +24,6 @@ export const QuoteSummary = ({ className, quote }: QuoteSummaryProps) => {
         {quote.bookingDetails.dropOffAddress.address}
       </span>{" "}
       using our <span className="font-medium">{quote.speedLabel}</span> service
-      {quote.bookingDetails.bookingType === "Fragile & Sensitive"
-        ? " using our premium service."
-        : "."}
     </p>
   );
 };
