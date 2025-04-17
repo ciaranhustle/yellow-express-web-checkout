@@ -114,5 +114,6 @@ export const createJobFromQuote = (
       distance: 0,
       duration: 0,
     },
+    quote: quote._id,
   };
 };

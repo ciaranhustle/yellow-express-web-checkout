@@ -232,6 +232,7 @@ interface Job {
     duration: number;
   };
   upsellApplied?: string;
+  quote: Quote | string;
 }
 
 interface Size {
