@@ -1,33 +1,42 @@
-export const PICKUP_TIME_SCHEDULE: Record<BookingTime, { hours: number, minutes: number, ampm: string }> = {
+export const PICKUP_TIME_SCHEDULE: Record<
+  BookingTime,
+  { hours: number; minutes: number; ampm: string }
+> = {
   Morning: {
     hours: 7,
     minutes: 30,
-    ampm: "am"
+    ampm: "am",
   },
   Midday: {
     hours: 10,
     minutes: 0,
-    ampm: "am"
+    ampm: "am",
   },
   Afternoon: {
     hours: 2,
     minutes: 0,
-    ampm: "pm"
-  }
-}
+    ampm: "pm",
+  },
+};
 
-export const createJobFromQuote = (quote: Quote, bookingAssistOption: BookingAssistOption): Job => {
+export const createJobFromQuote = (
+  quote: Quote,
+  bookingAssistOption: BookingAssistOption
+): Job => {
   if (quote.bookingDetails.isToday) {
     const now = new Date();
     quote.bookingDetails.date = now.toISOString();
-    
+
     // Determine time slot based on current hour
     const currentHour = now.getHours();
     const currentMinutes = now.getMinutes();
-    
+
     if (currentHour < 10 || (currentHour === 10 && currentMinutes === 0)) {
       quote.bookingDetails.time = "Morning";
-    } else if (currentHour < 14 || (currentHour === 14 && currentMinutes === 0)) {
+    } else if (
+      currentHour < 14 ||
+      (currentHour === 14 && currentMinutes === 0)
+    ) {
       quote.bookingDetails.time = "Midday";
     } else {
       quote.bookingDetails.time = "Afternoon";
@@ -56,10 +65,13 @@ export const createJobFromQuote = (quote: Quote, bookingAssistOption: BookingAss
           parking: "",
         },
         contactInfo: {
-          name: quote.customerDetails.firstName + " " + quote.customerDetails.lastName,
+          name:
+            quote.customerDetails.firstName +
+            " " +
+            quote.customerDetails.lastName,
           number: quote.customerDetails.mobile ?? "",
           email: quote.customerDetails.email ?? "",
-        }
+        },
       },
       dropoff: {
         location: {
@@ -76,31 +88,31 @@ export const createJobFromQuote = (quote: Quote, bookingAssistOption: BookingAss
           parking: "",
         },
         contactInfo: {
-          name: quote.customerDetails.firstName + " " + quote.customerDetails.lastName,
+          name:
+            quote.customerDetails.firstName +
+            " " +
+            quote.customerDetails.lastName,
           number: quote.customerDetails.mobile ?? "",
           email: quote.customerDetails.email ?? "",
-        }
+        },
       },
     },
-    items: [
-      {
-        name: quote.bookingDetails.bookingType,
-        quantity: 1,
-        description: quote.bookingDetails.description,
-      }
-    ],
+    items: quote.bookingDetails.description.map((item) => ({
+      name: item,
+      quantity: 1,
+    })),
     options: {
       weight: quote.inclusions.weight,
       loads: quote.inclusions.loads,
       minutes: quote.inclusions.minutes,
     },
     variationConditions: {
-      fullPrice: quote.fullPrice
+      fullPrice: quote.fullPrice,
     },
     estimates: {
       price: bookingAssistOption === "TLC" ? quote.tlcPrice : quote.price,
       distance: 0,
       duration: 0,
-    }
-  }
-}
+    },
+  };
+};

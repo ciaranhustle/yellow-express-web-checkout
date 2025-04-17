@@ -215,9 +215,8 @@ interface Job {
     };
   };
   items: {
-    name: BookingType;
+    name: string;
     quantity: number;
-    description: string;
   }[];
   options: {
     weight: number;
