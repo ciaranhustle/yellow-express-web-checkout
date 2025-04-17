@@ -41,7 +41,6 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
   const [isSpeedInfoModalOpen, setIsSpeedInfoModalOpen] = useState(false);
   const { state: cartState, dispatch } = useCartContext();
   const selectedUpsell = cartState.selectedUpsellOption;
-  console.log({ selectedUpsell });
   const isToday = quote.bookingDetails.isToday;
   const isWeekend = quote.bookingDetails.date
     ? new Date(quote.bookingDetails.date).getDay() === 0 ||
