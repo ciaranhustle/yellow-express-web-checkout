@@ -41,6 +41,7 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
   const [isSpeedInfoModalOpen, setIsSpeedInfoModalOpen] = useState(false);
   const { state: cartState, dispatch } = useCartContext();
   const selectedUpsell = cartState.selectedUpsellOption;
+  console.log({ selectedUpsell });
   const isToday = quote.bookingDetails.isToday;
   const isWeekend = quote.bookingDetails.date
     ? new Date(quote.bookingDetails.date).getDay() === 0 ||
@@ -108,38 +109,47 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
               </button>
             </div>
             <div className="flex flex-col gap-2">
-              {quote.upsellOptions.map((option) => (
-                <button
-                  key={option.speed}
-                  onClick={() =>
-                    dispatch({ type: "SET_UPSELL_OPTION", payload: option })
-                  }
-                  className={cn(
-                    "p-3 rounded border text-left transition-colors",
-                    selectedUpsell?.speed === option.speed
-                      ? "border-primary bg-primary/10"
-                      : "border-gray-300 hover:bg-gray-50",
-                    !option.available && "opacity-50"
-                  )}
-                  disabled={!option.available}
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="font-semibold">
-                      {option.speed} {!!option.label && `(${option.label})`}
-                      <span className="text-sm opacity-50">
-                        {!option.available && " - Unavailable"}
+              {quote.upsellOptions.map((option) => {
+                const selected =
+                  selectedUpsell?.speed === option.speed ||
+                  (!selectedUpsell && quote.speedLabel === option.speed);
+                return (
+                  <button
+                    key={option.speed}
+                    onClick={() =>
+                      dispatch({
+                        type: "SET_UPSELL_OPTION",
+                        payload:
+                          quote.speedLabel === option.speed ? null : option,
+                      })
+                    }
+                    className={cn(
+                      "p-3 rounded border text-left transition-colors",
+                      selected
+                        ? "border-primary bg-primary/10"
+                        : "border-gray-300 hover:bg-gray-50",
+                      !option.available && "opacity-50"
+                    )}
+                    disabled={!option.available}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold">
+                        {option.speed} {!!option.label && `(${option.label})`}
+                        <span className="text-sm opacity-50">
+                          {!option.available && " - Unavailable"}
+                        </span>
                       </span>
-                    </span>
-                    <span className="font-bold">
-                      {formatPrice(
-                        cartState.bookingAssistOption === "TLC"
-                          ? option.tlcPrice
-                          : option.price
-                      )}
-                    </span>
-                  </div>
-                </button>
-              ))}
+                      <span className="font-bold">
+                        {formatPrice(
+                          cartState.bookingAssistOption === "TLC"
+                            ? option.tlcPrice
+                            : option.price
+                        )}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
