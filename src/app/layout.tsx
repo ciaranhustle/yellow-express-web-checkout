@@ -95,7 +95,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${gtWalsheimPro.variable} flex flex-col items-center antialiased`}
+        className={`${gtWalsheimPro.variable} min-h-screen flex flex-col items-center antialiased`}
       >
         <QueryProvider>
           <AuthContextProvider>
@@ -109,13 +109,11 @@ export default function RootLayout({
                 pauseOnHover={false}
                 limit={1}
               />
-              <div className="flex flex-col min-h-screen">
-                <Header />
-                <main className="flex-1 flex flex-col w-screen bg-white items-center overflow-hidden">
-                  {children}
-                </main>
-                <Footer />
-              </div>
+              <Header />
+              <main className="flex-1 flex flex-col w-screen bg-white items-center overflow-hidden">
+                {children}
+              </main>
+              <Footer />
             </CartContextProvider>
           </AuthContextProvider>
         </QueryProvider>
