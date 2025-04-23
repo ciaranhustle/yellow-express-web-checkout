@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const Header = () => {
   return (
-    <header className="bg-primary flex flex-row justify-between items-center py-4 px-5 border-b-4 border-black overflow-hidden">
+    <header className="bg-primary flex flex-row justify-between items-center py-4 px-5 border-b-4 border-black overflow-hidden w-screen">
       <Link href="https://yellowexpress.com.au">
         <Image
           src="/logo.png"

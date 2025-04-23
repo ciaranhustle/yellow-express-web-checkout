@@ -18,7 +18,7 @@ export const Footer = () => {
   const step = STEP_PATHS.indexOf(pathname) + 1;
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden w-screen">
       {pathname === "/" && (
         <footer className="text-black pt-3 pb-6 text-center bg-primary border-t-4 border-black">
           <a
