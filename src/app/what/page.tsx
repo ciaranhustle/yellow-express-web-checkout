@@ -168,10 +168,14 @@ const WhatPage = () => {
 
   const nextDisabled =
     items.length === 0 ||
-    (state.type === "Small Items" && !isSmallItemsAcknowledge);
+    ((state.type === "Small Items" || state.type === "Fragile & Sensitive") &&
+      !isSmallItemsAcknowledge);
 
   const handleAddItem = () => {
-    if (state.type === "Small Items" && items.length >= MAX_SMALL_ITEMS) {
+    if (
+      (state.type === "Small Items" || state.type === "Fragile & Sensitive") &&
+      items.length >= MAX_SMALL_ITEMS
+    ) {
       setShowSmallItemsLimitNote(true);
       return;
     }
@@ -183,7 +187,10 @@ const WhatPage = () => {
   };
 
   const handleSuggestionSelect = (suggestion: string) => {
-    if (state.type === "Small Items" && items.length >= MAX_SMALL_ITEMS) {
+    if (
+      (state.type === "Small Items" || state.type === "Fragile & Sensitive") &&
+      items.length >= MAX_SMALL_ITEMS
+    ) {
       setShowSmallItemsLimitNote(true);
       return;
     }
@@ -253,7 +260,8 @@ const WhatPage = () => {
                     }
                   }}
                   disabled={
-                    state.type === "Small Items" &&
+                    (state.type === "Small Items" ||
+                      state.type === "Fragile & Sensitive") &&
                     items.length >= MAX_SMALL_ITEMS
                   }
                 />
@@ -263,7 +271,8 @@ const WhatPage = () => {
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                   aria-label="Add item"
                   disabled={
-                    state.type === "Small Items" &&
+                    (state.type === "Small Items" ||
+                      state.type === "Fragile & Sensitive") &&
                     items.length >= MAX_SMALL_ITEMS
                   }
                 >
@@ -296,11 +305,13 @@ const WhatPage = () => {
                 </div>
               )}
 
-              {state.type === "Small Items" && showSmallItemsLimitNote && (
-                <div className="text-red-500 text-sm">
-                  You can only add up to 6 small items.
-                </div>
-              )}
+              {state.type === "Small Items" ||
+                (state.type === "Fragile & Sensitive" &&
+                  showSmallItemsLimitNote && (
+                    <div className="text-red-500 text-sm">
+                      You can only add up to 6 small items.
+                    </div>
+                  ))}
 
               {state.type === "Big & Bulky" &&
                 items.length > MAX_BIG_ITEMS_BEFORE_NOTE && (
@@ -321,7 +332,8 @@ const WhatPage = () => {
                 selected={items.map((item) => item.description)}
                 onSelect={handleSuggestionSelect}
               />
-              {state.type === "Small Items" && (
+              {(state.type === "Small Items" ||
+                state.type === "Fragile & Sensitive") && (
                 <Acknowledgement
                   text="The items that I am moving are small enough to be placed on the front seat of a standard car."
                   isChecked={isSmallItemsAcknowledge}
