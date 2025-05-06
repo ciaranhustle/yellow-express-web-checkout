@@ -168,8 +168,7 @@ const WhatPage = () => {
 
   const nextDisabled =
     items.length === 0 ||
-    ((state.type === "Small Items" || state.type === "Fragile & Sensitive") &&
-      !isSmallItemsAcknowledge);
+    (state.type === "Small Items" && !isSmallItemsAcknowledge);
 
   const handleAddItem = () => {
     if (state.type === "Small Items" && items.length >= MAX_SMALL_ITEMS) {
