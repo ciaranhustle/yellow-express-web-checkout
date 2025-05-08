@@ -5,8 +5,9 @@ import { SuccessPage } from "@/components/SuccessPage/SuccessPage";
 import { useGuestJob } from "@/hooks/queries/useGuestJob";
 import { format } from "date-fns";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-const SuccessPageWrapper = () => {
+const SuccessPageContent = () => {
   const searchParams = useSearchParams();
   const jobId = searchParams.get("bookingId");
   const { data: jobData, isLoading } = useGuestJob({ jobId: jobId });
@@ -30,6 +31,14 @@ const SuccessPageWrapper = () => {
       message="A member of our team will be in touch shortly to confirm your booking."
       showAppStore
     />
+  );
+};
+
+const SuccessPageWrapper = () => {
+  return (
+    <Suspense fallback={<Loader />}>
+      <SuccessPageContent />
+    </Suspense>
   );
 };
 
