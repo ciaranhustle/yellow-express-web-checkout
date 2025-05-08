@@ -30,10 +30,7 @@ export async function POST(request: NextRequest) {
   if (!res.ok) {
     const errorData = await res.json();
     console.log("Error fetching new quote data:", errorData);
-    return NextResponse.json(
-      { error: errorData },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: errorData }, { status: 500 });
   }
 
   const data = await res.json();

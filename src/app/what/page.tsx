@@ -65,20 +65,17 @@ const SUGGESTED_SMALL_ITEMS = [
 
 const SUGGESTED_FRAGILE_ITEMS = [
   "Precious Jewelry",
-  "Glassware",
-  "Fine China",
   "Ceramic Dishes",
-  "Porcelain Vase",
-  "Crystal Bowl",
-  "Picture Frame",
-  "Antiques",
   "Laptop",
   "Smartphone",
   "Tablet",
   "Camera Gear",
   "Stereo Speaker",
   "Delicate Ornament",
-  "Fragile Sculpture",
+  "Important documents",
+  "Confidential information",
+  "Perishables",
+  "Medications",
 ];
 
 // Function to get icon for common items

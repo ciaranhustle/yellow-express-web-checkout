@@ -37,13 +37,23 @@ export const getFormattedAddress = async (placeId: string) => {
       params: {
         place_id: placeId,
         key: GMAPS_API_KEY!,
-        fields: ["address_components", "formatted_address", "geometry"],
+        fields: [
+          "address_components",
+          "formatted_address",
+          "geometry",
+          "name",
+          "types",
+        ],
       },
     });
 
     const details = response.data.result;
 
     if (!details) return null;
+
+    const isEstablishment = details.types?.includes(AddressType.establishment);
+
+    const name = details.name || "";
 
     const addressComponents = details.address_components ?? [];
 
@@ -55,7 +65,9 @@ export const getFormattedAddress = async (placeId: string) => {
       address: details.formatted_address || "",
       subpremise: getComponent(AddressType.subpremise),
       street_number: getComponent(AddressType.street_number),
-      company: getComponent(GeocodingAddressComponentType.establishment),
+      company: isEstablishment
+        ? name
+        : getComponent(GeocodingAddressComponentType.establishment),
       street: getComponent(AddressType.route),
       locality:
         getComponent(AddressType.locality) ||
