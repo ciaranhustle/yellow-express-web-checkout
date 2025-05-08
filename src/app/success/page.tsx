@@ -1,11 +1,32 @@
 "use client";
 
+import { Loader } from "@/components/Loader/Loader";
 import { SuccessPage } from "@/components/SuccessPage/SuccessPage";
+import { useGuestJob } from "@/hooks/queries/useGuestJob";
+import { format } from "date-fns";
+import { useSearchParams } from "next/navigation";
 
 const SuccessPageWrapper = () => {
+  const searchParams = useSearchParams();
+  const jobId = searchParams.get("bookingId");
+  const { data: jobData, isLoading } = useGuestJob({ jobId: jobId });
+  const job = jobData?.job;
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <SuccessPage
       title="Booking Confirmed!"
+      subTitle={
+        job?.JSData?.bookingNo
+          ? `#${job.JSData.bookingNo} - ${format(
+              new Date(job.pickupDateUTC),
+              "dd/MM/yyyy"
+            )}`
+          : undefined
+      }
       message="A member of our team will be in touch shortly to confirm your booking."
       showAppStore
     />

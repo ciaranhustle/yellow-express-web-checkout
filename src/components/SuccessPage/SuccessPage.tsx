@@ -7,18 +7,24 @@ import confetti from "canvas-confetti";
 
 interface SuccessPageProps {
   title: string;
+  subTitle?: string;
   message: string;
   showAppStore?: boolean;
 }
 
-export const SuccessPage = ({ title, message, showAppStore = false }: SuccessPageProps) => {
+export const SuccessPage = ({
+  title,
+  subTitle,
+  message,
+  showAppStore = false,
+}: SuccessPageProps) => {
   const router = useRouter();
 
   useEffect(() => {
     confetti({
       particleCount: 100,
       spread: 70,
-      origin: { y: 0.6 }
+      origin: { y: 0.6 },
     });
   }, []);
 
@@ -28,6 +34,7 @@ export const SuccessPage = ({ title, message, showAppStore = false }: SuccessPag
         <div className="px-24 pt-24 w-full flex flex-col items-center gap-4 text-center">
           <Image src="/greenTick.svg" width={60} height={60} alt="Success" />
           <p className="text-4xl font-bold">{title}</p>
+          {subTitle && <p className="text-2xl font-bold">{subTitle}</p>}
           <p className="text-lg">{message}</p>
         </div>
         <div className="w-full flex flex-col items-center bg-accent rounded-t-[50px] py-10 px-5">
@@ -37,11 +44,31 @@ export const SuccessPage = ({ title, message, showAppStore = false }: SuccessPag
                 Track your booking live with our app!
               </p>
               <div className="flex flex-col gap-2">
-                <a href="https://apps.apple.com/au/app/yellow-express/id1519252013" target="_blank" rel="noopener noreferrer">
-                  <Image src="/appStore2.jpg" alt="App Store" className="rounded-lg cursor-pointer" width={220} height={65} />
+                <a
+                  href="https://apps.apple.com/au/app/yellow-express/id1519252013"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/appStore2.jpg"
+                    alt="App Store"
+                    className="rounded-lg cursor-pointer"
+                    width={220}
+                    height={65}
+                  />
                 </a>
-                <a href="https://play.google.com/store/apps/details?id=com.yellowexpress.app&pli=1" target="_blank" rel="noopener noreferrer">
-                  <Image src="/playStore.jpg" alt="Google Play" className="rounded-lg cursor-pointer" width={220} height={65} />
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.yellowexpress.app&pli=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/playStore.jpg"
+                    alt="Google Play"
+                    className="rounded-lg cursor-pointer"
+                    width={220}
+                    height={65}
+                  />
                 </a>
               </div>
             </div>
@@ -56,4 +83,4 @@ export const SuccessPage = ({ title, message, showAppStore = false }: SuccessPag
       </div>
     </Container>
   );
-}; 
+};

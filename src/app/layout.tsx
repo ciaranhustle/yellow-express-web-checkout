@@ -95,7 +95,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${gtWalsheimPro.variable} min-h-screen flex flex-col items-center antialiased`}
+        className={`${gtWalsheimPro.variable} min-h-screen flex flex-col items-center antialiased overflow-hidden`}
       >
         <QueryProvider>
           <AuthContextProvider>
