@@ -20,15 +20,15 @@ const SuccessPageContent = () => {
   return (
     <SuccessPage
       title="Booking Confirmed!"
-      subTitle={
+      message="A member of our team will be in touch shortly to confirm your booking."
+      subMessage={
         job?.JSData?.bookingNo
-          ? `#${job.JSData.bookingNo} - ${format(
+          ? `Booking Reference #${job.JSData.bookingNo} - ${format(
               new Date(job.pickupDateUTC),
               "dd/MM/yyyy"
             )}`
           : undefined
       }
-      message="A member of our team will be in touch shortly to confirm your booking."
       showAppStore
     />
   );

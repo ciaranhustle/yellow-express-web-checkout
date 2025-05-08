@@ -7,14 +7,14 @@ import confetti from "canvas-confetti";
 
 interface SuccessPageProps {
   title: string;
-  subTitle?: string;
   message: string;
+  subMessage?: string;
   showAppStore?: boolean;
 }
 
 export const SuccessPage = ({
   title,
-  subTitle,
+  subMessage,
   message,
   showAppStore = false,
 }: SuccessPageProps) => {
@@ -34,8 +34,9 @@ export const SuccessPage = ({
         <div className="px-24 pt-24 w-full flex flex-col items-center gap-4 text-center">
           <Image src="/greenTick.svg" width={60} height={60} alt="Success" />
           <p className="text-4xl font-bold">{title}</p>
-          {subTitle && <p className="text-2xl font-bold">{subTitle}</p>}
+
           <p className="text-lg">{message}</p>
+          {subMessage && <p className="text-lg opacity-50">{subMessage}</p>}
         </div>
         <div className="w-full flex flex-col items-center bg-accent rounded-t-[50px] py-10 px-5">
           {showAppStore && (
