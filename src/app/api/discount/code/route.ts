@@ -3,8 +3,8 @@ import { API_URL } from "@/lib/secrets";
 
 export async function POST(request: NextRequest) {
   try {
-    const { code } = await request.json();
-    
+    const { code, email } = await request.json();
+
     if (!code) {
       return NextResponse.json(
         { error: "Discount code is required" },
@@ -12,8 +12,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const queryParams = new URLSearchParams();
+    if (email) {
+      queryParams.set("email", email);
+    }
+
     // Construct the URL with optional customer ID
-    const url = new URL(`${API_URL}/v1/coupon/${code}`);
+    const url = new URL(
+      `${API_URL}/v1/coupon/${code}?${queryParams.toString()}`
+    );
 
     const response = await fetch(url, {
       method: "GET",
@@ -39,4 +46,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}

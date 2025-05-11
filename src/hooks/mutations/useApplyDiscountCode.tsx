@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 import { useCartContext } from "@/context/CartContext";
 
 interface DiscountResponse {
-  coupon: Coupon
+  coupon: Coupon;
   message?: string;
 }
 
@@ -19,7 +19,7 @@ export const useApplyDiscountCode = () => {
   const { dispatch } = useCartContext();
 
   return useMutation({
-    mutationFn: async (data: { code: string }) => {
+    mutationFn: async (data: { code: string; email?: string }) => {
       const response = await api("/api/discount/code", {
         method: "POST",
         data: data,
@@ -38,7 +38,10 @@ export const useApplyDiscountCode = () => {
     },
     onError: (error: AxiosError<ErrorResponse>) => {
       console.error("Error applying coupon:", error);
-      toast.error(error.response?.data?.error || "Error applying coupon. Please try again.");
+      toast.error(
+        error.response?.data?.error ||
+          "Error applying coupon. Please try again."
+      );
     },
   });
 };

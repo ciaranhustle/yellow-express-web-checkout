@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useApplyDiscountCode } from '@/hooks/mutations/useApplyDiscountCode';
+import React, { useState } from "react";
+import { useApplyDiscountCode } from "@/hooks/mutations/useApplyDiscountCode";
+import { useCartContext } from "@/context/CartContext";
 
 interface DiscountCodeModalProps {
   isOpen: boolean;
@@ -10,17 +11,21 @@ export const DiscountCodeModal: React.FC<DiscountCodeModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [code, setCode] = useState('');
+  const { state } = useCartContext();
+  const [code, setCode] = useState("");
   const { mutate: applyDiscountCode, isPending } = useApplyDiscountCode();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    applyDiscountCode({ code }, {
-      onSuccess: () => {
-        setCode('');
-        onClose();
+    applyDiscountCode(
+      { code, email: state.customerDetails?.email },
+      {
+        onSuccess: () => {
+          setCode("");
+          onClose();
+        },
       }
-    });
+    );
   };
 
   if (!isOpen) return null;
@@ -60,11 +65,11 @@ export const DiscountCodeModal: React.FC<DiscountCodeModalProps> = ({
               className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
               disabled={isPending}
             >
-              {isPending ? 'Applying...' : 'Apply'}
+              {isPending ? "Applying..." : "Apply"}
             </button>
           </div>
         </form>
       </div>
     </div>
   );
-}; 
+};
