@@ -276,3 +276,14 @@ interface Coupon {
   code: string;
   value: number;
 }
+
+interface AppSettings {
+  unavailableDates: string[];
+  times: {
+    [key: string]: {
+      earliest: string;
+      latest: string;
+      openLatest?: string;
+    };
+  };
+}

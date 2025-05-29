@@ -7,14 +7,21 @@ import { StepHeader } from "@/components/StepHeader/StepHeader";
 import { YellowDatePicker } from "@/components/YellowDatePicker/YellowDatePicker";
 import { StepNavButtons } from "@/components/StepNavButtons/StepNavButtons";
 import { addDays } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, validBookingDateTime } from "@/lib/utils";
 import { useCartContext } from "@/context/CartContext";
 import { bookingTimeOptions } from "@/lib/constants";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useAppSettings } from "@/hooks/queries/useAppSettings";
+import { InvalidBookingDateTimeModal } from "@/components/InvalidBookingDateTimeModal/InvalidBookingDateTimeModal";
 
 const WhenPage = () => {
   const router = useRouter();
   const { state, dispatch, isLoading: isCartLoading } = useCartContext();
+  const { data: appSettings } = useAppSettings();
+  const [
+    isInvalidBookingDateTimeModalOpen,
+    setIsInvalidBookingDateTimeModalOpen,
+  ] = useState(false);
 
   // Check if current time is after 5:00 PM
   const isAfterCutoff = () => {
@@ -39,8 +46,48 @@ const WhenPage = () => {
     }
   }, [dispatch, state.when]);
 
+  const getFormattedTime = (time: BookingTime) => {
+    if (time === "Morning") {
+      return {
+        ampm: "am",
+        hours: 9,
+        minutes: 0,
+      };
+    } else if (time === "Midday") {
+      return {
+        ampm: "pm",
+        hours: 12,
+        minutes: 0,
+      };
+    } else if (time === "Afternoon") {
+      return {
+        ampm: "pm",
+        hours: 4,
+        minutes: 0,
+      };
+    } else {
+      return {
+        ampm: "am",
+        hours: 9,
+        minutes: 0,
+      };
+    }
+  };
+
   const handleNextPress = () => {
-    router.push("/where");
+    if (
+      state.when?.date &&
+      state.when?.time &&
+      appSettings &&
+      validBookingDateTime(state.when.date, getFormattedTime(state.when.time), {
+        unavailableDates: appSettings.unavailableDates,
+        times: appSettings.times,
+      })
+    ) {
+      router.push("/where");
+    } else {
+      setIsInvalidBookingDateTimeModalOpen(true);
+    }
   };
 
   const nextDisabled =
@@ -141,6 +188,13 @@ const WhenPage = () => {
       </div>
 
       <StepNavButtons onNext={handleNextPress} nextDisabled={nextDisabled} />
+      {appSettings && (
+        <InvalidBookingDateTimeModal
+          isOpen={isInvalidBookingDateTimeModalOpen}
+          setIsOpen={setIsInvalidBookingDateTimeModalOpen}
+          appSettings={appSettings}
+        />
+      )}
     </Container>
   );
 };

@@ -3,7 +3,7 @@ export enum StorageKey {
 }
 
 export const FETCH_CUSTOMER = "customer";
-
+export const FETCH_APP_SETTINGS = "appSettings";
 interface BookingTypeOption {
   type: BookingType;
   description: string;
