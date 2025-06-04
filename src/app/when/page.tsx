@@ -75,11 +75,27 @@ const WhenPage = () => {
   };
 
   const handleNextPress = () => {
+    const isToday = state.when?.isToday;
+    const date = isToday ? new Date().toISOString() : state.when?.date;
+    const time = isToday
+      ? (() => {
+          const nextHour = new Date();
+          nextHour.setHours(nextHour.getHours() + 1);
+          return {
+            ampm: nextHour.getHours() >= 12 ? "pm" : "am",
+            hours: nextHour.getHours() % 12 || 12,
+            minutes: 0,
+          };
+        })()
+      : state.when?.time
+      ? getFormattedTime(state.when?.time)
+      : null;
+
     if (
-      state.when?.date &&
-      state.when?.time &&
+      date &&
+      time &&
       appSettings &&
-      validBookingDateTime(state.when.date, getFormattedTime(state.when.time), {
+      validBookingDateTime(date, time, {
         unavailableDates: appSettings.unavailableDates,
         times: appSettings.times,
       })
