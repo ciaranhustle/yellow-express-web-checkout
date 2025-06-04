@@ -23,30 +23,32 @@ export const createJobFromQuote = (
   quote: Quote,
   bookingAssistOption: BookingAssistOption
 ): Job => {
+  let pickupDate;
+  let pickupTime;
   if (quote.bookingDetails.isToday) {
     const now = new Date();
-    quote.bookingDetails.date = now.toISOString();
-
-    // Determine time slot based on current hour
     const currentHour = now.getHours();
     const currentMinutes = now.getMinutes();
 
-    if (currentHour < 10 || (currentHour === 10 && currentMinutes === 0)) {
-      quote.bookingDetails.time = "Morning";
-    } else if (
-      currentHour < 14 ||
-      (currentHour === 14 && currentMinutes === 0)
-    ) {
-      quote.bookingDetails.time = "Midday";
-    } else {
-      quote.bookingDetails.time = "Afternoon";
-    }
+    const roundedMinutes = Math.ceil(currentMinutes / 15) * 15;
+    const additionalHours = Math.floor(roundedMinutes / 60);
+    const finalMinutes = roundedMinutes % 60;
+
+    pickupDate = now.toISOString();
+    pickupTime = {
+      hours: Math.ceil((currentHour + additionalHours) % 12 || 12),
+      minutes: finalMinutes,
+      ampm: currentHour + additionalHours >= 12 ? "pm" : "am",
+    };
+  } else {
+    pickupDate = quote.bookingDetails.date;
+    pickupTime = PICKUP_TIME_SCHEDULE[quote.bookingDetails.time];
   }
 
   return {
     type: quote.bookingDetails.bookingType,
-    pickupDateUTC: quote.bookingDetails.date,
-    pickupTime: PICKUP_TIME_SCHEDULE[quote.bookingDetails.time],
+    pickupDateUTC: pickupDate,
+    pickupTime: pickupTime,
     pickupNow: quote.bookingDetails.isToday,
     bookingAssistOption,
     addresses: {
