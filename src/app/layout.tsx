@@ -10,6 +10,7 @@ import { Header } from "@/components/Header/Header";
 import { Footer } from "@/components/Footer/Footer";
 import Script from "next/script";
 import { GMAPS_API_KEY } from "@/lib/secrets";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 const gtWalsheimPro = localFont({
   src: [
@@ -89,6 +90,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <GoogleTagManager gtmId="GTM-56X3GXD" />
         <Script
           src={`https://maps.googleapis.com/maps/api/js?key=${GMAPS_API_KEY}&libraries=places`}
           strategy="lazyOnload"
