@@ -55,6 +55,10 @@ export const useCheckout = () => {
     },
     onSuccess: (data: CheckoutResponse, variables: CheckoutData) => {
       if (data.success) {
+        const bookingType =
+          variables.quote.bookingDetails.bookingType === "Big & Bulky"
+            ? "MVAN"
+            : "COUR";
         sendGTMEvent({
           event: "purchase",
           ecommerce: {
@@ -63,11 +67,10 @@ export const useCheckout = () => {
             currency: "AUD",
             items: [
               {
-                item_id:
-                  `${variables.quote.bookingDetails.bookingType}_${variables.upsellApplied}`
-                    .toLowerCase()
-                    .replace(" ", "_"),
-                item_name: `${variables.quote.bookingDetails.bookingType} - ${variables.upsellApplied}`,
+                item_id: `${bookingType}_${variables.upsellApplied}`
+                  .toLowerCase()
+                  .replace(" ", "_"),
+                item_name: `${bookingType} - ${variables.upsellApplied}`,
                 price: variables.quote.price,
                 quantity: 1,
               },
