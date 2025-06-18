@@ -8,13 +8,13 @@ import { toast } from "react-toastify";
 import { sendGTMEvent } from "@next/third-parties/google";
 import CryptoJS from "crypto-js";
 
-const hashData = (data: string) => {
+const hashData = (data?: string) => {
   if (!data) return undefined;
   const normalizedData = String(data).trim().toLowerCase();
   return CryptoJS.SHA256(normalizedData).toString(CryptoJS.enc.Hex);
 };
 
-const normalizePhoneNumber = (phone: string) => {
+const normalizePhoneNumber = (phone?: string) => {
   if (!phone) return undefined;
   let cleaned = phone.replace(/\D/g, "");
   if (!cleaned.startsWith("+")) {
@@ -84,8 +84,8 @@ export const useCheckout = () => {
               email: hashData(variables.quote.customerDetails?.email),
             }),
             ...(variables.quote.customerDetails?.mobile && {
-              phone_number: normalizePhoneNumber(
-                variables.quote.customerDetails?.mobile
+              phone_number: hashData(
+                normalizePhoneNumber(variables.quote.customerDetails?.mobile)
               ),
             }),
           },
