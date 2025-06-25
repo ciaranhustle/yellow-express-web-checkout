@@ -86,9 +86,9 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
             isToday ? "ASAP" : getTimeDisplay(quote.bookingDetails.time),
           ]}
         />
-        <div className="text-sm w-full flex flex-col my-2 pt-4 border-t border-gray-200">
+        <div className="text-sm w-full flex flex-col gap-1 my-2 pt-4 border-t border-gray-200">
           <p className="opacity-50">Job summary</p>
-          <QuoteSummary quote={quote} />
+          <QuoteSummary quote={quote} className="text-start" />
         </div>
         {quote.upsellOptions && quote.upsellOptions.length > 0 && (
           <div className="pt-4 border-t border-gray-200">
