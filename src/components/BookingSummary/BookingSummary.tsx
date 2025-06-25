@@ -2,12 +2,12 @@ import { format } from "date-fns";
 import Image from "next/image";
 import React, { useState } from "react";
 import { bookingTimeOptions } from "@/lib/constants";
-import { QuoteSummaryModal } from "@/components/QuoteDescriptionModal/QuoteDescriptionModal";
 import { formatPrice } from "@/lib/format";
 import { useCartContext } from "@/context/CartContext";
 import { cn } from "@/lib/utils";
 import { SpeedInfoModal } from "../SpeedInfoModal/SpeedInfoModal";
 import { Info } from "lucide-react";
+import { QuoteSummary } from "../QuoteSummary/QuoteSummary";
 
 interface BookingSummaryItemProps {
   title: string;
@@ -37,7 +37,6 @@ interface Props {
 }
 
 export const BookingSummary: React.FC<Props> = ({ quote }) => {
-  const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
   const [isSpeedInfoModalOpen, setIsSpeedInfoModalOpen] = useState(false);
   const { state: cartState, dispatch } = useCartContext();
   const selectedUpsell = cartState.selectedUpsellOption;
@@ -87,14 +86,9 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
             isToday ? "ASAP" : getTimeDisplay(quote.bookingDetails.time),
           ]}
         />
-        <div className="text-sm w-full flex flex-row justify-between items-center my-2 pt-4 border-t border-gray-200">
+        <div className="text-sm w-full flex flex-col my-2 pt-4 border-t border-gray-200">
           <p className="opacity-50">Job summary</p>
-          <button
-            onClick={() => setIsDescriptionModalOpen(true)}
-            className="bg-primary text-black px-4 py-2 rounded-full font-bold hover:bg-primary/90 transition-colors"
-          >
-            See Description
-          </button>
+          <QuoteSummary quote={quote} />
         </div>
         {quote.upsellOptions && quote.upsellOptions.length > 0 && (
           <div className="pt-4 border-t border-gray-200">
@@ -153,11 +147,6 @@ export const BookingSummary: React.FC<Props> = ({ quote }) => {
           </div>
         )}
       </div>
-      <QuoteSummaryModal
-        isOpen={isDescriptionModalOpen}
-        onClose={() => setIsDescriptionModalOpen(false)}
-        quote={quote}
-      />
       <SpeedInfoModal
         isOpen={isSpeedInfoModalOpen}
         onClose={() => setIsSpeedInfoModalOpen(false)}

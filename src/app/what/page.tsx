@@ -248,7 +248,7 @@ const WhatPage = () => {
                   type="text"
                   value={newItemText}
                   onChange={(e) => setNewItemText(e.target.value)}
-                  placeholder="Add an item..."
+                  placeholder="Add an item... Any special instructions…"
                   className="w-full px-5 py-3 border border-lightgrey rounded text-lg bg-transparent"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
