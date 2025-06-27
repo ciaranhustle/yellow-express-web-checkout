@@ -6,27 +6,6 @@ import { useCartContext } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { sendGTMEvent } from "@next/third-parties/google";
-import CryptoJS from "crypto-js";
-
-const hashData = (data?: string) => {
-  if (!data) return undefined;
-  const normalizedData = String(data).trim().toLowerCase();
-  return CryptoJS.SHA256(normalizedData).toString(CryptoJS.enc.Hex);
-};
-
-const normalizePhoneNumber = (phone?: string) => {
-  if (!phone) return undefined;
-  let cleaned = phone.replace(/\D/g, "");
-  if (!cleaned.startsWith("+")) {
-    if (cleaned.startsWith("0")) {
-      cleaned = "61" + cleaned.substring(1);
-    }
-    if (!cleaned.startsWith("+")) {
-      cleaned = "+" + cleaned;
-    }
-  }
-  return cleaned;
-};
 
 interface CheckoutData {
   paymentMethodId: string;
@@ -78,18 +57,16 @@ export const useCheckout = () => {
           },
           user_data: {
             ...(variables.quote.customerDetails?.firstName && {
-              first_name: hashData(variables.quote.customerDetails?.firstName),
+              first_name: variables.quote.customerDetails?.firstName,
             }),
             ...(variables.quote.customerDetails?.lastName && {
-              last_name: hashData(variables.quote.customerDetails?.lastName),
+              last_name: variables.quote.customerDetails?.lastName,
             }),
             ...(variables.quote.customerDetails?.email && {
-              email: hashData(variables.quote.customerDetails?.email),
+              email: variables.quote.customerDetails?.email,
             }),
             ...(variables.quote.customerDetails?.mobile && {
-              phone_number: hashData(
-                normalizePhoneNumber(variables.quote.customerDetails?.mobile)
-              ),
+              phone_number: variables.quote.customerDetails?.mobile,
             }),
           },
         });
