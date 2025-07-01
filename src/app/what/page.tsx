@@ -248,7 +248,7 @@ const WhatPage = () => {
                   type="text"
                   value={newItemText}
                   onChange={(e) => setNewItemText(e.target.value)}
-                  placeholder="Add an item... Any special instructions…"
+                  placeholder="Add an item..."
                   className="w-full px-5 py-3 border border-lightgrey rounded text-lg bg-transparent"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -341,6 +341,18 @@ const WhatPage = () => {
           )}
         </>
       ) : null}
+
+      <div className="w-full flex flex-col gap-4 mt-5">
+        <p className="text-lg font-medium">Special Instructions</p>
+        <textarea
+          value={state.instructions}
+          onChange={(e) =>
+            dispatch({ type: "SET_INSTRUCTIONS", payload: e.target.value })
+          }
+          placeholder="Any special instructions…"
+          className="w-full px-5 py-3 border border-lightgrey rounded text-lg bg-transparent"
+        />
+      </div>
 
       <StepNavButtons
         onNext={handleSubmit(handleNextPress)}

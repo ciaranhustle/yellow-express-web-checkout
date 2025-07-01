@@ -18,6 +18,7 @@ export const useCreateQuote = () => {
     ...whenDetails,
     ...whereDetails,
     description: whatDetails,
+    instructions: state.instructions,
     bookingAssistOption,
   };
   const customerDetails = state.customerDetails;

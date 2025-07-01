@@ -23,6 +23,7 @@ export const initialState: CartState = {
   when: initialWhenState,
   where: initialWhereState,
   what: null,
+  instructions: "",
   customerDetails: initialCustomerDetailsState,
   quoteId: null,
   coupon: null,
@@ -68,6 +69,10 @@ export const cartReducer = (
 
     case "SET_WHAT":
       newState = { ...newState, what: action.payload };
+      break;
+
+    case "SET_INSTRUCTIONS":
+      newState = { ...newState, instructions: action.payload };
       break;
 
     case "SET_CUSTOMER_DETAILS":

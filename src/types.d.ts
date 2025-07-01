@@ -16,6 +16,7 @@ interface CartState {
   when: WhenDetails | null;
   where: WhereDetails | null;
   what: string[] | null;
+  instructions: string;
   customerDetails: CustomerDetails | null;
   quoteId: string | null;
   coupon: Coupon | null;
@@ -27,6 +28,7 @@ type CartAction =
   | { type: "SET_WHEN"; payload: Partial<WhenDetails> | null }
   | { type: "SET_WHERE"; payload: Partial<WhereDetails> | null }
   | { type: "SET_WHAT"; payload: string[] | null }
+  | { type: "SET_INSTRUCTIONS"; payload: string }
   | { type: "SET_CUSTOMER_DETAILS"; payload: Partial<CustomerDetails> | null }
   | { type: "SET_COUPON"; payload: Coupon | null }
   | { type: "CLEAR_COUPON" }
@@ -100,6 +102,7 @@ interface Quote {
     isToday: boolean;
     date: string;
     time: BookingTime;
+    instructions: string;
     pickUpAddress: {
       address: string;
       company: string;
@@ -223,6 +226,7 @@ interface Job {
     weight: number;
     loads: number;
     minutes: number;
+    instructions: string;
   };
   variationConditions: {
     fullPrice: number;
