@@ -107,6 +107,7 @@ export const createJobFromQuote = (
       weight: quote.inclusions.weight,
       loads: quote.inclusions.loads,
       minutes: quote.inclusions.minutes,
+      instructions: quote.bookingDetails.instructions,
     },
     variationConditions: {
       fullPrice: quote.fullPrice,
