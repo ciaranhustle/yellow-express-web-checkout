@@ -61,6 +61,30 @@ export const getFormattedAddress = async (placeId: string) => {
       addressComponents.find((component) => component.types.includes(type))
         ?.short_name || "";
 
+    const getFirstPartOfFormattedAddress = (formattedAddress: string) => {
+      if (!formattedAddress) return "";
+      return formattedAddress.split(",")[0].trim();
+    };
+
+    let locality =
+      getComponent(AddressType.locality) ||
+      getComponent(AddressType.sublocality) ||
+      getComponent(AddressType.neighborhood);
+
+    if (!locality) {
+      if (
+        name &&
+        details.formatted_address &&
+        details.formatted_address.startsWith(name)
+      ) {
+        locality = name;
+      } else {
+        locality = getFirstPartOfFormattedAddress(
+          details.formatted_address || ""
+        );
+      }
+    }
+
     return {
       address: details.formatted_address || "",
       subpremise: getComponent(AddressType.subpremise),
@@ -69,10 +93,7 @@ export const getFormattedAddress = async (placeId: string) => {
         ? name
         : getComponent(GeocodingAddressComponentType.establishment),
       street: getComponent(AddressType.route),
-      locality:
-        getComponent(AddressType.locality) ||
-        getComponent(AddressType.sublocality) ||
-        getComponent(AddressType.neighborhood),
+      locality,
       country: getComponent(AddressType.country),
       state: getComponent(AddressType.administrative_area_level_1),
       postal_code: getComponent(AddressType.postal_code),
