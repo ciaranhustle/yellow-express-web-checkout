@@ -106,6 +106,7 @@ interface Quote {
     pickUpAddress: {
       address: string;
       company: string;
+      subpremise: string;
       street_number: string;
       street: string;
       locality: string;
@@ -118,6 +119,7 @@ interface Quote {
     dropOffAddress: {
       address: string;
       company: string;
+      subpremise: string;
       street_number: string;
       street: string;
       locality: string;
@@ -181,6 +183,7 @@ interface Job {
       location: {
         address: string;
         company: string;
+        subpremise: string;
         street_number: string;
         street: string;
         locality: string;
@@ -201,6 +204,7 @@ interface Job {
       location: {
         address: string;
         company: string;
+        subpremise: string;
         street_number: string;
         street: string;
         locality: string;

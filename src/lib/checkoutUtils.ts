@@ -56,6 +56,7 @@ export const createJobFromQuote = (
         location: {
           address: quote.bookingDetails.pickUpAddress.address,
           company: quote.bookingDetails.pickUpAddress.company,
+          subpremise: quote.bookingDetails.pickUpAddress.subpremise,
           street_number: quote.bookingDetails.pickUpAddress.street_number,
           street: quote.bookingDetails.pickUpAddress.street,
           locality: quote.bookingDetails.pickUpAddress.locality,
@@ -79,6 +80,7 @@ export const createJobFromQuote = (
         location: {
           address: quote.bookingDetails.dropOffAddress.address,
           company: quote.bookingDetails.dropOffAddress.company,
+          subpremise: quote.bookingDetails.dropOffAddress.subpremise,
           street_number: quote.bookingDetails.dropOffAddress.street_number,
           street: quote.bookingDetails.dropOffAddress.street,
           locality: quote.bookingDetails.dropOffAddress.locality,
