@@ -16,7 +16,7 @@ export const Header = () => {
       </Link>
       <a
         className="text-black bg-primary px-3 py-2 rounded border border-black flex flex-row gap-2.5 items-center"
-        href="tel:1300935569"
+        href="tel:0293523000"
       >
         <Image src="/phone.svg" alt="Phone Icon" width={16} height={16} />
         <span className="font-bold text-sm">Need help?</span>
