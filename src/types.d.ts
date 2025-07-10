@@ -137,6 +137,7 @@ interface Quote {
     weight: number;
     loads: number;
     distance: number;
+    tolls: number;
   };
   speedLabel: string;
   fullPrice: number;
@@ -239,6 +240,7 @@ interface Job {
     price: number;
     distance: number;
     duration: number;
+    tolls: number;
   };
   upsellApplied?: string;
   quote: Quote | string;
