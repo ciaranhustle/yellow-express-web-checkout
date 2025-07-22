@@ -241,6 +241,7 @@ interface Job {
     distance: number;
     duration: number;
     tolls: number;
+    minutes: number;
   };
   upsellApplied?: string;
   quote: Quote | string;
