@@ -36,11 +36,9 @@ export async function POST(
       );
     }
 
-    console.log("data", data);
-
     if (!data.success) {
       return NextResponse.json(
-        { error: "Failed to claim job" },
+        { error: data.message || "Failed to claim job" },
         { status: 500 }
       );
     }

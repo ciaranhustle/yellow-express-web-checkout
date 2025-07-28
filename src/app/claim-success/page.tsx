@@ -6,9 +6,10 @@ const ClaimSuccessPageWrapper = () => {
   return (
     <SuccessPage
       title="Booking Claimed Successfully!"
-      message="Your booking has been claimed and is now associated with your account. You can view your booking details in your account dashboard."
+      message="Your booking is now associated with your Yellow Express account."
+      showAppStore={true}
     />
   );
 };
 
-export default ClaimSuccessPageWrapper; 
+export default ClaimSuccessPageWrapper;
