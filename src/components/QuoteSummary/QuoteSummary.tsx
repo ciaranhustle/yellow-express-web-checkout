@@ -1,3 +1,4 @@
+import { useCartContext } from "@/context/CartContext";
 import { cn } from "@/lib/utils";
 
 interface QuoteSummaryProps {
@@ -6,7 +7,7 @@ interface QuoteSummaryProps {
 }
 
 export const QuoteSummary = ({ className, quote }: QuoteSummaryProps) => {
-  console.log(quote.bookingDetails.description);
+  const { state } = useCartContext();
   return (
     <p className={cn("text-center", className)}>
       Your{" "}
@@ -23,7 +24,11 @@ export const QuoteSummary = ({ className, quote }: QuoteSummaryProps) => {
       <span className="font-medium">
         {quote.bookingDetails.dropOffAddress.address}
       </span>{" "}
-      using our <span className="font-medium">{quote.speedLabel}</span> service
+      using our{" "}
+      <span className="font-medium">
+        {state.selectedUpsellOption?.label || quote.speedLabel}
+      </span>{" "}
+      service
     </p>
   );
 };

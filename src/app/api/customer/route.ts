@@ -17,6 +17,8 @@ export async function GET() {
       try {
         const tokens = await authenticate({ refresh_token: refreshToken });
 
+        console.log("tokens", tokens);
+
         if (!tokens.access_token) {
           return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
@@ -61,13 +63,16 @@ export async function GET() {
           firstName: customer.firstName,
           lastName: customer.lastName,
           email: customer.email,
-          mobile: customer.mobile
-        }
+          mobile: customer.mobile,
+        },
       },
       { status: 200 }
     );
   } catch (error) {
     console.error("Failed to fetch customer data:", error);
-    return NextResponse.json({ error: "Failed to fetch customer data" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch customer data" },
+      { status: 500 }
+    );
   }
 }

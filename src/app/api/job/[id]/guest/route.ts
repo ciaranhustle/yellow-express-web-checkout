@@ -7,9 +7,9 @@ export async function GET(
 ) {
   try {
     const jobId = (await params).id;
-    
+
     const res = await fetch(`${API_URL}/v1/job/${jobId}/guest`);
-    
+
     if (!res.ok) {
       return NextResponse.json(
         { error: "Failed to fetch job" },
@@ -21,9 +21,6 @@ export async function GET(
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error("Unexpected error in job guest route:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch job" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch job" }, { status: 500 });
   }
 }
