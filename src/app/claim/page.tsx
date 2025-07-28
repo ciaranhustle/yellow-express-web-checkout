@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useCallback, useEffect, useState } from "react";
+import { use, useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import LoginForm from "@/components/Auth/LoginForm";
 import RegisterForm from "@/components/Auth/RegisterForm";
@@ -10,6 +10,8 @@ import { useClaimJob } from "@/hooks/mutations/useClaimJob";
 import { toast } from "react-toastify";
 import { LoadingPage } from "@/components/LoadingPage";
 import { useAuthContext } from "@/context/AuthContext";
+import { cn } from "@/lib/utils";
+
 type SearchParams = {
   reference: string;
 };
@@ -41,12 +43,6 @@ const ConfirmationPage = ({ searchParams }: ConfirmationPageProps) => {
     );
   }, [job?._id, router, claimJob]);
 
-  useEffect(() => {
-    if (isAuthenticated && customer) {
-      handleClaimJob();
-    }
-  }, [isAuthenticated, customer, handleClaimJob]);
-
   if (isLoading) {
     return <LoadingPage message="Loading your booking..." />;
   }
@@ -59,8 +55,6 @@ const ConfirmationPage = ({ searchParams }: ConfirmationPageProps) => {
     return <LoadingPage message="Claiming your booking..." />;
   }
 
-  console.log("job", job);
-
   return (
     <Container>
       <div className="w-full flex flex-col py-8 gap-6 items-center text-center">
@@ -70,36 +64,58 @@ const ConfirmationPage = ({ searchParams }: ConfirmationPageProps) => {
         <p className="text-lg text-gray-600 mb-6">
           Booking Reference #{job?.JSData?.bookingNo}
         </p>
-        {customer && (
-          <p className="text-lg text-gray-600 mb-6">
-            Welcome back, {customer.firstName}!
-          </p>
-        )}
-        {showLogin ? (
-          <>
-            <LoginForm onSuccess={handleClaimJob} />
-            <p className="mt-4 text-gray-600">
-              Don&apos;t have an account?{" "}
-              <button
-                onClick={() => setShowLogin(false)}
-                className="text-accent font-bold hover:underline"
-              >
-                Register here
-              </button>
-            </p>
-          </>
+
+        {isAuthenticated && customer ? (
+          <div className="flex flex-col items-center gap-4 w-full">
+            <div className="text-center space-y-2 mb-4">
+              <p className="text-lg font-semibold">
+                Ready to claim your booking, {customer.firstName}?
+              </p>
+              <p className="text-sm text-gray-600">
+                This will link this booking to your account and allow you to
+                track the jobs progress through the Yellow Express app.
+              </p>
+            </div>
+            <button
+              onClick={handleClaimJob}
+              disabled={isPending}
+              className={cn(
+                "w-full text-center font-bold text-xl py-3 bg-primary border-2 border-black rounded capitalize",
+                isPending && "opacity-50"
+              )}
+            >
+              {isPending ? "Claiming..." : "Claim"}
+            </button>
+          </div>
         ) : (
           <>
-            <RegisterForm onSuccess={handleClaimJob} />
-            <p className="mt-4 text-gray-600">
-              Already have an account?{" "}
-              <button
-                onClick={() => setShowLogin(true)}
-                className="text-accent font-bold hover:underline"
-              >
-                Login here
-              </button>
-            </p>
+            {showLogin ? (
+              <>
+                <LoginForm onSuccess={handleClaimJob} />
+                <p className="mt-4 text-gray-600">
+                  Don&apos;t have an account?{" "}
+                  <button
+                    onClick={() => setShowLogin(false)}
+                    className="text-accent font-bold hover:underline"
+                  >
+                    Register here
+                  </button>
+                </p>
+              </>
+            ) : (
+              <>
+                <RegisterForm onSuccess={handleClaimJob} />
+                <p className="mt-4 text-gray-600">
+                  Already have an account?{" "}
+                  <button
+                    onClick={() => setShowLogin(true)}
+                    className="text-accent font-bold hover:underline"
+                  >
+                    Login here
+                  </button>
+                </p>
+              </>
+            )}
           </>
         )}
       </div>

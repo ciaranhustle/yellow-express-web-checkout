@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import { API_URL } from '@/lib/secrets';
-import { cookies } from 'next/headers';
+import { NextResponse } from "next/server";
+import { API_URL } from "@/lib/secrets";
+import { cookies } from "next/headers";
 
 export async function POST(
   request: Request,
@@ -8,8 +8,6 @@ export async function POST(
 ) {
   try {
     const jobId = (await params).id;
-
-    console.log({ jobId });
 
     const cookieStore = await cookies();
 
@@ -24,7 +22,7 @@ export async function POST(
 
     if (!response) {
       return NextResponse.json(
-        { error: 'Failed to claim job' },
+        { error: "Failed to claim job" },
         { status: 500 }
       );
     }
@@ -33,17 +31,23 @@ export async function POST(
 
     if (!data) {
       return NextResponse.json(
-        { error: 'Failed to claim job' },
+        { error: "Failed to claim job" },
+        { status: 500 }
+      );
+    }
+
+    console.log("data", data);
+
+    if (!data.success) {
+      return NextResponse.json(
+        { error: "Failed to claim job" },
         { status: 500 }
       );
     }
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error('Error claiming job:', error);
-    return NextResponse.json(
-      { error: 'Failed to claim job' },
-      { status: 500 }
-    );
+    console.error("Error claiming job:", error);
+    return NextResponse.json({ error: "Failed to claim job" }, { status: 500 });
   }
-} 
+}

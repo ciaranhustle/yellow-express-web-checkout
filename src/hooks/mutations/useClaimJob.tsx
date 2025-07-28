@@ -14,9 +14,10 @@ export const useClaimJob = () => {
 
   return useMutation({
     mutationFn: async ({ jobId }: ClaimJobProps) => {
-      await api(`/api/job/${jobId}/claim`, {
+      const response = await api(`/api/job/${jobId}/claim`, {
         method: "POST",
       });
+      return response?.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["job", "guest"] });
