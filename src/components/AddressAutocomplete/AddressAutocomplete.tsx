@@ -53,7 +53,7 @@ export const AddressAutocomplete: React.FC<Props> = ({
     if (!postcodes.includes(parseInt(postcodeComponent.long_name))) {
       // If postcode is not in our list, don't allow selection
       toast.error(
-        "Sorry, we currently only service addresses in the Greater Sydney area. Please select a different address."
+        "Sorry, we currently only service addresses in the Greater Sydney area. For all deliveries outside of Sydney Metro please call 02 9352 3000."
       );
       return;
     }
