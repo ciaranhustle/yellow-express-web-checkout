@@ -48,7 +48,29 @@ const ConfirmationPage = ({ searchParams }: ConfirmationPageProps) => {
   }
 
   if (!reference || !job) {
-    return <div>Booking not found</div>;
+    return (
+      <Container>
+        <div className="w-full flex flex-col py-8 gap-6 items-center text-center">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl font-bold text-gray-800">
+              Booking Not Found
+            </h1>
+            <p className="text-lg text-gray-600 max-w-md">
+              We couldn&apos;t find a booking with the reference number
+              provided. Please check the link and try again.
+            </p>
+            <div className="mt-6">
+              <button
+                onClick={() => router.push("/")}
+                className="w-full text-center font-bold text-xl py-3 bg-primary border-2 border-black rounded capitalize"
+              >
+                Return to Home
+              </button>
+            </div>
+          </div>
+        </div>
+      </Container>
+    );
   }
 
   if (isPending) {
