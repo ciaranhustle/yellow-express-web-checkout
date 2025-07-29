@@ -8,6 +8,7 @@ interface QuoteSummaryProps {
 
 export const QuoteSummary = ({ className, quote }: QuoteSummaryProps) => {
   const { state } = useCartContext();
+  console.log("state", state);
   return (
     <p className={cn("text-center", className)}>
       Your{" "}
@@ -26,7 +27,7 @@ export const QuoteSummary = ({ className, quote }: QuoteSummaryProps) => {
       </span>{" "}
       using our{" "}
       <span className="font-medium">
-        {state.selectedUpsellOption?.label || quote.speedLabel}
+        {state.selectedUpsellOption?.speed || quote.speedLabel}
       </span>{" "}
       service
     </p>
