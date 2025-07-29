@@ -69,7 +69,7 @@ const gtWalsheimPro = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Yellow Express",
+  title: "Instant Booking | Yellow Express",
   description:
     "Get large items or a whole apartment from A2B and get it done FAST! Book your man & a big van on demand now.",
 };

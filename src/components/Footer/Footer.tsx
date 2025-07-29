@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { StepProgressBar } from "../StepProgressBar/StepProgressBar";
+import Link from "next/link";
 
 const STEP_PATHS = [
   "/when",
@@ -21,13 +22,12 @@ export const Footer = () => {
     <div className="overflow-hidden w-screen">
       {pathname === "/" && (
         <footer className="text-black pt-3 pb-6 text-center bg-primary border-t-4 border-black">
-          <a
+          <Link
             className="underline text-2xl font-bold leading-normal"
-            href="https://yellowexpress.com.au/get-a-quote/"
-            target="_blank"
+            href="/get-a-quote"
           >
             Want a quote first?
-          </a>
+          </Link>
         </footer>
       )}
       {step >= 1 && (
