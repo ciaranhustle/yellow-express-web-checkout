@@ -8,7 +8,7 @@ export const BookingNotFound = ({ description }: { description?: string }) => (
         <h1 className="text-4xl font-bold text-gray-800">Booking Not Found</h1>
         <p className="text-lg text-gray-600 max-w-md">
           {description ||
-            "We couldn't find a booking with the reference number provided. Please check the link and try again."}
+            "We couldn't find a guest booking with the reference number provided. Please check the link and try again or contact us for assistance."}
         </p>
         <div className="mt-6">
           <Link
