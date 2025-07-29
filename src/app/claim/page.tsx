@@ -7,7 +7,6 @@ import RegisterForm from "@/components/Auth/RegisterForm";
 import { Container } from "@/components/Container/Container";
 import { useGuestJob } from "@/hooks/queries/useGuestJob";
 import { useClaimJob } from "@/hooks/mutations/useClaimJob";
-import { toast } from "react-toastify";
 import { LoadingPage } from "@/components/LoadingPage";
 import { useAuthContext } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
