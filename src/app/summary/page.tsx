@@ -281,11 +281,16 @@ const SummaryPage = () => {
                       <p className="text-lg font-bold">
                         -{" "}
                         {formatPrice(
-                          (state.bookingAssistOption === "TLC"
-                            ? currentPrices.tlcFullPrice -
-                              currentPrices.tlcPrice
-                            : currentPrices.fullPrice - currentPrices.price) +
-                            (state.coupon?.value || 0)
+                          Math.min(
+                            (state.bookingAssistOption === "TLC"
+                              ? currentPrices.tlcFullPrice -
+                                currentPrices.tlcPrice
+                              : currentPrices.fullPrice - currentPrices.price) +
+                              (state.coupon?.value || 0),
+                            state.bookingAssistOption === "TLC"
+                              ? currentPrices.tlcFullPrice
+                              : currentPrices.fullPrice
+                          )
                         )}
                       </p>
                       {state.coupon && (
@@ -302,9 +307,12 @@ const SummaryPage = () => {
                     <p className="text-2xl font-bold">Total</p>
                     <p className="text-2xl font-bold mr-8">
                       {formatPrice(
-                        (state.bookingAssistOption === "TLC"
-                          ? currentPrices.tlcPrice
-                          : currentPrices.price) - (state.coupon?.value || 0)
+                        Math.max(
+                          0,
+                          (state.bookingAssistOption === "TLC"
+                            ? currentPrices.tlcPrice
+                            : currentPrices.price) - (state.coupon?.value || 0)
+                        )
                       )}
                     </p>
                   </div>
