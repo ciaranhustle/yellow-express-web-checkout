@@ -8,7 +8,7 @@ interface QuoteSummaryProps {
 
 export const QuoteSummary = ({ className, quote }: QuoteSummaryProps) => {
   const { state } = useCartContext();
-  console.log("state", state);
+
   return (
     <p className={cn("text-center", className)}>
       Your{" "}

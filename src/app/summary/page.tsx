@@ -137,7 +137,9 @@ const SummaryPage = () => {
           <>
             <div className="px-5 pt-8">
               <p className="text-base font-bold mb-3">
-                {quote.bookingDetails.bookingType} Instant Booking
+                {quote.bookingDetails.bookingType}
+                {" | "}
+                {state.title ?? "Instant Booking"}
               </p>
               <BookingSummary quote={quote} />
 

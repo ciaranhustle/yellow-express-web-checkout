@@ -12,6 +12,7 @@ type BookingType =
 type BookingAssistOption = "DIY" | "TLC";
 
 interface CartState {
+  title?: string;
   type: BookingType | null;
   when: WhenDetails | null;
   where: WhereDetails | null;
@@ -24,6 +25,7 @@ interface CartState {
   selectedUpsellOption: UpsellOption | null;
 }
 type CartAction =
+  | { type: "SET_TITLE"; payload: string | undefined }
   | { type: "SET_TYPE"; payload: BookingType | null }
   | { type: "SET_WHEN"; payload: Partial<WhenDetails> | null }
   | { type: "SET_WHERE"; payload: Partial<WhereDetails> | null }

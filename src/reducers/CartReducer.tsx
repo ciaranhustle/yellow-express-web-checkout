@@ -19,6 +19,7 @@ const initialCustomerDetailsState = {
 };
 
 export const initialState: CartState = {
+  title: undefined,
   type: null,
   when: initialWhenState,
   where: initialWhereState,
@@ -38,9 +39,13 @@ export const cartReducer = (
   let newState = state;
 
   switch (action.type) {
+    case "SET_TITLE":
+      newState = { ...initialState, title: action.payload };
+      break;
+
     case "SET_TYPE":
       newState = {
-        ...initialState,
+        ...newState,
         type: action.payload,
       };
       break;
@@ -114,6 +119,8 @@ export const cartReducer = (
     default:
       break;
   }
+
+  console.log("newState", newState);
 
   localStorage.setItem(StorageKey.Cart, JSON.stringify(newState));
   return newState;
