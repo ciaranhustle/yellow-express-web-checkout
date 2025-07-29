@@ -10,8 +10,7 @@ import { Suspense } from "react";
 const SuccessPageContent = () => {
   const searchParams = useSearchParams();
   const jobId = searchParams.get("bookingId");
-  const { data: jobData, isLoading } = useGuestJob({ jobId: jobId });
-  const job = jobData?.job;
+  const { data: job, isLoading } = useGuestJob({ jobId: jobId });
 
   if (isLoading) {
     return <Loader />;
@@ -20,7 +19,7 @@ const SuccessPageContent = () => {
   return (
     <SuccessPage
       title="Booking Confirmed!"
-      message="A member of our team will be in touch shortly to confirm your booking."
+      message="A member of our team will be in touch shortly to confirm your booking. You can also claim your booking by logging in or creating an account to track it live through the Yellow Express app."
       subMessage={
         job?.JSData?.bookingNo
           ? `Booking Reference #${job.JSData.bookingNo} - ${format(
@@ -29,7 +28,7 @@ const SuccessPageContent = () => {
             )}`
           : undefined
       }
-      showAppStore
+      bookingId={jobId || undefined}
     />
   );
 };

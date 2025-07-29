@@ -27,7 +27,7 @@ const ConfirmationPage = ({ searchParams }: ConfirmationPageProps) => {
 
   const { data: job, isLoading } = useGuestJob({ jobId: reference });
   const { mutate: claimJob, isPending } = useClaimJob();
-  const { customer, isAuthenticated } = useAuthContext();
+  const { customer, isAuthenticated, logout } = useAuthContext();
 
   const handleClaimJob = useCallback(async () => {
     claimJob(
@@ -42,6 +42,10 @@ const ConfirmationPage = ({ searchParams }: ConfirmationPageProps) => {
       }
     );
   }, [job?._id, router, claimJob]);
+
+  const handleLogout = useCallback(() => {
+    logout();
+  }, [logout]);
 
   if (isLoading) {
     return <LoadingPage message="Loading your booking..." />;
@@ -98,6 +102,30 @@ const ConfirmationPage = ({ searchParams }: ConfirmationPageProps) => {
                 track the jobs progress through the Yellow Express app.
               </p>
             </div>
+
+            {/* Customer Details Section */}
+            <div className="w-full max-w-md bg-gray-50 rounded-lg p-4 mb-4">
+              <h3 className="font-semibold text-gray-800 mb-3">
+                Your Account Details
+              </h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Name:</span>
+                  <span className="font-medium">
+                    {customer.firstName} {customer.lastName}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Email:</span>
+                  <span className="font-medium">{customer.email}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Mobile:</span>
+                  <span className="font-medium">{customer.mobile}</span>
+                </div>
+              </div>
+            </div>
+
             <button
               onClick={handleClaimJob}
               disabled={isPending}
@@ -108,12 +136,23 @@ const ConfirmationPage = ({ searchParams }: ConfirmationPageProps) => {
             >
               {isPending ? "Claiming..." : "Claim"}
             </button>
+            <div className="mt-4">
+              <p className="text-sm text-gray-600 mb-2">
+                Not you? Log out to use a different account.
+              </p>
+              <button
+                onClick={handleLogout}
+                className="text-accent font-bold hover:underline text-sm"
+              >
+                Logout
+              </button>
+            </div>
           </div>
         ) : (
           <>
             {showLogin ? (
               <>
-                <LoginForm onSuccess={handleClaimJob} />
+                <LoginForm />
                 <p className="mt-4 text-gray-600">
                   Don&apos;t have an account?{" "}
                   <button
@@ -126,7 +165,7 @@ const ConfirmationPage = ({ searchParams }: ConfirmationPageProps) => {
               </>
             ) : (
               <>
-                <RegisterForm onSuccess={handleClaimJob} />
+                <RegisterForm />
                 <p className="mt-4 text-gray-600">
                   Already have an account?{" "}
                   <button

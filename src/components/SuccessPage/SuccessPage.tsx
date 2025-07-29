@@ -10,6 +10,7 @@ interface SuccessPageProps {
   message: string;
   subMessage?: string;
   showAppStore?: boolean;
+  bookingId?: string;
 }
 
 export const SuccessPage = ({
@@ -17,6 +18,7 @@ export const SuccessPage = ({
   subMessage,
   message,
   showAppStore = false,
+  bookingId,
 }: SuccessPageProps) => {
   const router = useRouter();
 
@@ -27,6 +29,12 @@ export const SuccessPage = ({
       origin: { y: 0.6 },
     });
   }, []);
+
+  const handleClaimClick = () => {
+    if (bookingId) {
+      router.push(`/claim?reference=${bookingId}`);
+    }
+  };
 
   return (
     <Container className="px-0 pb-0">
@@ -39,7 +47,20 @@ export const SuccessPage = ({
           {subMessage && <p className="text-lg opacity-50">{subMessage}</p>}
         </div>
         <div className="w-full flex flex-col items-center bg-accent rounded-t-[50px] py-10 px-5">
-          {showAppStore && (
+          {bookingId && (
+            <div className="flex flex-col items-center gap-12 py-6">
+              <p className="text-white text-4xl font-bold text-center">
+                Claim your booking to track it live!
+              </p>
+              <button
+                onClick={handleClaimClick}
+                className="w-full text-center font-bold text-2xl py-3 bg-primary border-2 border-black rounded md:flex-1 capitalize"
+              >
+                CLAIM BOOKING
+              </button>
+            </div>
+          )}
+          {showAppStore && !bookingId && (
             <div className="flex flex-col items-center gap-12 py-6">
               <p className="text-white text-4xl font-bold text-center">
                 Track your booking live with our app!
