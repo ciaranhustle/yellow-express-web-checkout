@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 interface ClaimJobProps {
   jobId: string;
@@ -22,8 +23,12 @@ export const useClaimJob = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["job", "guest"] });
     },
-    onError: () => {
-      toast.error("Failed to claim job. Please try again.");
+    onError: (error: AxiosError<{ error?: string }>) => {
+      console.log("error", error?.response?.data);
+      const message =
+        error?.response?.data?.error ||
+        "Failed to claim job. Please try again. If the problem persists, please contact support.";
+      toast.error(message);
     },
   });
 };

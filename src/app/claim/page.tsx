@@ -36,9 +36,6 @@ const ConfirmationPage = ({ searchParams }: ConfirmationPageProps) => {
         onSuccess: () => {
           router.push("/claim-success");
         },
-        onError: () => {
-          toast.error("Failed to claim booking");
-        },
       }
     );
   }, [job?._id, router, claimJob]);
