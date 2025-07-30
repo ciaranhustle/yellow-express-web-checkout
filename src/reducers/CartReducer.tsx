@@ -120,8 +120,6 @@ export const cartReducer = (
       break;
   }
 
-  console.log("newState", newState);
-
   localStorage.setItem(StorageKey.Cart, JSON.stringify(newState));
   return newState;
 };

@@ -13,6 +13,7 @@ import { bookingTimeOptions } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import { useAppSettings } from "@/hooks/queries/useAppSettings";
 import { InvalidBookingDateTimeModal } from "@/components/InvalidBookingDateTimeModal/InvalidBookingDateTimeModal";
+import * as Sentry from "@sentry/nextjs";
 
 const WhenPage = () => {
   const router = useRouter();
@@ -102,6 +103,17 @@ const WhenPage = () => {
     ) {
       router.push("/where");
     } else {
+      Sentry.captureException(
+        "Invalid booking date/time: " +
+          JSON.stringify({
+            date: state.when?.date,
+            time: state.when?.time,
+            isToday: state.when?.isToday,
+            calculatedDate: date,
+            calculatedTime: time,
+            appSettings,
+          })
+      );
       setIsInvalidBookingDateTimeModalOpen(true);
     }
   };
