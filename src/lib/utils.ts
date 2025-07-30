@@ -11,7 +11,7 @@ import {
 } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 
-const TIMEZONE = "Australia/Sydney";
+export const TIMEZONE = "Australia/Sydney";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -86,16 +86,16 @@ export const validBookingDateTime = (
     };
   }
 ) => {
-  const selectedDateTime = setMinutes(
-    setHours(parseISO(date), getCorrectHour(time)),
-    time.minutes
+  const selectedDateTime = toZonedTime(
+    setMinutes(setHours(parseISO(date), getCorrectHour(time)), time.minutes),
+    TIMEZONE
   );
   const dayOfWeek = format(selectedDateTime, "EEEE");
 
   const unavailableDate = appSettings?.unavailableDates?.find((dateString) => {
     return (
       format(selectedDateTime, "dd/MM/yyyy") ===
-      format(parseISO(dateString), "dd/MM/yyyy")
+      format(toZonedTime(parseISO(dateString), TIMEZONE), "dd/MM/yyyy")
     );
   });
 
@@ -117,14 +117,20 @@ export const validBookingDateTime = (
     ? appSettings?.times[timesKey].openLatest?.split(":")
     : appSettings?.times[timesKey].latest.split(":");
 
-  const earliestTime = setMinutes(
-    setHours(parseISO(date), Number(earliestParts[0])),
-    Number(earliestParts[1])
+  const earliestTime = toZonedTime(
+    setMinutes(
+      setHours(parseISO(date), Number(earliestParts[0])),
+      Number(earliestParts[1])
+    ),
+    TIMEZONE
   );
 
-  const latestTime = setMinutes(
-    setHours(parseISO(date), Number(latestParts?.[0] ?? "0")),
-    Number(latestParts?.[1] ?? "0")
+  const latestTime = toZonedTime(
+    setMinutes(
+      setHours(parseISO(date), Number(latestParts?.[0] ?? "0")),
+      Number(latestParts?.[1] ?? "0")
+    ),
+    TIMEZONE
   );
 
   return (

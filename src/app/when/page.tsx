@@ -6,8 +6,9 @@ import { Container } from "@/components/Container/Container";
 import { StepHeader } from "@/components/StepHeader/StepHeader";
 import { YellowDatePicker } from "@/components/YellowDatePicker/YellowDatePicker";
 import { StepNavButtons } from "@/components/StepNavButtons/StepNavButtons";
-import { addDays } from "date-fns";
-import { cn, validBookingDateTime } from "@/lib/utils";
+import { addDays, addHours, startOfDay } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
+import { cn, validBookingDateTime, TIMEZONE } from "@/lib/utils";
 import { useCartContext } from "@/context/CartContext";
 import { bookingTimeOptions } from "@/lib/constants";
 import { useEffect, useState } from "react";
@@ -26,7 +27,7 @@ const WhenPage = () => {
 
   // Check if current time is after 5:00 PM
   const isAfterCutoff = () => {
-    const now = new Date();
+    const now = toZonedTime(new Date(), TIMEZONE);
     return now.getHours() >= 17;
   };
 
@@ -77,11 +78,13 @@ const WhenPage = () => {
 
   const handleNextPress = () => {
     const isToday = state.when?.isToday;
-    const date = isToday ? new Date().toISOString() : state.when?.date;
+    const date = isToday
+      ? startOfDay(toZonedTime(new Date(), TIMEZONE)).toISOString()
+      : state.when?.date;
     const time = isToday
       ? (() => {
-          const nextHour = new Date();
-          nextHour.setHours(nextHour.getHours() + 1);
+          const now = toZonedTime(new Date(), TIMEZONE);
+          const nextHour = addHours(now, 1);
           return {
             ampm: nextHour.getHours() >= 12 ? "pm" : "am",
             hours: nextHour.getHours() % 12 || 12,
