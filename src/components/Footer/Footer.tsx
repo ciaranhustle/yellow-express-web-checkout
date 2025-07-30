@@ -24,7 +24,8 @@ export const Footer = () => {
         <footer className="text-black pt-3 pb-6 text-center bg-primary border-t-4 border-black">
           <Link
             className="underline text-2xl font-bold leading-normal"
-            href="/get-a-quote"
+            href="https://yellowexpress.com.au/get-a-quote"
+            target="_blank"
           >
             Want a quote first?
           </Link>
