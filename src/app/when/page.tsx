@@ -103,7 +103,7 @@ const WhenPage = () => {
     ) {
       router.push("/where");
     } else {
-      Sentry.captureException(
+      Sentry.captureMessage(
         "Invalid booking date/time: " +
           JSON.stringify({
             date: state.when?.date,
