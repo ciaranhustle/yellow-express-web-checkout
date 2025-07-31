@@ -144,6 +144,7 @@ const WhenPage = () => {
   };
 
   const nextDisabled =
+    !appSettings ||
     !state.when ||
     (!state.when.isToday && (!state.when.date || !state.when.time));
 
