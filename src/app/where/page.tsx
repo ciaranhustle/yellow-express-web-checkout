@@ -60,14 +60,14 @@ const WherePage = () => {
         </div>
         <div className="flex-1 flex flex-col gap-1.5">
           <AddressAutocomplete
-            placeholder="Pick up location..."
+            placeholder="Pick up location... (e.g. company name, street or suburb)"
             value={state.where?.pickUpAddress ?? null}
             onChange={(addr) =>
               dispatch({ type: "SET_WHERE", payload: { pickUpAddress: addr } })
             }
           />
           <AddressAutocomplete
-            placeholder="Drop off location..."
+            placeholder="Drop off location... (e.g. company name, street or suburb)"
             value={state.where?.dropOffAddress ?? null}
             onChange={(addr) =>
               dispatch({ type: "SET_WHERE", payload: { dropOffAddress: addr } })
