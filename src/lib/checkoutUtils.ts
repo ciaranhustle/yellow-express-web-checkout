@@ -1,3 +1,6 @@
+import { toZonedTime } from "date-fns-tz";
+import { TIMEZONE } from "./utils";
+
 export const PICKUP_TIME_SCHEDULE: Record<
   BookingTime,
   { hours: number; minutes: number; ampm: string }
@@ -26,20 +29,30 @@ export const createJobFromQuote = (
   let pickupDate;
   let pickupTime;
   if (quote.bookingDetails.isToday) {
-    const now = new Date();
-    const currentHour = now.getHours();
-    const currentMinutes = now.getMinutes();
+    const now = toZonedTime(new Date(), TIMEZONE);
 
-    const roundedMinutes = Math.ceil(currentMinutes / 15) * 15;
-    const additionalHours = Math.floor(roundedMinutes / 60);
-    const finalMinutes = roundedMinutes % 60;
+    if (now.getHours() < 8) {
+      pickupDate = now.toISOString();
+      pickupTime = {
+        hours: 8,
+        minutes: 0,
+        ampm: "am",
+      };
+    } else {
+      const currentHour = now.getHours();
+      const currentMinutes = now.getMinutes();
 
-    pickupDate = now.toISOString();
-    pickupTime = {
-      hours: Math.ceil((currentHour + additionalHours) % 12 || 12),
-      minutes: finalMinutes,
-      ampm: currentHour + additionalHours >= 12 ? "pm" : "am",
-    };
+      const roundedMinutes = Math.ceil(currentMinutes / 15) * 15;
+      const additionalHours = Math.floor(roundedMinutes / 60);
+      const finalMinutes = roundedMinutes % 60;
+
+      pickupDate = now.toISOString();
+      pickupTime = {
+        hours: Math.ceil((currentHour + additionalHours) % 12 || 12),
+        minutes: finalMinutes,
+        ampm: currentHour + additionalHours >= 12 ? "pm" : "am",
+      };
+    }
   } else {
     pickupDate = quote.bookingDetails.date;
     pickupTime = PICKUP_TIME_SCHEDULE[quote.bookingDetails.time];

@@ -6,7 +6,7 @@ import { Container } from "@/components/Container/Container";
 import { StepHeader } from "@/components/StepHeader/StepHeader";
 import { YellowDatePicker } from "@/components/YellowDatePicker/YellowDatePicker";
 import { StepNavButtons } from "@/components/StepNavButtons/StepNavButtons";
-import { addDays, addHours, startOfDay } from "date-fns";
+import { addDays, startOfDay } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { cn, validBookingDateTime, TIMEZONE } from "@/lib/utils";
 import { useCartContext } from "@/context/CartContext";
@@ -25,10 +25,12 @@ const WhenPage = () => {
     setIsInvalidBookingDateTimeModalOpen,
   ] = useState(false);
 
-  // Check if current time is after 5:00 PM
+  // Check if current time is after 5:30 PM
   const isAfterCutoff = () => {
     const now = toZonedTime(new Date(), TIMEZONE);
-    return now.getHours() >= 17;
+    return (
+      (now.getHours() === 17 && now.getMinutes() >= 30) || now.getHours() > 17
+    );
   };
 
   useEffect(() => {
@@ -84,11 +86,31 @@ const WhenPage = () => {
     const time = isToday
       ? (() => {
           const now = toZonedTime(new Date(), TIMEZONE);
-          const nextHour = addHours(now, 1);
+
+          if (now.getHours() < 8) {
+            const nextTime = new Date(now);
+            nextTime.setHours(8, 0, 0, 0);
+            return {
+              ampm: "am",
+              hours: 8,
+              minutes: 0,
+            };
+          }
+
+          const minutes = now.getMinutes();
+          const roundedMinutes = Math.ceil(minutes / 15) * 15;
+          const nextTime = new Date(now);
+
+          if (roundedMinutes === 60) {
+            nextTime.setHours(now.getHours() + 1, 0, 0, 0);
+          } else {
+            nextTime.setMinutes(roundedMinutes, 0, 0);
+          }
+
           return {
-            ampm: nextHour.getHours() >= 12 ? "pm" : "am",
-            hours: nextHour.getHours() % 12 || 12,
-            minutes: 0,
+            ampm: nextTime.getHours() >= 12 ? "pm" : "am",
+            hours: nextTime.getHours() % 12 || 12,
+            minutes: nextTime.getMinutes(),
           };
         })()
       : state.when?.time
