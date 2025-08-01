@@ -11,13 +11,15 @@ import { isMobile, isEmail } from "@/lib/validation";
 import { useCreateQuote } from "@/hooks/mutations/useCreateQuote";
 import { useCreateEnquiry } from "@/hooks/mutations/useCreateEnquiry";
 import { toast } from "react-toastify";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 const WhatPage = () => {
   const router = useRouter();
   const { state, dispatch } = useCartContext();
   const customerDetails = state.customerDetails;
   const { mutate: createQuote, isPending: isCreatingQuote } = useCreateQuote();
-  const { mutate: createEnquiry, isPending: isCreatingEnquiry } = useCreateEnquiry();
+  const { mutate: createEnquiry, isPending: isCreatingEnquiry } =
+    useCreateEnquiry();
 
   const {
     handleSubmit,
@@ -36,6 +38,31 @@ const WhatPage = () => {
 
   const handleNextPress = async (formData: CustomerDetails) => {
     dispatch({ type: "SET_CUSTOMER_DETAILS", payload: formData });
+
+    sendGTMEvent({
+      event: "details_submitted",
+      user_data: {
+        ...(formData.firstName && {
+          first_name: formData.firstName,
+        }),
+        ...(formData.lastName && {
+          last_name: formData.lastName,
+        }),
+        ...(formData.email && {
+          email: formData.email,
+        }),
+        ...(formData.mobile && {
+          phone_number: formData.mobile,
+        }),
+      },
+      booking_data: {
+        booking_type: state.type ?? "",
+        pickup_now: state.when?.isToday ?? false,
+        pickup_date: state.when?.date ?? "",
+        pickup_time: state.when?.time ?? "",
+        description: state.what?.join(", ") ?? "",
+      },
+    });
 
     if (state.type === "Corporate Enquiries") {
       createEnquiry();
